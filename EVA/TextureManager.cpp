@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include "GL/glew.h"
-#include "stb_image.h"
 
 namespace EVA
 {
@@ -37,7 +36,7 @@ namespace EVA
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 
 			// Save the texture
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, channels == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, data);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, channels == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, data);
 			glGenerateMipmap(GL_TEXTURE_2D);
 
 			// Save the id
@@ -125,4 +124,27 @@ namespace EVA
 		return texture;
 	}
 
+	std::shared_ptr<RawTexture> TextureManager::LoadRaw(const FS::path& path)
+	{
+		// No need to flip is as it's not used as a OpenGL texture
+		stbi_set_flip_vertically_on_load(false);
+
+		// Load the image data
+		int width, height, channels;
+		const auto data = stbi_load(FileSystem::ToString(path).c_str(), &width, &height, &channels, 0);
+
+		// If the image was loaded
+		if (data)
+		{
+			auto texture = std::make_shared<RawTexture>(data, width, height, channels);
+
+			std::cout << "TextureManager::LoadRaw - Loaded image: " << FileSystem::ToString(path) << "\n";
+			return texture;
+		}
+		else // If not
+		{
+			std::cout << "TextureManager::LoadRaw - Failed to load image: " << FileSystem::ToString(path) << "\n";
+			return nullptr;
+		}
+	}
 }

@@ -39,7 +39,7 @@ public:
 
 	static void Float(const char* name, float& value)
 	{
-		ImGui::InputFloat(name, &value);
+		ImGui::InputFloat(name, &value, 0.0f, 0.0f, "%.5f");
 	}
 
 	static void Float2(const char* name, glm::vec2& value)
@@ -116,5 +116,29 @@ public:
 		ImGui::EndGroup();
 
 		return false;
+	}
+
+	static bool ColorPicker(const char* name, glm::vec3& value)
+	{
+		return ImGui::ColorEdit3(name, glm::value_ptr(value));
+	}
+
+	static bool ColorPicker(const char* name, glm::vec4& value)
+	{
+		return ImGui::ColorEdit4(name, glm::value_ptr(value));
+	}
+
+	static bool DragFloat(const char* name, float& value, const float min = 0.0f, const float max = 1.0f, const float step = 0.01f)
+	{
+		return ImGui::DragFloat(name, &value, step, min, max);
+	}
+	static bool RangeFloat(const char* name, float& min, float& max, const float step = 0.01f)
+	{
+		return ImGui::DragFloatRange2(name, &min, &max, step);
+	}
+
+	static bool Button(const char* name)
+	{
+		return ImGui::Button(name);
 	}
 };

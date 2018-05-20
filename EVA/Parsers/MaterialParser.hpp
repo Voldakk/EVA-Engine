@@ -44,8 +44,15 @@ namespace EVA
 			// Instancing
 			material->SetUseInstancing(data.GetBool("useInstancing", false));
 
+			// Culling 
+			material->cullFront = data.GetBool("cullFront", material->cullFront);
+			material->cullBack = data.GetBool("cullBack", material->cullBack);
+
 			// Shininess
 			material->materialShininess = data.GetFloat("shininess", material->materialShininess);
+
+			// Alpha cutoff
+			material->alphaCutoff = data.GetFloat("alphaCutoff", material->alphaCutoff);
 
 			// Tint
 			material->tintDiffuse = data.GetVec4("tintDiffuse", material->tintDiffuse);
@@ -87,7 +94,14 @@ namespace EVA
 
 			data.SetBool("useInstancing", material->useInstancing);
 
+			// Culling 
+			data.SetBool("cullFront", material->cullFront);
+			data.SetBool("cullBack", material->cullBack);
+
+
 			data.SetFloat("shininess", material->materialShininess);
+
+			data.SetFloat("alphaCutoff", material->alphaCutoff);
 
 			if (material->tintDiffuse != glm::vec4(1.0f))
 				data.SetVec4("tintDiffuse", material->tintDiffuse);

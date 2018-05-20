@@ -15,6 +15,9 @@ namespace EVA
 
 	void Material::SetMbo(const std::shared_ptr<Mesh>& mesh, const std::vector<glm::mat4>& models)
 	{
+		if(models.size() == 0)
+			return;
+
 		if(m_MatrixBuffers.find(mesh) == m_MatrixBuffers.end())
 		{
 			m_MatrixBuffers[mesh] = InstancedMeshData();
@@ -26,6 +29,8 @@ namespace EVA
 			m_MatrixBuffers[mesh].instanceCount = models.size();
 			m_MatrixBuffers[mesh].matrixBuffer->BufferData(&models[0], models.size() * sizeof(glm::mat4));
 		}
+
+		m_MatrixBuffers[mesh].dirty = false;
 	}
 
 	bool Material::HasMbo(const std::shared_ptr<Mesh>& mesh) const
@@ -135,8 +140,23 @@ namespace EVA
 		{
 			m_ActiveMaterial = this;
 
+			// Shader
 			shader->Bind();
 
+			// Culling
+			if(cullBack && !cullFront)
+				glCullFace(GL_BACK);
+			else if (cullFront && !cullBack)
+				glCullFace(GL_FRONT);
+			else if(cullFront && cullBack)
+				glCullFace(GL_FRONT_AND_BACK);
+
+			if (cullFront || cullBack)
+				glEnable(GL_CULL_FACE);
+			else
+				glDisable(GL_CULL_FACE);
+
+			// Set uniforms
 			SetMaterialUniforms(scene);
 		}
 
@@ -149,6 +169,7 @@ namespace EVA
 		// Material
 		shader->SetUniform1F("material.shininess", materialShininess);
 		shader->SetUniform4Fv("material.tint_diffuse", tintDiffuse);
+		shader->SetUniform1F("material.alphaCutoff", alphaCutoff);
 
 		// Textures
 		SetTextures();

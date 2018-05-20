@@ -2,6 +2,7 @@
 
 #include "EVA/Input.hpp"
 #include "Transformer.hpp"
+#include "Transform.hpp"
 
 namespace EVA
 {
@@ -15,39 +16,44 @@ namespace EVA
 
 	void FreeLook::Update(const float deltaTime)
 	{
+		if (Input::Key(keyBindings[Forward]))
+			currentMovementSpeed *= 1.0 + deltaTime;
+		if (Input::KeyUp(keyBindings[Forward]))
+			currentMovementSpeed = minMovementSpeed;
+
 		// Movement
 		glm::vec3 movement;
 
 		// Front
-		if (Input::Key(wasd ? Input::W : Input::Up))
+		if (Input::Key(keyBindings[Forward]))
 			movement += transform->forward;
 
 		// Back
-		if (Input::Key(wasd ? Input::S : Input::Down))
+		if (Input::Key(keyBindings[Back]))
 			movement -= transform->forward;
 
 		// Right
-		if (Input::Key(wasd ? Input::D : Input::Right))
+		if (Input::Key(keyBindings[Right]))
 			movement += transform->right;
 
 		// Left
-		if (Input::Key(wasd ? Input::A : Input::Left))
+		if (Input::Key(keyBindings[Left]))
 			movement -= transform->right;
 
 		// Up
-		if (Input::Key(wasd ? Input::Space : Input::RightShift))
+		if (Input::Key(keyBindings[Up]))
 			movement += transform->up;
 
 		// Down
-		if (Input::Key(wasd ? Input::LeftShift : Input::RightControl))
+		if (Input::Key(keyBindings[Down]))
 			movement -= transform->up;
 
-		transform->Translate(movement * movementSpeed * deltaTime);
+		transform->Translate(movement * currentMovementSpeed * deltaTime);
 
 		// Look
 		const auto mouseMovement = Input::MouseMovement();
 		pitch -= mouseMovement.y * mouseSensitivity * deltaTime;
-		yaw += mouseMovement.x * mouseSensitivity * deltaTime;
+		yaw -= mouseMovement.x * mouseSensitivity * deltaTime;
 
 		// Clamp
 		pitch = glm::clamp(pitch, -89.0f, 89.0f);
@@ -56,7 +62,8 @@ namespace EVA
 		else if (yaw > 360.0f)
 			yaw -= 360.0f;
 
-		transform->SetOrientation(pitch, yaw, 0.0f);
+		transform->SetOrientation(YAXIS, yaw);
+		transform->Rotate(transform->right, pitch);
 
 		if (m_Camera != nullptr)
 			m_Camera->fov -= Input::GetScroll().y;
@@ -64,9 +71,9 @@ namespace EVA
 
 	void FreeLook::Load(const DataObject data)
 	{
-		wasd = data.GetBool("wasd", true);
-		mouseSensitivity = data.GetFloat("mouseSensitivity", 50.0f);
-		movementSpeed = data.GetFloat("movementSpeed", 10.0f);
+		mouseSensitivity = data.GetFloat("mouseSensitivity", mouseSensitivity);
+		minMovementSpeed = data.GetFloat("movementSpeed", minMovementSpeed);
+		currentMovementSpeed = minMovementSpeed;
 
 		pitch = data.GetFloat("pitch", 0.0f);
 		yaw = data.GetFloat("yaw", 0.0f);
@@ -74,9 +81,8 @@ namespace EVA
 
 	void FreeLook::Save(DataObject& data)
 	{
-		data.SetBool("wasd", wasd);
 		data.SetFloat("mouseSensitivity", mouseSensitivity);
-		data.SetFloat("movementSpeed", movementSpeed);
+		data.SetFloat("movementSpeed", minMovementSpeed);
 
 		data.SetFloat("pitch", pitch);
 		data.SetFloat("yaw", yaw);
@@ -84,8 +90,7 @@ namespace EVA
 
 	void FreeLook::Inspector()
 	{
-		ComponentInspector::Bool("WASD", wasd);
 		ComponentInspector::Float("Mouse sensitivity", mouseSensitivity);
-		ComponentInspector::Float("Movement speed", movementSpeed);
+		ComponentInspector::Float("Movement speed", minMovementSpeed);
 	}
 }

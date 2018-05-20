@@ -8,12 +8,28 @@
  */
 int main()
 {
-    EVA::Application::Init("EVA-Engine");
+
+#define EDITOR
+
+#ifdef EDITOR
+
+	#include "../EVA/Editor/SceneEditor.hpp"
+
+	if(!EVA::Application::Init("EVA-Engine"))
+		return EXIT_FAILURE;
 
 	EVA::SceneManager::CreateScene<EVA::SceneEditor>();
-	//EVA::SceneManager::CreateScene<EVA::Scene>("./assets/scenes/cubes.scene");
 
-    EVA::Application::Run();
+#else
+	
+	if(!EVA::Application::Init("EVA-Engine"))
+		return EXIT_FAILURE;
 
-    return EXIT_SUCCESS;
+	EVA::SceneManager::CreateScene<EVA::Scene>("./assets/scenes/main.scene");
+
+#endif
+
+	EVA::Application::Run();
+
+	return EXIT_SUCCESS;
 }

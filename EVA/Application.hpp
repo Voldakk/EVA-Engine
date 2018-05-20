@@ -13,8 +13,8 @@ namespace EVA
 {
 
     const int MAX_FPS = 2000;
-    const int WINDOW_WIDTH = 1664;
-    const int WINDOW_HEIGHT = 936;
+    const int WINDOW_WIDTH = 1920;
+    const int WINDOW_HEIGHT = 1080;
     const glm::vec4 CLEAR_COLOR = glm::vec4{0.5f, 0.5f, 0.5f, 1.0f};
 
     const bool LOG_FPS = true;
@@ -44,7 +44,7 @@ namespace EVA
         static Camera* mainCamera;
 
         /// <summary>Initializes the application</summary>
-        static void Init(const std::string &title);
+        static bool Init(const std::string &title);
 
         /// <summary>Starts the game loop</summary>
         static void Run();
