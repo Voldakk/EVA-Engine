@@ -1,0 +1,8 @@
+{
+    "shader": "./assets/standard assets/shaders/wireframe.shader",
+    "useInstancing": false,
+    "cullFront": false,
+    "cullBack": true,
+    "shininess": 32.0,
+    "alphaCutoff": 0.0
+}
