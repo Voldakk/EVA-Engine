@@ -171,6 +171,8 @@ namespace EVA
 		shader->SetUniform4Fv("material.tint_diffuse", tintDiffuse);
 		shader->SetUniform1F("material.alphaCutoff", alphaCutoff);
 
+		shader->SetUniform1I("instancing", useInstancing);
+
 		// Textures
 		SetTextures();
 
