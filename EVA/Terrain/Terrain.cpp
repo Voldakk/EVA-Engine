@@ -2,13 +2,18 @@
 
 #include "EVA/ResourceManagers.hpp"
 
+#include "TerrainMaterial.hpp"
+
 namespace EVA
 {
 	REGISTER_COMPONENT_CPP(Terrain, "Terrain")
 
 	void Terrain::Start()
 	{
-		m_Material = MaterialManager::LoadMaterial("./assets/standard assets/materials/terrain.mat");
+		m_Material = std::make_shared<TerrainMaterial>(this);
+		m_Material->shader = ShaderManager::LoadShader("./assets/standard assets/shaders/terrain.shader");
+		m_Material->SetUseInstancing(true);
+
 		auto v = GeneratePatch();
 		m_Mesh = std::make_shared<Mesh>(v);
 		gameObject->GetComponentOfType<MeshRenderer>()->Set(m_Mesh, m_Material);
@@ -53,15 +58,17 @@ namespace EVA
 
 	void Terrain::Inspector()
 	{
-		LateUpdate();
+		ComponentInspector::Int("tessLevelOuter", tessLevelOuter);
+		ComponentInspector::Int("tessLevelInner0", tessLevelInner0);
+		ComponentInspector::Int("tessLevelInner1", tessLevelInner1);
 	}
 
 	std::vector<glm::vec3> Terrain::GeneratePatch()
 	{
 		std::vector<glm::vec3> vertices;
-		vertices.resize(16);
+		vertices.resize(4);
 
-		vertices[0] = { -1.0f, 0.0f, -1.0f };
+		/*vertices[0] = { -1.0f, 0.0f, -1.0f };
 		vertices[1] = { -0.333f, 0.0f, -1.0f };
 		vertices[2] = { 0.333f, 0.0f, -1.0f };
 		vertices[3] = { 1.0f, 0.0f, -1.0f };
@@ -79,7 +86,12 @@ namespace EVA
 		vertices[12] = { -1.0f, 0.0f, 1.0f };
 		vertices[13] = { -0.333f, 0.0f, 1.0f };
 		vertices[14] = { 0.333f, 0.0f, 1.0f };
-		vertices[15] = { 1.0f, 0.0f, 1.0f };
+		vertices[15] = { 1.0f, 0.0f, 1.0f };*/
+
+		vertices[0] = { -1.0f, 0.0f, -1.0f };
+		vertices[1] = {  1.0f, 0.0f, -1.0f };
+		vertices[2] = { -1.0f, 0.0f,  1.0f };
+		vertices[3] = {  1.0f, 0.0f,  1.0f };
 
 		return vertices;
 	}

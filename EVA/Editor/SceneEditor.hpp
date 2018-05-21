@@ -9,6 +9,7 @@
 #include "../Parsers/SceneParser.hpp"
 #include "../Components/SceneCamera.hpp"
 #include "../Physics.hpp"
+#include "../Terrain/Terrain.hpp"
 
 namespace EVA
 {
@@ -102,6 +103,8 @@ namespace EVA
 			// Move camera
 			if(m_SceneCameraGameObject != nullptr)
 				m_SceneCameraGameObject->LateUpdate();
+
+			FindComponentOfType<Terrain>()->LateUpdate();
 		}
 	};
 
