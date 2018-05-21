@@ -23,26 +23,18 @@ namespace EVA
 		glm::vec3 bitangent;
 	};
 
-	struct ColorVertex
-	{
-		glm::vec3 position;
-		glm::vec3 normal;
-		glm::vec3 color;
-		glm::vec3 tangent;
-		glm::vec3 bitangent;
-	};
-
 	/**
 	 * \brief A mesh
 	 */
 	class Mesh
 	{
+	protected:
+
 		std::unique_ptr<VertexArray> m_Va;
 		std::unique_ptr<VertexBuffer> m_Vb;
 		std::unique_ptr<IndexBuffer> m_Ib;
 
 		unsigned int m_VertexCount;
-		bool m_Patch = false;
 		bool m_HasFaceIndices;
 		
 	public:
@@ -52,23 +44,16 @@ namespace EVA
 		FS::path path;
 		unsigned int index;
 
+		Mesh() = default;
+
 		explicit Mesh(const std::vector<Vertex>& vertices, std::string name = "");
 
 		explicit Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& faceIndices, std::string name = "");
 
-		explicit Mesh(const std::vector<ColorVertex>& vertices, const std::vector<unsigned int>& faceIndices, std::string name = "");
-
-		explicit Mesh(const std::vector<glm::vec3>& vertices, std::string name = "");
-
 		void Create(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& faceIndices);
 
-		void Create(const std::vector<ColorVertex>& vertices, const std::vector<unsigned int>& faceIndices);
+		virtual void Draw() const;
 
-		void Create(const std::vector<glm::vec3>& vertices);
-
-		void Draw() const;
-
-		void DrawInstanced(const InstancedMeshData* instancedMeshData) const;
+		virtual void DrawInstanced(const InstancedMeshData* instancedMeshData) const;
 	};
-
 }

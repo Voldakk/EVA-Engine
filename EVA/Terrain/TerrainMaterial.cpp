@@ -16,5 +16,7 @@ namespace EVA
 		shader->SetUniform1I("tessLevelOuter", m_Terrain->tessLevelOuter);
 		shader->SetUniform1I("tessLevelInner0", m_Terrain->tessLevelInner0);
 		shader->SetUniform1I("tessLevelInner1", m_Terrain->tessLevelInner1);
+
+		shader->SetUniform1I("maxLod", m_Terrain->maxTessLod);
 	}
 }

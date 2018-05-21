@@ -15,7 +15,7 @@ namespace EVA
 		m_Material->SetUseInstancing(true);
 
 		auto v = GeneratePatch();
-		m_Mesh = std::make_shared<Mesh>(v);
+		m_Mesh = std::make_shared<TerrainMesh>(v);
 		gameObject->GetComponentOfType<MeshRenderer>()->Set(m_Mesh, m_Material);
 
 		m_Quadtree = std::make_unique<Quadtree>(m_Extents, 5);

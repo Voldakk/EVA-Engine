@@ -5,6 +5,7 @@
 
 #include "Quadtree.hpp"
 #include "TerrainMaterial.hpp"
+#include "TerrainMesh.hpp"
 
 namespace EVA
 {
@@ -17,13 +18,15 @@ namespace EVA
 		std::unique_ptr<Quadtree> m_Quadtree;
 
 		std::shared_ptr<TerrainMaterial> m_Material = nullptr;
-		std::shared_ptr<Mesh> m_Mesh = nullptr;
+		std::shared_ptr<TerrainMesh> m_Mesh = nullptr;
 
 	public:
 
 		int tessLevelOuter = 1;
 		int tessLevelInner0 = 1;
 		int tessLevelInner1 = 1;
+
+		int maxTessLod = 5;
 
 		void Start() override;
 		void LateUpdate() override;

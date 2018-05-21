@@ -104,7 +104,9 @@ namespace EVA
 			if(m_SceneCameraGameObject != nullptr)
 				m_SceneCameraGameObject->LateUpdate();
 
-			FindComponentOfType<Terrain>()->LateUpdate();
+			auto t = FindComponentOfType<Terrain>();
+			if(t)
+				t->LateUpdate();
 		}
 	};
 

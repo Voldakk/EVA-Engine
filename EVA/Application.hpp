@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <memory>
 
@@ -8,6 +8,7 @@
 
 #include "Components/Camera.hpp"
 #include "GameObject.hpp"
+#include <iostream>
 
 namespace EVA
 {
@@ -86,6 +87,17 @@ namespace EVA
 		 * \param description Error description
 		 */
 		static void GlfwErrorCallback(int error, const char* description);
-    };
 
+	    /**
+		 * \brief Callback for OpenGL messages
+		 * \param source 
+		 * \param type 
+		 * \param id 
+		 * \param severity 
+		 * \param length 
+		 * \param message 
+		 * \param userParam 
+		 */
+		static void GLAPIENTRY OpenGlMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
+    };
 }

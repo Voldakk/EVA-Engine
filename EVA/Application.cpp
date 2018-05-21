@@ -47,6 +47,9 @@ namespace EVA
 
         WindowResizeCallback(m_Window, width, height);
 
+		glEnable(GL_DEBUG_OUTPUT);
+		glDebugMessageCallback(OpenGlMessageCallback, nullptr);
+
 		// Material stuff
 		Material::Init();
 
@@ -64,6 +67,8 @@ namespace EVA
 		ImGui::StyleColorsDark();
 
 		return true;
+
+		
     }
 
 	bool Application::CreateWindow(const std::string &title)
@@ -247,11 +252,20 @@ namespace EVA
 
 	void Application::GlfwErrorCallback(const int error, const char* description)
 	{
-		std::cout << 
-			"\nGLFW error code: " << error << "\n" << 
-			description << "\n\n";
+		std::cout << std::endl <<
+			"GLFW error code: " << error << "\n" << 
+			description << std::endl << std::endl;
 
 		std::system("PAUSE");
 	}
 
+	void Application::OpenGlMessageCallback(GLenum source, GLenum type, GLuint id, 
+		GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+	{
+		if(type != GL_DEBUG_TYPE_ERROR)
+			return;
+
+		fprintf(stderr, "\nOpenGL error: type = 0x%x, severity = 0x%x, message = %s\n\n",
+			type, severity, message);
+	}
 }
