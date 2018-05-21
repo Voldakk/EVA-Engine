@@ -8,20 +8,19 @@ namespace EVA
 
 	void Terrain::Start()
 	{
+		m_Material = MaterialManager::LoadMaterial("./assets/standard assets/materials/terrain.mat");
+		auto v = GeneratePatch();
+		m_Mesh = std::make_shared<Mesh>(v);
+		gameObject->GetComponentOfType<MeshRenderer>()->Set(m_Mesh, m_Material);
+
 		m_Quadtree = std::make_unique<Quadtree>(m_Extents, 5);
-
-		m_MeshRenderer = gameObject->GetComponentOfType<MeshRenderer>();
-
-		m_Quadtree->Subdivide();
-
-		m_Quadtree->northEast->Subdivide();
 
 		LateUpdate();
 	}
 
 	void Terrain::LateUpdate()
 	{
-		if(m_MeshRenderer == nullptr)
+		if(m_Material == nullptr)
 			return;
 
 		m_Quadtree->Update(Application::mainCamera->transform->position);
@@ -44,7 +43,12 @@ namespace EVA
 		transform->SetPosition(position);
 		transform->SetScale(scale);
 
-		m_MeshRenderer->material->SetMbo(m_MeshRenderer->mesh, modelMatrices);
+		m_Material->SetMbo(m_Mesh, modelMatrices);
+	}
+
+	void Terrain::Render()
+	{
+
 	}
 
 	void Terrain::Inspector()
@@ -52,4 +56,31 @@ namespace EVA
 		LateUpdate();
 	}
 
+	std::vector<glm::vec3> Terrain::GeneratePatch()
+	{
+		std::vector<glm::vec3> vertices;
+		vertices.resize(16);
+
+		vertices[0] = { -1.0f, 0.0f, -1.0f };
+		vertices[1] = { -0.333f, 0.0f, -1.0f };
+		vertices[2] = { 0.333f, 0.0f, -1.0f };
+		vertices[3] = { 1.0f, 0.0f, -1.0f };
+
+		vertices[4] = { -1.0f, 0.0f, -0.333f };
+		vertices[5] = { -0.333f, 0.0f, -0.333f };
+		vertices[6] = { 0.333f, 0.0f, -0.333f };
+		vertices[7] = { 1.0f, 0.0f, -0.333f };
+
+		vertices[8] = { -1.0f, 0.0f, 0.333f };
+		vertices[9] = { -0.333f, 0.0f, 0.333f };
+		vertices[10] = { 0.333f, 0.0f, 0.333f };
+		vertices[11] = { 1.0f, 0.0f, 0.333f };
+
+		vertices[12] = { -1.0f, 0.0f, 1.0f };
+		vertices[13] = { -0.333f, 0.0f, 1.0f };
+		vertices[14] = { 0.333f, 0.0f, 1.0f };
+		vertices[15] = { 1.0f, 0.0f, 1.0f };
+
+		return vertices;
+	}
 }

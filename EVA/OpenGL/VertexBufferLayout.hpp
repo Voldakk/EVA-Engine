@@ -33,8 +33,11 @@ namespace EVA
 
 		unsigned int m_Stride = 0;
 
+
 	public:
 
+		unsigned int patchSize = 0;
+		
 		VertexBufferLayout() = default;
 		~VertexBufferLayout() = default;
 

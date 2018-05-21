@@ -16,6 +16,8 @@ namespace EVA
 		FS::path vertex;
 		FS::path fragment;
 		FS::path geometry;
+		FS::path tessControl;
+		FS::path tessEvaluation;
 	};
 
 	/**

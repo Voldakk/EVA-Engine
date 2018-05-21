@@ -829,6 +829,22 @@ namespace EVA
 			shader->SetPaths(paths);
 			ShaderManager::SaveShader(shader.get(), paths->shader);
 		}
+
+		path = FileSystem::ToString(shader->paths->tessControl);
+		if (ComponentInspector::DragDropTargetString("Tessellation control", path, "file"))
+		{
+			paths->tessControl = path;
+			shader->SetPaths(paths);
+			ShaderManager::SaveShader(shader.get(), paths->shader);
+		}
+
+		path = FileSystem::ToString(shader->paths->tessEvaluation);
+		if (ComponentInspector::DragDropTargetString("Tessellation evaluation", path, "file"))
+		{
+			paths->tessEvaluation = path;
+			shader->SetPaths(paths);
+			ShaderManager::SaveShader(shader.get(), paths->shader);
+		}
 	}
 
 	void EditorWindows::NewAssetPopup()

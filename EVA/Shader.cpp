@@ -61,6 +61,30 @@ namespace EVA
 				m_Paths->geometry = "";
 		}
 
+		if (!m_Paths->tessControl.empty())
+		{
+			const auto tessControlShader = ShaderManager::LoadAndCompileShader(m_Paths->tessControl, GL_TESS_CONTROL_SHADER);
+			if (tessControlShader != -1)
+			{
+				glAttachShader(m_ShaderId, tessControlShader);
+				glDeleteShader(tessControlShader);
+			}
+			else
+				m_Paths->tessControl = "";
+		}
+
+		if (!m_Paths->tessEvaluation.empty())
+		{
+			const auto tessellationEvaluationShader = ShaderManager::LoadAndCompileShader(m_Paths->tessEvaluation, GL_TESS_EVALUATION_SHADER);
+			if (tessellationEvaluationShader != -1)
+			{
+				glAttachShader(m_ShaderId, tessellationEvaluationShader);
+				glDeleteShader(tessellationEvaluationShader);
+			}
+			else
+				m_Paths->tessEvaluation = "";
+		}
+
 		glLinkProgram(m_ShaderId);
 		glUseProgram(m_ShaderId);
 	}

@@ -34,6 +34,15 @@ namespace EVA
 		Create(vertices, faceIndices);
 	}
 
+	Mesh::Mesh(const std::vector<glm::vec3>& vertices, std::string name)
+		: name(std::move(name)), index(0)
+	{
+		m_VertexCount = vertices.size();
+		m_HasFaceIndices = false;
+
+		Create(vertices);
+	}
+
 	void Mesh::Create(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& faceIndices)
 	{
 		m_Va = std::make_unique<VertexArray>();
@@ -80,6 +89,23 @@ namespace EVA
 			m_Ib->Unbind();
 	}
 
+	void Mesh::Create(const std::vector<glm::vec3>& vertices)
+	{
+		m_Va = std::make_unique<VertexArray>();
+		m_Vb = std::make_unique<VertexBuffer>(&vertices[0], vertices.size() * sizeof(Vertex));
+
+		VertexBufferLayout layout;
+		layout.Push<float>(3); // Position
+
+		layout.patchSize = vertices.size();
+		m_Patch = true;
+
+		m_Va->AddBuffer(*m_Vb, layout);
+
+		m_Va->Unbind();
+		m_Vb->Unbind();
+	}
+
 	void Mesh::Draw() const
 	{
 		// Draw
@@ -110,14 +136,29 @@ namespace EVA
 
 		m_Va->AddTempBuffer(*instancedMeshData->matrixBuffer, layout);
 
-		if (m_HasFaceIndices)
+		if (m_Patch)
 		{
-			m_Ib->Bind();
-			glDrawElementsInstanced(GL_TRIANGLES, m_Ib->GetCount(), GL_UNSIGNED_INT, nullptr, instancedMeshData->instanceCount);
-			m_Ib->Unbind();
+			if (m_HasFaceIndices)
+			{
+				m_Ib->Bind();
+				glDrawElementsInstanced(GL_PATCHES, m_Ib->GetCount(), GL_UNSIGNED_INT, nullptr, instancedMeshData->instanceCount);
+				m_Ib->Unbind();
+			}
+			else
+				glDrawArraysInstanced(GL_PATCHES, 0, m_VertexCount, instancedMeshData->instanceCount);
+
 		}
 		else
-			glDrawArraysInstanced(GL_TRIANGLES, 0, m_VertexCount, instancedMeshData->instanceCount);
+		{
+			if (m_HasFaceIndices)
+			{
+				m_Ib->Bind();
+				glDrawElementsInstanced(GL_TRIANGLES, m_Ib->GetCount(), GL_UNSIGNED_INT, nullptr, instancedMeshData->instanceCount);
+				m_Ib->Unbind();
+			}
+			else
+				glDrawArraysInstanced(GL_TRIANGLES, 0, m_VertexCount, instancedMeshData->instanceCount);
+		}
 
 		m_Va->Unbind();
 	}

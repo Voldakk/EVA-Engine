@@ -44,6 +44,12 @@ namespace EVA
 		if (!shader->paths->geometry.empty())
 			data.SetString("geometry", FileSystem::ToString(shader->paths->geometry));
 
+		if (!shader->paths->tessControl.empty())
+			data.SetString("tessControl", FileSystem::ToString(shader->paths->tessControl));
+
+		if (!shader->paths->tessEvaluation.empty())
+			data.SetString("tessEvaluation", FileSystem::ToString(shader->paths->tessEvaluation));
+
 		Json::Save(&d, path);
 	}
 

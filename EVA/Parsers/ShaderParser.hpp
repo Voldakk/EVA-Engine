@@ -39,6 +39,8 @@ namespace EVA
 			shaderPaths->vertex = data.GetPath("vertex", "");
 			shaderPaths->fragment = data.GetPath("fragment", "");
 			shaderPaths->geometry = data.GetPath("geometry", "");
+			shaderPaths->tessControl = data.GetPath("tessControl", "");
+			shaderPaths->tessEvaluation = data.GetPath("tessEvaluation", "");
 
 			return shaderPaths;
 		}

@@ -42,6 +42,9 @@ namespace EVA
 
 			m_Attributes++;
 		}
+
+		if (layout.patchSize != 0)
+			glPatchParameteri(GL_PATCH_VERTICES, layout.patchSize);
 	}
 
 	void VertexArray::AddTempBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout) const

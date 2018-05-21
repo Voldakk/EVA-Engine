@@ -42,6 +42,7 @@ namespace EVA
 		std::unique_ptr<IndexBuffer> m_Ib;
 
 		unsigned int m_VertexCount;
+		bool m_Patch = false;
 		bool m_HasFaceIndices;
 		
 	public:
@@ -57,9 +58,13 @@ namespace EVA
 
 		explicit Mesh(const std::vector<ColorVertex>& vertices, const std::vector<unsigned int>& faceIndices, std::string name = "");
 
+		explicit Mesh(const std::vector<glm::vec3>& vertices, std::string name = "");
+
 		void Create(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& faceIndices);
 
 		void Create(const std::vector<ColorVertex>& vertices, const std::vector<unsigned int>& faceIndices);
+
+		void Create(const std::vector<glm::vec3>& vertices);
 
 		void Draw() const;
 
