@@ -13,7 +13,7 @@ namespace EVA
 	{
 		REGISTER_COMPONENT_HPP(Terrain);
 
-		glm::vec3 m_Extents = glm::vec3(10.0f, 1.0f, 10.0f);
+		glm::vec3 m_Extents = glm::vec3(100.0f, 1.0f, 100.0f);
 		std::unique_ptr<Quadtree> m_Quadtree;
 
 		MeshRenderer* m_MeshRenderer = nullptr;

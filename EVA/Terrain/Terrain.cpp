@@ -8,7 +8,7 @@ namespace EVA
 
 	void Terrain::Start()
 	{
-		m_Quadtree = std::make_unique<Quadtree>(m_Extents);
+		m_Quadtree = std::make_unique<Quadtree>(m_Extents, 5);
 
 		m_MeshRenderer = gameObject->GetComponentOfType<MeshRenderer>();
 
@@ -23,6 +23,8 @@ namespace EVA
 	{
 		if(m_MeshRenderer == nullptr)
 			return;
+
+		m_Quadtree->Update(Application::mainCamera->transform->position);
 
 		std::vector<Bounds> bounds;
 		m_Quadtree->GetLeafBounds(bounds);
@@ -47,8 +49,7 @@ namespace EVA
 
 	void Terrain::Inspector()
 	{
-		if (ComponentInspector::Button("LateUpdate"))
-			LateUpdate();
+		LateUpdate();
 	}
 
 }

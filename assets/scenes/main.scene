@@ -131,7 +131,7 @@
                 },
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/standard assets/materials/wireframe.mat",
+                    "material": "./assets/standard assets/materials/wireframe_instanced.mat",
                     "mesh": "./assets/standard assets/models/plane.obj",
                     "meshIndex": 0
                 }
