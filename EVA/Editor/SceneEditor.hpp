@@ -94,7 +94,7 @@ namespace EVA
 
 			//ImGui::ShowDemoWindow();
 
-			// Usualy done in Scene::Update
+			// Usually done in Scene::Update
 			ProcessDestroyQueue();
 		}
 

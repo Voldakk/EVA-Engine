@@ -12,42 +12,26 @@ const int northEast = 2;
 const int southWest = 1;
 const int southEast = 0;
 
-// Camera
-uniform vec3 cameraPosition;
-
-uniform int tessLevelOuter;
-uniform int tessLevelInner0;
-uniform int tessLevelInner1;
-
 uniform int maxLod;
 
-float Distance(vec3 point)
-{
-	vec4 minP = gl_in[southEast].gl_Position;
-	vec4 maxP = gl_in[northWest].gl_Position;
-
-	float dx = max(max(minP.x - point.x, point.x - maxP.x), 0);
-	float dy = max(max(minP.y - point.y, point.y - maxP.y), 0);
-	float dz = max(max(minP.z - point.z, point.z - maxP.z), 0);
-
-	return sqrt(dx * dx + dy * dy + dz * dz);
-}
+in float[] vertLod;
+in float[][4] vertLodSides;
 
 void main()
 {
 	if(gl_InvocationID == 0)
 	{
-		float dist = Distance(cameraPosition);
+		float tessLevel = 1 + (maxLod - vertLod[0]);
 
-		int lod = int(max(1, maxLod - abs(dist / 10)));
+		float tess = pow(2, vertLod[0]);
 
-		gl_TessLevelOuter[north] = tessLevelOuter;
-		gl_TessLevelOuter[west] = tessLevelOuter;
-		gl_TessLevelOuter[south] = tessLevelOuter;
-		gl_TessLevelOuter[east] = tessLevelOuter;
+		gl_TessLevelOuter[north] = tess;
+		gl_TessLevelOuter[west] = tess;
+		gl_TessLevelOuter[south] = tess;
+		gl_TessLevelOuter[east] = tess;
 
-		gl_TessLevelInner[0] = lod;
-		gl_TessLevelInner[1] = lod;
+		gl_TessLevelInner[0] = tessLevel;
+		gl_TessLevelInner[1] = tessLevel;
 	}
 
 	gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;

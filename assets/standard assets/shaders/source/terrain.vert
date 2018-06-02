@@ -2,17 +2,25 @@
 
 layout (location = 0) in vec3 vertPos;
 layout (location = 1) in mat4 instanceMatrix;
+layout (location = 5) in float lod;
+layout (location = 6) in vec4 lodSides;
 
-uniform mat4 model;
+const int north = 3;
+const int west  = 2;
+const int south = 1; 
+const int east  = 0;
 
-uniform bool instancing;
+out float vertLod;
+out float[4] vertLodSides;
 
 void main()
 {
-	mat4 modelMatrix = model;
+	gl_Position = instanceMatrix * vec4(vertPos, 1);
+	
+	vertLod = lod;
 
-	if(instancing)
-		modelMatrix = instanceMatrix;
-
-	gl_Position = modelMatrix * vec4(vertPos, 1);
+	vertLodSides[north] = lodSides.x;
+	vertLodSides[west] = lodSides.y;
+	vertLodSides[south] = lodSides.z;
+	vertLodSides[east] = lodSides.w;
 }

@@ -4,7 +4,12 @@
 
 namespace EVA
 {
-	
+	struct NodeData
+	{
+		Bounds bounds;
+		unsigned int lod;
+	};
+
 	class Quadtree
 	{
 		unsigned int m_Lod = 0;
@@ -69,16 +74,16 @@ namespace EVA
 			m_SouthEast.reset(nullptr);
 		}
 
-		void GetLeafBounds(std::vector<Bounds>& boundsList) const
+		void GetLeafData(std::vector<NodeData>& leafData) const
 		{
 			if (m_Leaf)
-				boundsList.push_back(m_Bounds);
+				leafData.push_back({ m_Bounds, m_Lod });
 			else
 			{
-				m_NorthWest->GetLeafBounds(boundsList);
-				m_NorthEast->GetLeafBounds(boundsList);
-				m_SouthWest->GetLeafBounds(boundsList);
-				m_SouthEast->GetLeafBounds(boundsList);
+				m_NorthWest->GetLeafData(leafData);
+				m_NorthEast->GetLeafData(leafData);
+				m_SouthWest->GetLeafData(leafData);
+				m_SouthEast->GetLeafData(leafData);
 			}
 		}
 

@@ -1,6 +1,8 @@
 #CMAKE FOR GLFW, GLEW, GLM
 cmake_minimum_required(VERSION 3.1)
 
+add_definitions(-DFOO)
+
 # Project name
 project(EVA)
 
@@ -102,8 +104,12 @@ if(WINDOWS)
 	)
 
 	file(
-		COPY  ${PROJECT_SOURCE_DIR}/dependencies/dll/glew32.dll 
-		DESTINATION ${PROJECT_BINARY_DIR}/bin
+			COPY  ${PROJECT_SOURCE_DIR}/dependencies/dll/glew32.dll
+			DESTINATION ${PROJECT_BINARY_DIR}/bin
+	)
+	file(
+			COPY  ${PROJECT_SOURCE_DIR}/dependencies/dll/zlib1.dll
+			DESTINATION ${PROJECT_BINARY_DIR}/bin
 	)
 	file(
 		COPY  ${PROJECT_SOURCE_DIR}/dependencies/freetype/bin/freetype6.dll

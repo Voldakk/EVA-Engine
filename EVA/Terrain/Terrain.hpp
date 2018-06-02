@@ -20,6 +20,8 @@ namespace EVA
 		std::shared_ptr<TerrainMaterial> m_Material = nullptr;
 		std::shared_ptr<TerrainMesh> m_Mesh = nullptr;
 
+		std::vector<TerrainMeshData> meshData;
+
 	public:
 
 		int tessLevelOuter = 1;

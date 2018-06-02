@@ -16,11 +16,11 @@ namespace EVA
 			this->center = center;
 			this->extents = extents;
 		}
-		glm::vec3 Min()
+		glm::vec3 Min() const
 		{
 			return center - extents;
 		}
-		glm::vec3 Max()
+		glm::vec3 Max() const
 		{
 			return center + extents;
 		}
@@ -33,7 +33,7 @@ namespace EVA
 				point.z < center.z + extents.z && point.z > center.z - extents.z;
 		}
 
-		float Distance(const glm::vec3 point)
+		float Distance(const glm::vec3 point) const
 		{
 			if (Contains((point)))
 				return 0.0f;

@@ -16,9 +16,8 @@ namespace EVA
 
 		auto v = GeneratePatch();
 		m_Mesh = std::make_shared<TerrainMesh>(v);
-		gameObject->GetComponentOfType<MeshRenderer>()->Set(m_Mesh, m_Material);
 
-		m_Quadtree = std::make_unique<Quadtree>(m_Extents, 5);
+		m_Quadtree = std::make_unique<Quadtree>(m_Extents, maxTessLod);
 
 		LateUpdate();
 	}
@@ -30,30 +29,33 @@ namespace EVA
 
 		m_Quadtree->Update(Application::mainCamera->transform->position);
 
-		std::vector<Bounds> bounds;
-		m_Quadtree->GetLeafBounds(bounds);
-
-		std::vector<glm::mat4> modelMatrices;
+		std::vector<NodeData> leafData;
+		m_Quadtree->GetLeafData(leafData);
 
 		const auto position = transform->localPosition;
 		const auto scale = transform->localScale;
 
-		for (const auto bound : bounds)
+		meshData.clear();
+		for (const auto data : leafData)
 		{
-			transform->SetPosition(bound.center);
-			transform->SetScale(bound.extents);
-			modelMatrices.push_back(transform->modelMatrix);
+			transform->SetPosition(data.bounds.center);
+			transform->SetScale(data.bounds.extents);
+			const auto modelMatrix = transform->modelMatrix;
+
+			meshData.push_back({ modelMatrix, (float)data.lod, glm::vec4(1.0f) });
 		}
 
 		transform->SetPosition(position);
 		transform->SetScale(scale);
-
-		m_Material->SetMbo(m_Mesh, modelMatrices);
 	}
 
 	void Terrain::Render()
 	{
+		if (m_Material == nullptr)
+			return;
 
+		m_Material->Activate(scene.Get(), nullptr);
+		m_Mesh->DrawTerrain(meshData);
 	}
 
 	void Terrain::Inspector()
