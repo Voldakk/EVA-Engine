@@ -1,8 +1,7 @@
 {
+    "id": "EVA::TerrainMaterial",
     "shader": "./assets/standard assets/shaders/terrain.shader",
     "useInstancing": true,
     "cullFront": false,
-    "cullBack": true,
-    "shininess": 32.0,
-    "alphaCutoff": 0.0
+    "cullBack": true
 }

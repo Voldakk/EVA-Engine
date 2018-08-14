@@ -72,7 +72,7 @@ namespace EVA
 		if(!modelPath.empty())
 		{
 			const auto model = ModelManager::LoadModel(modelPath);
-			if(model->MeshCount() > meshIndex)
+			if(model != nullptr && model->MeshCount() > meshIndex)
 				mesh = model->GetMesh(meshIndex);
 		}
 
@@ -94,7 +94,7 @@ namespace EVA
 	void MeshRenderer::Inspector()
 	{
 		auto materialPath = material != nullptr ? FileSystem::ToString(material->path) : "";
-		if (ComponentInspector::DragDropTargetString("Material", materialPath, "file"))
+		if (InspectorFields::DragDropTargetString("Material", materialPath, "file"))
 		{
 			if (!materialPath.empty())
 			{
@@ -103,7 +103,7 @@ namespace EVA
 		}
 
 		auto modelPath = FileSystem::ToString(m_ModelPath);
-		if (ComponentInspector::DragDropTargetString("Model", modelPath, "file"))
+		if (InspectorFields::DragDropTargetString("Model", modelPath, "file"))
 		{
 			if (!modelPath.empty())
 			{
@@ -112,7 +112,7 @@ namespace EVA
 		}
 
 		int meshIndex = m_MeshIndex;
-		if(ComponentInspector::EnterInt("Mesh index", meshIndex))
+		if(InspectorFields::EnterInt("Mesh index", meshIndex))
 		{
 			if (meshIndex >= 0)
 			{

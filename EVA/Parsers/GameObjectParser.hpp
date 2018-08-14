@@ -61,7 +61,7 @@ namespace EVA
 
 				const std::string id = c["id"].GetString();
 
-				const auto component = ComponentMap::CreateComponent(id);
+				const auto component = ComponentMap::Create(id);
 				if (component != nullptr)
 				{
 					component->SetScene(gameObject->scene.Get());

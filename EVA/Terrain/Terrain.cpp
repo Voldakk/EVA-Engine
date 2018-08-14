@@ -10,7 +10,8 @@ namespace EVA
 
 	void Terrain::Start()
 	{
-		m_Material = std::make_shared<TerrainMaterial>(this);
+		m_Material = std::make_shared<TerrainMaterial>();
+		m_Material->SetTerrain(this);
 		m_Material->shader = ShaderManager::LoadShader("./assets/standard assets/shaders/terrain.shader");
 		m_Material->SetUseInstancing(true);
 
@@ -60,9 +61,9 @@ namespace EVA
 
 	void Terrain::Inspector()
 	{
-		ComponentInspector::Int("tessLevelOuter", tessLevelOuter);
-		ComponentInspector::Int("tessLevelInner0", tessLevelInner0);
-		ComponentInspector::Int("tessLevelInner1", tessLevelInner1);
+		InspectorFields::Int("tessLevelOuter", tessLevelOuter);
+		InspectorFields::Int("tessLevelInner0", tessLevelInner0);
+		InspectorFields::Int("tessLevelInner1", tessLevelInner1);
 	}
 
 	std::vector<glm::vec3> Terrain::GeneratePatch()

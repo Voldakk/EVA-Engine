@@ -8,6 +8,7 @@
 #include "Skybox.hpp"
 #include "Components/MeshRenderer.hpp"
 #include "UI/UiElement.hpp"
+#include "Materials/ShadowMaterial.hpp"
 
 namespace EVA
 {

@@ -1,4 +1,5 @@
 {
+  "id": "EVA::StandardMaterial",
   "shader": "./assets/standard assets/shaders/standard.shader",
   "textureDiffuse": "./assets/standard assets/textures/grid.png"
 }

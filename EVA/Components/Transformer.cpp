@@ -27,8 +27,8 @@ namespace EVA
 
 	void Transformer::Inspector()
 	{
-		ComponentInspector::Float3("Translation", m_Translation);
-		ComponentInspector::Float3("Scaling", m_Scaling);
-		ComponentInspector::Float3("Rotation", m_Rotation);
+		InspectorFields::Float3("Translation", m_Translation);
+		InspectorFields::Float3("Scaling", m_Scaling);
+		InspectorFields::Float3("Rotation", m_Rotation);
 	}
 }

@@ -50,9 +50,6 @@ namespace EVA
 		glEnable(GL_DEBUG_OUTPUT);
 		glDebugMessageCallback(OpenGlMessageCallback, nullptr);
 
-		// Material stuff
-		Material::Init();
-
 		// Text
 		Text::Init();
 

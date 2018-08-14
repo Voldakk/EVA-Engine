@@ -70,13 +70,13 @@ namespace EVA
 		
 	}
 
-	std::string Component::GetTypeId()
+	std::string Component::GetTypeId() const
 	{
 		return "";
 	}
 
 	void Component::Inspector()
 	{
-		ComponentInspector::Text("-- No inspector --");
+		InspectorFields::Text("-- No inspector --");
 	}
 }

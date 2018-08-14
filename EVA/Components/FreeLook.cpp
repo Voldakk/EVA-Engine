@@ -90,7 +90,7 @@ namespace EVA
 
 	void FreeLook::Inspector()
 	{
-		ComponentInspector::Float("Mouse sensitivity", mouseSensitivity);
-		ComponentInspector::Float("Movement speed", minMovementSpeed);
+		InspectorFields::Float("Mouse sensitivity", mouseSensitivity);
+		InspectorFields::Float("Movement speed", minMovementSpeed);
 	}
 }

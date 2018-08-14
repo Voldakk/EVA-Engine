@@ -4,11 +4,16 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-class ComponentInspector
+class InspectorFields
 {
 public:
 
 	static const int STRING_LENGTH = 10000;
+
+	static void Text(std::string text)
+	{
+		ImGui::Text(text.c_str(), nullptr);
+	}
 
 	static void Text(const char* text)
 	{
@@ -32,41 +37,43 @@ public:
 		return false;
 	}
 
-	static void Bool(const char* name, bool& value)
+	static bool Bool(const char* name, bool& value)
 	{
-		ImGui::Checkbox(name, &value);
+		return ImGui::Checkbox(name, &value);
 	}
 
-	static void Float(const char* name, float& value)
+	static bool Float(const char* name, float& value)
 	{
-		ImGui::InputFloat(name, &value, 0.0f, 0.0f, "%.5f");
+		return ImGui::InputFloat(name, &value, 0.0f, 0.0f, "%.5f");
 	}
 
-	static void Float2(const char* name, glm::vec2& value)
+	static bool Float2(const char* name, glm::vec2& value)
 	{
-		ImGui::InputFloat2(name, glm::value_ptr(value));
+		return ImGui::InputFloat2(name, glm::value_ptr(value));
 	}
 
-	static void Float3(const char* name, glm::vec3& value)
+	static bool Float3(const char* name, glm::vec3& value)
 	{
-		ImGui::InputFloat3(name, glm::value_ptr(value));
+		return ImGui::InputFloat3(name, glm::value_ptr(value));
 	}
 
-	static void Float4(const char* name, glm::vec4& value)
+	static bool Float4(const char* name, glm::vec4& value)
 	{
-		ImGui::InputFloat4(name, glm::value_ptr(value));
+		return ImGui::InputFloat4(name, glm::value_ptr(value));
 	}
 
-	static void String(const char* name, std::string& value)
+	static bool String(const char* name, std::string& value)
 	{
 		const auto string = new char[STRING_LENGTH];
 		strcpy(string, value.c_str());
 
-		ImGui::InputText(name, string, STRING_LENGTH);
+		bool changed = ImGui::InputText(name, string, STRING_LENGTH);
 
 		value = string;
 
 		delete[] string;
+
+		return changed;
 	}
 
 	static bool EnterString(const char* name, std::string& value)

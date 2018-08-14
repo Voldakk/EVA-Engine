@@ -2,16 +2,13 @@
 
 #include "Scene.hpp"
 #include "Application.hpp"
-
+#include "ShaderManager.hpp"
+#include "Editor/InspectorFields.hpp"
+#include "Parsers/MaterialParser.hpp"
 
 namespace EVA
 {
 	Material *Material::m_ActiveMaterial;
-
-	std::shared_ptr<Texture> Material::textureDefaultDiffuse;
-	std::shared_ptr<Texture> Material::textureDefaultSpecular;
-	std::shared_ptr<Texture> Material::textureDefaultNormal;
-	std::shared_ptr<Texture> Material::textureDefaultEmission;
 
 	void Material::SetMbo(const std::shared_ptr<Mesh>& mesh, const std::vector<glm::mat4>& models)
 	{
@@ -75,60 +72,9 @@ namespace EVA
 		m_MatrixBuffers.clear();
 	}
 
-	void Material::SetTexture(const Texture::Type type, const FS::path& path)
+	void Material::SetNoActive()
 	{
-		const auto t = TextureManager::LoadTexture(path);
-		if (t == nullptr)
-		{
-			switch (type)
-			{
-			case Texture::Diffuse:
-				textureDiffuse = nullptr;
-				break;
-			case Texture::Specular:
-				textureSpecular = nullptr;
-				break;
-			case Texture::Normal:
-				textureNormal = nullptr;
-				break;
-			case Texture::Height:
-				textureHeight = nullptr;
-				break;
-			case Texture::Emission:
-				textureEmission = nullptr;
-				break;
-			default:
-				break;
-			}
-			return;
-		}
-
-		t->type = type;
-		SetTexture(t);
-	}
-
-	void Material::SetTexture(const std::shared_ptr<Texture>& texture)
-	{
-		switch (texture->type)
-		{
-		case Texture::Diffuse:
-			textureDiffuse = texture;
-			break;
-		case Texture::Specular:
-			textureSpecular = texture;
-			break;
-		case Texture::Normal:
-			textureNormal = texture;
-			break;
-		case Texture::Height:
-			textureHeight = texture;
-			break;
-		case Texture::Emission:
-			textureEmission = texture;
-			break;
-		default:
-			break;
-		}
+		m_ActiveMaterial = nullptr;
 	}
 
 	void Material::Activate(Scene *scene, Transform *transform)
@@ -167,14 +113,7 @@ namespace EVA
 	void Material::SetMaterialUniforms(Scene *scene) const
 	{
 		// Material
-		shader->SetUniform1F("material.shininess", materialShininess);
-		shader->SetUniform4Fv("material.tint_diffuse", tintDiffuse);
-		shader->SetUniform1F("material.alphaCutoff", alphaCutoff);
-
 		shader->SetUniform1I("instancing", useInstancing);
-
-		// Textures
-		SetTextures();
 
 		// Camera
 		shader->SetUniform3Fv("cameraPosition", Application::mainCamera->transform->position);
@@ -241,75 +180,65 @@ namespace EVA
 		shader->SetUniformMatrix4Fv("model", transform->modelMatrix);
 	}
 
-	void Material::SetTextures() const
+	void Material::Load(const DataObject data)
 	{
-		// Diffuse
-		glActiveTexture(GL_TEXTURE0);
-		shader->SetUniform1I("material.texture_diffuse", 0);
+		// Shader
+		const auto shaderPath = data.GetPath("shader", "");
+		if (!shaderPath.empty())
+			shader = ShaderManager::LoadShader(shaderPath);
 
-		if (textureDiffuse != nullptr)
-			glBindTexture(GL_TEXTURE_2D, textureDiffuse->id);
-		else
-			glBindTexture(GL_TEXTURE_2D, textureDefaultDiffuse->id);
+		// Instancing
+		SetUseInstancing(data.GetBool("useInstancing", false));
 
-		// Specular
-		glActiveTexture(GL_TEXTURE1);
-		shader->SetUniform1I("material.texture_specular", 1);
-
-		if (textureSpecular != nullptr)
-			glBindTexture(GL_TEXTURE_2D, textureSpecular->id);
-		else
-			glBindTexture(GL_TEXTURE_2D, textureDefaultSpecular->id);
-
-		// Normal
-		glActiveTexture(GL_TEXTURE2);
-		shader->SetUniform1I("material.texture_normal", 2);
-
-		if (textureNormal != nullptr)
-			glBindTexture(GL_TEXTURE_2D, textureNormal->id);
-		else
-			glBindTexture(GL_TEXTURE_2D, textureDefaultNormal->id);
-
-		// Emission
-		glActiveTexture(GL_TEXTURE3);
-		shader->SetUniform1I("material.texture_emission", 3);
-
-		if (textureEmission != nullptr)
-			glBindTexture(GL_TEXTURE_2D, textureEmission->id);
-		else
-			glBindTexture(GL_TEXTURE_2D, textureDefaultEmission->id);
-
-		// Height
-		glActiveTexture(GL_TEXTURE4);
-		shader->SetUniform1I("material.texture_height", 4);
-
-		if (textureHeight != nullptr)
-			glBindTexture(GL_TEXTURE_2D, textureHeight->id);
-		else
-			glBindTexture(GL_TEXTURE_2D, textureDefaultSpecular->id);
+		// Culling 
+		cullFront = data.GetBool("cullFront", cullFront);
+		cullBack = data.GetBool("cullBack", cullBack);
 	}
 
-	void Material::Init()
+	void Material::Save(DataObject & data) const
 	{
-		textureDefaultDiffuse = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_diffuse.png");
-		textureDefaultSpecular = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_specular.png");
-		textureDefaultNormal = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_normal.png");
-		textureDefaultEmission = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_emission.png");
+		if (shader != nullptr)
+			data.SetString("shader", FileSystem::ToString(shader->paths->shader));
+
+		data.SetBool("useInstancing", useInstancing);
+
+		// Culling 
+		data.SetBool("cullFront", cullFront);
+		data.SetBool("cullBack", cullBack);
 	}
 
-	void Material::SetNoActive()
+	void Material::Inspector()
 	{
-		m_ActiveMaterial = nullptr;
+		InspectorFields::Text("Material: " + FileSystem::ToString(path.filename()));
+
+		auto path = shader == nullptr ? "" : FileSystem::ToString(shader->paths->shader);
+		if (InspectorFields::DragDropTargetString("Shader", path, "file"))
+		{
+			shader = ShaderManager::LoadShader(path);
+			SaveToFile();
+		}
+
+		auto useInstancing = this->useInstancing;
+		if (InspectorFields::Bool("Use instancing", useInstancing))
+		{
+			SetUseInstancing(useInstancing);
+			SaveToFile();
+		}
+
+		if (InspectorFields::Bool("Cull front", cullFront))
+			SaveToFile();
+
+		if (InspectorFields::Bool("Cull back", cullBack))
+			SaveToFile();
 	}
 
-	void ShadowMaterial::SetMaterialUniforms(Scene* scene) const
+	std::string Material::GetTypeId() const
 	{
-
+		return std::string();
 	}
 
-	void ShadowMaterial::SetObjectUniforms(Transform* transform) const
+	void Material::SaveToFile()
 	{
-		// Position
-		shader->SetUniformMatrix4Fv("model", transform->modelMatrix);
+		MaterialParser::Save(this, path);
 	}
 }

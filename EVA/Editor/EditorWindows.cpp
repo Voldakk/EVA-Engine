@@ -6,6 +6,7 @@
 #include "../Parsers/SceneParser.hpp"
 #include "../MaterialManager.hpp"
 #include "../Parsers/MaterialParser.hpp"
+#include "../ShaderManager.hpp"
 
 namespace EVA
 {
@@ -219,13 +220,13 @@ namespace EVA
 
 				if (ImGui::BeginMenu("Component", SelectedGameObject() != nullptr))
 				{
-					auto ids = ComponentMap::GetComponentIds();
+					auto ids = ComponentMap::GetIds();
 
 					for (const auto& id : ids)
 					{
 						if (ImGui::MenuItem(id.c_str()) && SelectedGameObject() != nullptr)
 						{
-							const auto component = ComponentMap::CreateComponent(id);
+							const auto component = ComponentMap::Create(id);
 							if (component != nullptr)
 							{
 								component->SetScene(SelectedGameObject()->scene.Get());
@@ -658,14 +659,14 @@ namespace EVA
 
 		if (ImGui::BeginPopup("InspectorAddComponentSelect"))
 		{
-			auto ids = ComponentMap::GetComponentIds();
+			auto ids = ComponentMap::GetIds();
 			ImGui::Separator();
 
 			for (const auto& id : ids)
 			{
 				if (ImGui::Selectable(id.c_str()))
 				{
-					const auto component = ComponentMap::CreateComponent(id);
+					const auto component = ComponentMap::Create(id);
 					if (component != nullptr)
 					{
 						component->SetScene(gameObject->scene.Get());
@@ -734,65 +735,7 @@ namespace EVA
 		if (material == nullptr)
 			return;
 
-		ImGui::Text(("Material: " + FileSystem::ToString(material->path.filename())).c_str());
-
-		auto path = material->shader == nullptr ? "" : FileSystem::ToString(material->shader->paths->shader);
-		if (ComponentInspector::DragDropTargetString("Shader", path, "file"))
-		{
-			material->shader = ShaderManager::LoadShader(path);
-			MaterialParser::Save(material, material->path);
-		}
-
-		auto useInstancing = material->useInstancing;
-		if (ImGui::Checkbox("Use instancing", &useInstancing))
-		{
-			material->SetUseInstancing(useInstancing);
-			MaterialParser::Save(material, material->path);
-		}
-
-		if (ImGui::Checkbox("Cull front", &material->cullFront))
-			MaterialParser::Save(material, material->path);
-
-		if (ImGui::Checkbox("Cull back", &material->cullBack))
-			MaterialParser::Save(material, material->path);
-
-		if (ImGui::InputFloat("Shininess", &material->materialShininess))
-		{
-			MaterialParser::Save(material, material->path);
-		}
-
-		if (ImGui::InputFloat("Alpha cutoff", &material->alphaCutoff))
-		{
-			MaterialParser::Save(material, material->path);
-		}
-
-		path = material->textureDiffuse == nullptr ? "" : FileSystem::ToString(material->textureDiffuse->path);
-		if (ComponentInspector::DragDropTargetString("Diffuse texture", path, "file"))
-		{
-			material->SetTexture(Texture::Diffuse, path);
-			MaterialParser::Save(material, material->path);
-		}
-
-		path = material->textureSpecular == nullptr ? "" : FileSystem::ToString(material->textureSpecular->path);
-		if (ComponentInspector::DragDropTargetString("Specular texture", path, "file"))
-		{
-			material->SetTexture(Texture::Specular, path);
-			MaterialParser::Save(material, material->path);
-		}
-
-		path = material->textureNormal == nullptr ? "" : FileSystem::ToString(material->textureNormal->path);
-		if (ComponentInspector::DragDropTargetString("Normal texture", path, "file"))
-		{
-			material->SetTexture(Texture::Normal, path);
-			MaterialParser::Save(material, material->path);
-		}
-
-		path = material->textureEmission == nullptr ? "" : FileSystem::ToString(material->textureEmission->path);
-		if (ComponentInspector::DragDropTargetString("Emission texture", path, "file"))
-		{
-			material->SetTexture(Texture::Emission, path);
-			MaterialParser::Save(material, material->path);
-		}
+		material->Inspector();
 	}
 
 	void EditorWindows::ShaderInspector() const
@@ -807,7 +750,7 @@ namespace EVA
 		auto paths = shader->paths;
 		
 		auto path = FileSystem::ToString(shader->paths->vertex);
-		if (ComponentInspector::DragDropTargetString("Vertex", path, "file"))
+		if (InspectorFields::DragDropTargetString("Vertex", path, "file"))
 		{
 			paths->vertex = path;
 			shader->SetPaths(paths);
@@ -815,7 +758,7 @@ namespace EVA
 		}
 
 		path = FileSystem::ToString(shader->paths->fragment);
-		if (ComponentInspector::DragDropTargetString("Fragment", path, "file"))
+		if (InspectorFields::DragDropTargetString("Fragment", path, "file"))
 		{
 			paths->fragment = path;
 			shader->SetPaths(paths);
@@ -823,7 +766,7 @@ namespace EVA
 		}
 
 		path = FileSystem::ToString(shader->paths->geometry);
-		if (ComponentInspector::DragDropTargetString("Geometry", path, "file"))
+		if (InspectorFields::DragDropTargetString("Geometry", path, "file"))
 		{
 			paths->geometry = path;
 			shader->SetPaths(paths);
@@ -831,7 +774,7 @@ namespace EVA
 		}
 
 		path = FileSystem::ToString(shader->paths->tessControl);
-		if (ComponentInspector::DragDropTargetString("Tessellation control", path, "file"))
+		if (InspectorFields::DragDropTargetString("Tessellation control", path, "file"))
 		{
 			paths->tessControl = path;
 			shader->SetPaths(paths);
@@ -839,7 +782,7 @@ namespace EVA
 		}
 
 		path = FileSystem::ToString(shader->paths->tessEvaluation);
-		if (ComponentInspector::DragDropTargetString("Tessellation evaluation", path, "file"))
+		if (InspectorFields::DragDropTargetString("Tessellation evaluation", path, "file"))
 		{
 			paths->tessEvaluation = path;
 			shader->SetPaths(paths);

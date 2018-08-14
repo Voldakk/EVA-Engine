@@ -30,7 +30,7 @@ namespace EVA
 
 	void BoxCollider::Inspector()
 	{
-		ComponentInspector::Float3("Center", bounds.center);
-		ComponentInspector::Float3("Extents", bounds.extents);
+		InspectorFields::Float3("Center", bounds.center);
+		InspectorFields::Float3("Extents", bounds.extents);
 	}
 }

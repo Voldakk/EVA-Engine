@@ -43,8 +43,8 @@ namespace EVA
 
 	void Camera::Inspector()
 	{
-		ComponentInspector::Float("Fov", fov);
-		ComponentInspector::Float("Near", near);
-		ComponentInspector::Float("Far", far);
+		InspectorFields::Float("Fov", fov);
+		InspectorFields::Float("Near", near);
+		InspectorFields::Float("Far", far);
 	}
 }

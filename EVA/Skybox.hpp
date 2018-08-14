@@ -4,26 +4,13 @@
 #include <memory>
 #include "Parsers/Json.hpp"
 
-#include "Material.hpp"
+#include "Materials/SkyBoxMaterial.hpp"
 
 namespace EVA
 {
-
 	class Model;
 	class Shader;
 	class Transform;
-
-	class SkyBoxMaterial : public Material
-	{
-
-	public:
-
-		glm::vec4 skyTint = glm::vec4(1.0f);
-
-		SkyBoxMaterial() = default;
-
-		void SetMaterialUniforms(Scene* scene) const override;
-	};
 
 	/**
 	 * \brief A skybox

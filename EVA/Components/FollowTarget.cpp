@@ -42,8 +42,8 @@ namespace EVA
 
 	void FollowTarget::Inspector()
 	{
-		ComponentInspector::Float3("Offset", offset);
-		ComponentInspector::Float("Scalar", scalar);
-		ComponentInspector::EnterString("Target", m_TargetName);
+		InspectorFields::Float3("Offset", offset);
+		InspectorFields::Float("Scalar", scalar);
+		InspectorFields::EnterString("Target", m_TargetName);
 	}
 }

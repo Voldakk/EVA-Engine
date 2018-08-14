@@ -4,15 +4,18 @@
 
 namespace EVA
 {
-	TerrainMaterial::TerrainMaterial(Terrain* terrain) : m_Terrain(terrain)
-	{
-
-	}
+	REGISTER_MATERIAL_CPP(TerrainMaterial, "EVA::TerrainMaterial")
 
 	void TerrainMaterial::SetMaterialUniforms(Scene* scene) const
 	{
 		Material::SetMaterialUniforms(scene);
 
-		shader->SetUniform1I("maxLod", m_Terrain->maxTessLod);
+		if(m_Terrain != nullptr)
+			shader->SetUniform1I("maxLod", m_Terrain->maxTessLod);
+	}
+
+	void TerrainMaterial::SetTerrain(Terrain * terrain)
+	{
+		m_Terrain = terrain;
 	}
 }

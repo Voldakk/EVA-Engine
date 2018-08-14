@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Material.hpp"
+#include "../MaterialMap.hpp"
 
 namespace EVA
 {
@@ -9,12 +10,13 @@ namespace EVA
 
 	class TerrainMaterial : public Material
 	{
+		REGISTER_MATERIAL_HPP(TerrainMaterial)
 		Terrain* m_Terrain;
 		
 	public:
 
-		explicit TerrainMaterial(Terrain* terrain);
-
 		void SetMaterialUniforms(Scene* scene) const override;
+
+		void SetTerrain(Terrain* terrain);
 	};
 }

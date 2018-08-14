@@ -11,21 +11,6 @@
 
 namespace EVA
 {
-	void SkyBoxMaterial::SetMaterialUniforms(Scene* scene) const
-	{
-		shader->SetUniformMatrix4Fv("view", Application::mainCamera->viewMatrix);
-		shader->SetUniformMatrix4Fv("projection", Application::GetPerspectiveMatrix());
-
-		shader->SetUniform4Fv("skyTint", skyTint);
-
-		// Cubemap
-		glActiveTexture(GL_TEXTURE0);
-		shader->SetUniform1I("material.texture_diffuse", 0);
-
-		if (textureDiffuse != nullptr)
-			glBindTexture(GL_TEXTURE_CUBE_MAP, textureDiffuse->id);
-	}
-
 	Skybox::Skybox(const std::string &folderPath, const std::string &fileType)
 	{
 		Set(folderPath, fileType);
@@ -94,13 +79,13 @@ namespace EVA
 
 	void Skybox::Inspector()
 	{
-		if (ComponentInspector::DragDropTargetString("Folder path", m_FolderPath, "folder") || 
-			ComponentInspector::EnterString("File type", m_FileType))
+		if (InspectorFields::DragDropTargetString("Folder path", m_FolderPath, "folder") || 
+			InspectorFields::EnterString("File type", m_FileType))
 		{
 			Set(m_FolderPath, m_FileType);
 		}
 
 		if(m_Material != nullptr)
-			ComponentInspector::ColorPicker("Tint", m_Material->skyTint);
+			InspectorFields::ColorPicker("Tint", m_Material->skyTint);
 	}
 }

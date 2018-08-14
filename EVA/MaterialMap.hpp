@@ -5,22 +5,22 @@
 #include <vector>
 
 #include "ClassMap.hpp"
-#include "Component.hpp"
+#include "Material.hpp"
 
 namespace EVA
 {
 	// Macro for registering a component. Should be put inside the class declaration
-	#define REGISTER_COMPONENT_HPP(TYPE) \
-    REGISTER_CLASS_HPP(Component, TYPE)
+	#define REGISTER_MATERIAL_HPP(TYPE) \
+    REGISTER_CLASS_HPP(Material, TYPE)
 
 	// Macro for registering a component
-	#define REGISTER_COMPONENT_CPP(TYPE, NAME) \
-    REGISTER_CLASS_CPP(Component, TYPE, NAME)
+	#define REGISTER_MATERIAL_CPP(TYPE, NAME) \
+    REGISTER_CLASS_CPP(Material, TYPE, NAME)
 
 	/**
 	 * \brief Keeps track of all registerd components
 	 */
-	class ComponentMap : public ClassMap<Component>
+	class MaterialMap : public ClassMap<Material>
 	{
 
 	};
