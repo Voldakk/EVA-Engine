@@ -640,7 +640,7 @@ namespace EVA
 			if (ImGui::CollapsingHeader((std::to_string(i) + " " + component->GetTypeId()).c_str(), &keep))
 			{
 				ImGui::PushID(i);
-				component->Inspector();
+				component->DrawInspector();
 				ImGui::PopID();
 			}
 			if (!keep)
@@ -725,7 +725,7 @@ namespace EVA
 
 		ImGui::Text("Skybox");
 
-		skybox->Inspector();
+		skybox->DrawInspector();
 	}
 
 	void EditorWindows::MaterialInspector() const
@@ -735,7 +735,7 @@ namespace EVA
 		if (material == nullptr)
 			return;
 
-		material->Inspector();
+		material->DrawInspector();
 	}
 
 	void EditorWindows::ShaderInspector() const

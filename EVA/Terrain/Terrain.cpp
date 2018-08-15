@@ -59,7 +59,7 @@ namespace EVA
 		m_Mesh->DrawTerrain(meshData);
 	}
 
-	void Terrain::Inspector()
+	void Terrain::DrawInspector()
 	{
 		InspectorFields::Int("tessLevelOuter", tessLevelOuter);
 		InspectorFields::Int("tessLevelInner0", tessLevelInner0);

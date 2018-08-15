@@ -77,7 +77,7 @@ namespace EVA
 			data.SetString("fileExtension", m_FileType);
 	}
 
-	void Skybox::Inspector()
+	void Skybox::DrawInspector()
 	{
 		if (InspectorFields::DragDropTargetString("Folder path", m_FolderPath, "folder") || 
 			InspectorFields::EnterString("File type", m_FileType))

@@ -49,7 +49,7 @@ namespace EVA
 		*/
 		void Save(DataObject& data) const;
 
-		void Inspector();
+		void DrawInspector();
 	};
 
 }

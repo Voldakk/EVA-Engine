@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "Asset.hpp"
 #include "ConstPointer.hpp"
 #include "Parsers/Json.hpp"
 #include "Editor/InspectorFields.hpp"
@@ -71,7 +72,7 @@ namespace EVA
 	/**
 	* \brief Base class for components
 	*/
-    class Component
+    class Component : public Asset
     {
 		friend GameObject;
 
@@ -134,30 +135,5 @@ namespace EVA
 		* \brief Called when the scene starts
 		*/
 		virtual void Start();
-
-	    /**
-		 * \brief Loads Component values from the given DataObject
-		 * \param data The DataObject
-		 */
-		virtual void Load(const DataObject data);
-
-	    /**
-		 * \brief Saves Component values to the given DataObject
-		 * \param data The DataObject
-		 */
-		virtual void Save(DataObject& data);
-
-		virtual std::string GetTypeId() const;
-
-		/**
-		* \brief Draws the component inspector
-		*/
-		virtual void Inspector();
     };
-
-	/*template <class T>
-	T* Component::GetComponentOfType()
-	{
-		return m_GameObject->GetComponentOfType<T>();
-	}*/
 }

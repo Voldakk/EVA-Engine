@@ -69,7 +69,7 @@ namespace EVA
 			m_Camera->fov -= Input::GetScroll().y;
 	}
 
-	void FreeLook::Load(const DataObject data)
+	void FreeLook::LoadAsset(const DataObject data)
 	{
 		mouseSensitivity = data.GetFloat("mouseSensitivity", mouseSensitivity);
 		minMovementSpeed = data.GetFloat("movementSpeed", minMovementSpeed);
@@ -79,7 +79,7 @@ namespace EVA
 		yaw = data.GetFloat("yaw", 0.0f);
 	}
 
-	void FreeLook::Save(DataObject& data)
+	void FreeLook::SaveAsset(DataObject& data) const
 	{
 		data.SetFloat("mouseSensitivity", mouseSensitivity);
 		data.SetFloat("movementSpeed", minMovementSpeed);
@@ -88,7 +88,7 @@ namespace EVA
 		data.SetFloat("yaw", yaw);
 	}
 
-	void FreeLook::Inspector()
+	void FreeLook::DrawInspector()
 	{
 		InspectorFields::Float("Mouse sensitivity", mouseSensitivity);
 		InspectorFields::Float("Movement speed", minMovementSpeed);

@@ -18,7 +18,7 @@ int main()
 	if(!EVA::Application::Init("EVA-Engine"))
 		return EXIT_FAILURE;
 
-	EVA::SceneManager::CreateScene<EVA::SceneEditor>("./assets/scenes/main.scene");
+	EVA::SceneManager::CreateScene<EVA::SceneEditor>();
 
 #else
 	

@@ -228,7 +228,7 @@ namespace EVA
 		return m_Children;
 	}
 
-	void Transform::Load(const DataObject data)
+	void Transform::LoadAsset(const DataObject data)
 	{
 		m_LocalPosition = data.GetVec3("position", m_LocalPosition);
 		m_LocalScale = data.GetVec3("scale", m_Scale);
@@ -239,7 +239,7 @@ namespace EVA
 		UpdateModelMatrix();
 	}
 
-	void Transform::Save(DataObject& data)
+	void Transform::SaveAsset(DataObject& data) const
 	{
 		data.SetVec3("position", m_LocalPosition);
 		data.SetVec3("scale", m_LocalScale);

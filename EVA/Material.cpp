@@ -180,7 +180,21 @@ namespace EVA
 		shader->SetUniformMatrix4Fv("model", transform->modelMatrix);
 	}
 
-	void Material::Load(const DataObject data)
+	void Material::SaveAsset(DataObject & data) const
+	{
+		// Shader
+		if (shader != nullptr)
+			data.SetString("shader", FileSystem::ToString(shader->paths->shader));
+
+		// Instancing
+		data.SetBool("useInstancing", useInstancing);
+
+		// Culling 
+		data.SetBool("cullFront", cullFront);
+		data.SetBool("cullBack", cullBack);
+	}
+
+	void Material::LoadAsset(const DataObject data)
 	{
 		// Shader
 		const auto shaderPath = data.GetPath("shader", "");
@@ -195,19 +209,7 @@ namespace EVA
 		cullBack = data.GetBool("cullBack", cullBack);
 	}
 
-	void Material::Save(DataObject & data) const
-	{
-		if (shader != nullptr)
-			data.SetString("shader", FileSystem::ToString(shader->paths->shader));
-
-		data.SetBool("useInstancing", useInstancing);
-
-		// Culling 
-		data.SetBool("cullFront", cullFront);
-		data.SetBool("cullBack", cullBack);
-	}
-
-	void Material::Inspector()
+	void Material::DrawInspector()
 	{
 		InspectorFields::Text("Material: " + FileSystem::ToString(path.filename()));
 
@@ -230,11 +232,6 @@ namespace EVA
 
 		if (InspectorFields::Bool("Cull back", cullBack))
 			SaveToFile();
-	}
-
-	std::string Material::GetTypeId() const
-	{
-		return std::string();
 	}
 
 	void Material::SaveToFile()

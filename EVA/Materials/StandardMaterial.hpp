@@ -46,14 +46,14 @@ namespace EVA
 		* \brief Loads Material values from the given DataObject
 		* \param data The DataObject
 		*/
-		void Load(const DataObject data) override;
+		void LoadAsset(const DataObject data) override;
 
 		/**
 		* \brief Saves Material values to the given DataObject
 		* \param data The DataObject
 		*/
-		void Save(DataObject& data) const override;
+		void SaveAsset(DataObject& data) const override;
 
-		void Inspector() override;
+		void DrawInspector() override;
 	};
 }

@@ -36,7 +36,7 @@ namespace EVA
 			if (material != nullptr)
 			{
 				material->path = path;
-				material->Load(data);
+				material->LoadAsset(data);
 			}
 
 			return material;
@@ -56,7 +56,7 @@ namespace EVA
 
 			data.SetString("id", material->GetTypeId());
 
-			material->Save(data);
+			material->SaveAsset(data);
 
 			Json::Save(&d, path);
 		}

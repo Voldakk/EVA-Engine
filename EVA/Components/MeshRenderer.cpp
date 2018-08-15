@@ -44,7 +44,7 @@ namespace EVA
 		m_Mesh->Draw();
 	}
 
-	void MeshRenderer::Load(const DataObject data)
+	void MeshRenderer::LoadAsset(const DataObject data)
 	{
 		std::shared_ptr<Mesh> mesh;
 		std::shared_ptr<Material> material;
@@ -79,7 +79,7 @@ namespace EVA
 		Set(mesh, material);
 	}
 
-	void MeshRenderer::Save(DataObject& data)
+	void MeshRenderer::SaveAsset(DataObject& data) const
 	{
 		if (material != nullptr)
 			data.SetString("material", FileSystem::ToString(material->path));
@@ -91,7 +91,7 @@ namespace EVA
 		}
 	}
 
-	void MeshRenderer::Inspector()
+	void MeshRenderer::DrawInspector()
 	{
 		auto materialPath = material != nullptr ? FileSystem::ToString(material->path) : "";
 		if (InspectorFields::DragDropTargetString("Material", materialPath, "file"))

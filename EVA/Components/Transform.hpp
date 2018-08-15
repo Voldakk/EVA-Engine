@@ -208,12 +208,12 @@ namespace EVA
 		* \brief Loads Component values from the given DataObject
 		* \param data The DataObject
 		*/
-		void Load(DataObject data) override;
+		void LoadAsset(DataObject data) override;
 
 		/**
 		* \brief Saves Component values to the given DataObject
 		* \param data The DataObject
 		*/
-		void Save(DataObject& data) override;
+		void SaveAsset(DataObject& data) const override;
 	};
 }

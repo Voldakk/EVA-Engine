@@ -59,24 +59,4 @@ namespace EVA
 	{
 
 	}
-
-	void Component::Load(const DataObject data)
-	{
-
-	}
-
-	void Component::Save(DataObject& data)
-	{
-		
-	}
-
-	std::string Component::GetTypeId() const
-	{
-		return "";
-	}
-
-	void Component::Inspector()
-	{
-		InspectorFields::Text("-- No inspector --");
-	}
 }

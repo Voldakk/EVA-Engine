@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "Asset.hpp"
 #include "Shader.hpp"
 
 #include "EVA/OpenGL.hpp"
@@ -27,7 +28,7 @@ namespace EVA
 	/**
 	 * \brief A material holds a Shader, textures and other material properties
 	 */
-	class Material
+	class Material : public Asset
 	{
 	protected:
 
@@ -69,23 +70,21 @@ namespace EVA
 		virtual void SetObjectUniforms(Transform* transform) const;
 
 		/**
-		* \brief Loads Material values from the given DataObject
-		* \param data The DataObject
-		*/
-		virtual void Load(const DataObject data);
-
-		/**
 		* \brief Saves Material values to the given DataObject
 		* \param data The DataObject
 		*/
-		virtual void Save(DataObject& data) const;
+		virtual void SaveAsset(DataObject& data) const override;
+
+		/**
+		* \brief Loads Material values from the given DataObject
+		* \param data The DataObject
+		*/
+		virtual void LoadAsset(const DataObject data) override;
 
 		/**
 		* \brief Draws the inspector
 		*/
-		virtual void Inspector();
-
-		virtual std::string GetTypeId() const;
+		virtual void DrawInspector() override;
 
 		void SaveToFile();
 	};

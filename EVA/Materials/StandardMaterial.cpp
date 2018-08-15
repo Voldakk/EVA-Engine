@@ -141,9 +141,9 @@ namespace EVA
 			glBindTexture(GL_TEXTURE_2D, textureDefaultSpecular->id);
 	}
 
-	void StandardMaterial::Load(const DataObject data)
+	void StandardMaterial::LoadAsset(const DataObject data)
 	{
-		Material::Load(data);
+		Material::LoadAsset(data);
 
 		// Shininess
 		materialShininess = data.GetFloat("shininess", materialShininess);
@@ -175,8 +175,10 @@ namespace EVA
 			SetTexture(Texture::Emission, emissionPath);
 	}
 
-	void StandardMaterial::Save(DataObject & data) const
+	void StandardMaterial::SaveAsset(DataObject & data) const
 	{
+		Material::SaveAsset(data);
+
 		data.SetFloat("shininess", materialShininess);
 
 		data.SetFloat("alphaCutoff", alphaCutoff);
@@ -197,9 +199,9 @@ namespace EVA
 			data.SetPath("textureEmission", textureEmission->path);
 	}
 
-	void StandardMaterial::Inspector()
+	void StandardMaterial::DrawInspector()
 	{
-		Material::Inspector();
+		Material::DrawInspector();
 
 		if (InspectorFields::Float("Shininess", materialShininess))
 			SaveToFile();

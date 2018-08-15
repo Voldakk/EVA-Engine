@@ -48,7 +48,7 @@ namespace EVA
 			gameObject->SetName(document["name"].GetString());
 
 		// Transform
-		gameObject->transform->Load(DataObject(document));
+		gameObject->transform->LoadAsset(DataObject(document));
 
 		// Components
 		if (document.HasMember("components") && document["components"].IsArray())
@@ -65,7 +65,7 @@ namespace EVA
 				if (component != nullptr)
 				{
 					component->SetScene(gameObject->scene.Get());
-					component->Load(DataObject(c));
+					component->LoadAsset(DataObject(c));
 					gameObject->AttachComponent(component);
 				}
 			}
@@ -128,7 +128,7 @@ namespace EVA
 		data.SetString("name", gameObject->GetName());
 
 		// Transform
-		gameObject->transform->Save(data);
+		gameObject->transform->SaveAsset(data);
 
 		// Components
 		const auto& components = gameObject->GetComponents();
@@ -150,7 +150,7 @@ namespace EVA
 				componentData.SetString("id", component->GetTypeId());
 
 				// Save other data
-				component->Save(componentData);
+				component->SaveAsset(componentData);
 
 				// Add to array
 				componentsArray.PushBack(componentValue, a);

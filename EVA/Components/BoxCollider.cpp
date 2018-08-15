@@ -14,7 +14,7 @@ namespace EVA
 		return Bounds(bounds.center + transform->position, bounds.extents * transform->scale);
 	}
 
-	void BoxCollider::Load(const DataObject data)
+	void BoxCollider::LoadAsset(const DataObject data)
 	{
 		const auto center = data.GetVec3("center", bounds.center);
 		const auto extents = data.GetVec3("extents", bounds.extents);
@@ -22,13 +22,13 @@ namespace EVA
 		bounds = Bounds(center, extents);
 	}
 
-	void BoxCollider::Save(DataObject& data)
+	void BoxCollider::SaveAsset(DataObject& data) const
 	{
 		data.SetVec3("center", bounds.center);
 		data.SetVec3("extents", bounds.extents);
 	}
 
-	void BoxCollider::Inspector()
+	void BoxCollider::DrawInspector()
 	{
 		InspectorFields::Float3("Center", bounds.center);
 		InspectorFields::Float3("Extents", bounds.extents);
