@@ -27,24 +27,10 @@ namespace EVA
 		EVA::Application::SetMainCamera(this);
     }
 
-	void Camera::LoadAsset(const DataObject data)
+	void Camera::Serialize(DataObject& data)
 	{
-		fov = data.GetFloat("fov", 90.0f);
-		near = data.GetFloat("near", 0.1f);
-		far = data.GetFloat("far", 1000.0f);
-	}
-
-	void Camera::SaveAsset(DataObject& data) const
-	{
-		data.SetFloat("fov", fov);
-		data.SetFloat("near", near);
-		data.SetFloat("far", far);
-	}
-
-	void Camera::DrawInspector()
-	{
-		InspectorFields::Float("Fov", fov);
-		InspectorFields::Float("Near", near);
-		InspectorFields::Float("Far", far);
+		data.Serialize("fov", fov);
+		data.Serialize("near", near);
+		data.Serialize("far", far);
 	}
 }

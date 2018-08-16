@@ -1,4 +1,7 @@
 #include "MaterialManager.hpp"
+
+#include <iostream>
+
 #include "Parsers/MaterialParser.hpp"
 
 namespace EVA
@@ -10,6 +13,8 @@ namespace EVA
 		// Return the id if the material's already loaded
 		if (m_Materials.count(path))
 			return m_Materials[path];
+
+		std::cout << "MaterialManager::LoadMaterial - " << FileSystem::ToString(path) << "\n";
 
 		auto material = MaterialParser::Load(path);
 

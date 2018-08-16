@@ -180,62 +180,23 @@ namespace EVA
 		shader->SetUniformMatrix4Fv("model", transform->modelMatrix);
 	}
 
-	void Material::SaveAsset(DataObject & data) const
-	{
-		// Shader
-		if (shader != nullptr)
-			data.SetString("shader", FileSystem::ToString(shader->paths->shader));
-
-		// Instancing
-		data.SetBool("useInstancing", useInstancing);
-
-		// Culling 
-		data.SetBool("cullFront", cullFront);
-		data.SetBool("cullBack", cullBack);
-	}
-
-	void Material::LoadAsset(const DataObject data)
-	{
-		// Shader
-		const auto shaderPath = data.GetPath("shader", "");
-		if (!shaderPath.empty())
-			shader = ShaderManager::LoadShader(shaderPath);
-
-		// Instancing
-		SetUseInstancing(data.GetBool("useInstancing", false));
-
-		// Culling 
-		cullFront = data.GetBool("cullFront", cullFront);
-		cullBack = data.GetBool("cullBack", cullBack);
-	}
-
-	void Material::DrawInspector()
-	{
-		InspectorFields::Text("Material: " + FileSystem::ToString(path.filename()));
-
-		auto path = shader == nullptr ? "" : FileSystem::ToString(shader->paths->shader);
-		if (InspectorFields::DragDropTargetString("Shader", path, "file"))
-		{
-			shader = ShaderManager::LoadShader(path);
-			SaveToFile();
-		}
-
-		auto useInstancing = this->useInstancing;
-		if (InspectorFields::Bool("Use instancing", useInstancing))
-		{
-			SetUseInstancing(useInstancing);
-			SaveToFile();
-		}
-
-		if (InspectorFields::Bool("Cull front", cullFront))
-			SaveToFile();
-
-		if (InspectorFields::Bool("Cull back", cullBack))
-			SaveToFile();
-	}
-
 	void Material::SaveToFile()
 	{
 		MaterialParser::Save(this, path);
+	}
+
+	void Material::Serialize(DataObject& data)
+	{
+		// Shader
+		auto shaderPath = shader != nullptr ? shader->paths->shader : "";
+		if (data.Serialize("shader", shaderPath) && !shaderPath.empty())
+			shader = ShaderManager::LoadShader(shaderPath);
+
+		// Instancing
+		data.Serialize("useInstancing", m_UseInstancing);
+
+		// Culling 
+		data.Serialize("cullFront", cullFront);
+		data.Serialize("cullBack", cullBack);
 	}
 }

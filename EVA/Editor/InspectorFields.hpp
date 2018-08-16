@@ -4,148 +4,165 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-class InspectorFields
+#include "../FileSystem.hpp"
+
+namespace EVA
 {
-public:
 
-	static const int STRING_LENGTH = 10000;
-
-	static void Text(std::string text)
+	class InspectorFields
 	{
-		ImGui::Text(text.c_str(), nullptr);
-	}
+	public:
 
-	static void Text(const char* text)
-	{
-		ImGui::Text(text, nullptr);
-	}
+		static const int STRING_LENGTH = 10000;
 
-	static void Int(const char* name, int& value)
-	{
-		ImGui::InputInt(name, &value);
-	}
-
-	static bool EnterInt(const char* name, int& value)
-	{
-		auto temp = value;
-		if( ImGui::InputInt(name, &temp, 1, 5, ImGuiInputTextFlags_EnterReturnsTrue))
+		static void Text(std::string text)
 		{
-			value = temp;
-			return true;
+			ImGui::Text(text.c_str(), nullptr);
 		}
 
-		return false;
-	}
-
-	static bool Bool(const char* name, bool& value)
-	{
-		return ImGui::Checkbox(name, &value);
-	}
-
-	static bool Float(const char* name, float& value)
-	{
-		return ImGui::InputFloat(name, &value, 0.0f, 0.0f, "%.5f");
-	}
-
-	static bool Float2(const char* name, glm::vec2& value)
-	{
-		return ImGui::InputFloat2(name, glm::value_ptr(value));
-	}
-
-	static bool Float3(const char* name, glm::vec3& value)
-	{
-		return ImGui::InputFloat3(name, glm::value_ptr(value));
-	}
-
-	static bool Float4(const char* name, glm::vec4& value)
-	{
-		return ImGui::InputFloat4(name, glm::value_ptr(value));
-	}
-
-	static bool String(const char* name, std::string& value)
-	{
-		const auto string = new char[STRING_LENGTH];
-		strcpy(string, value.c_str());
-
-		bool changed = ImGui::InputText(name, string, STRING_LENGTH);
-
-		value = string;
-
-		delete[] string;
-
-		return changed;
-	}
-
-	static bool EnterString(const char* name, std::string& value)
-	{
-		const auto string = new char[STRING_LENGTH];
-		strcpy(string, value.c_str());
-
-		if (ImGui::InputText(name, string, STRING_LENGTH, ImGuiInputTextFlags_EnterReturnsTrue))
+		static void Text(const char* text)
 		{
-			value = string;
-			delete[] string;
-			return true;
+			ImGui::Text(text, nullptr);
 		}
 
-		delete[] string;
-		return false;
-	}
-
-	static bool DragDropTargetString(const char* name, std::string& value, const char* payloadType)
-	{
-		const auto string = new char[STRING_LENGTH];
-		strcpy(string, value.c_str());
-
-		ImGui::BeginGroup();
-		if (ImGui::InputText(name, string, STRING_LENGTH, ImGuiInputTextFlags_EnterReturnsTrue))
+		static bool Int(const char* name, int& value)
 		{
-			value = string;
-			delete[] string;
-			ImGui::EndGroup();
-			return true;
+			return ImGui::InputInt(name, &value);
 		}
-		delete[] string;
-		if (ImGui::BeginDragDropTarget())
+
+		static bool EnterInt(const char* name, int& value)
 		{
-			const auto payload = ImGui::AcceptDragDropPayload(payloadType);
-			if (payload)
+			auto temp = value;
+			if (ImGui::InputInt(name, &temp, 1, 5, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
-				const char* path = (char*)payload->Data;
-				value = path;
+				value = temp;
+				return true;
+			}
 
-				ImGui::EndDragDropTarget();
+			return false;
+		}
+
+		static bool Bool(const char* name, bool& value)
+		{
+			return ImGui::Checkbox(name, &value);
+		}
+
+		static bool Float(const char* name, float& value)
+		{
+			return ImGui::InputFloat(name, &value, 0.0f, 0.0f, "%.5f");
+		}
+
+		static bool Float2(const char* name, glm::vec2& value)
+		{
+			return ImGui::InputFloat2(name, glm::value_ptr(value));
+		}
+
+		static bool Float3(const char* name, glm::vec3& value)
+		{
+			return ImGui::InputFloat3(name, glm::value_ptr(value));
+		}
+
+		static bool Float4(const char* name, glm::vec4& value)
+		{
+			return ImGui::InputFloat4(name, glm::value_ptr(value));
+		}
+
+		static bool String(const char* name, std::string& value)
+		{
+			const auto string = new char[STRING_LENGTH];
+			strcpy(string, value.c_str());
+
+			bool changed = ImGui::InputText(name, string, STRING_LENGTH);
+
+			value = string;
+
+			delete[] string;
+
+			return changed;
+		}
+
+		static bool EnterString(const char* name, std::string& value)
+		{
+			const auto string = new char[STRING_LENGTH];
+			strcpy(string, value.c_str());
+
+			if (ImGui::InputText(name, string, STRING_LENGTH, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				value = string;
+				delete[] string;
+				return true;
+			}
+
+			delete[] string;
+			return false;
+		}
+
+		static bool DragDropTargetString(const char* name, std::string& value, const char* payloadType)
+		{
+			const auto string = new char[STRING_LENGTH];
+			strcpy(string, value.c_str());
+
+			ImGui::BeginGroup();
+			if (ImGui::InputText(name, string, STRING_LENGTH, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				value = string;
+				delete[] string;
 				ImGui::EndGroup();
 				return true;
 			}
-			ImGui::EndDragDropTarget();
+			delete[] string;
+			if (ImGui::BeginDragDropTarget())
+			{
+				const auto payload = ImGui::AcceptDragDropPayload(payloadType);
+				if (payload)
+				{
+					const char* path = (char*)payload->Data;
+					value = path;
+
+					ImGui::EndDragDropTarget();
+					ImGui::EndGroup();
+					return true;
+				}
+				ImGui::EndDragDropTarget();
+			}
+			ImGui::EndGroup();
+
+			return false;
 		}
-		ImGui::EndGroup();
 
-		return false;
-	}
+		static bool ColorPicker(const char* name, glm::vec3& value)
+		{
+			return ImGui::ColorEdit3(name, glm::value_ptr(value));
+		}
 
-	static bool ColorPicker(const char* name, glm::vec3& value)
-	{
-		return ImGui::ColorEdit3(name, glm::value_ptr(value));
-	}
+		static bool ColorPicker(const char* name, glm::vec4& value)
+		{
+			return ImGui::ColorEdit4(name, glm::value_ptr(value));
+		}
 
-	static bool ColorPicker(const char* name, glm::vec4& value)
-	{
-		return ImGui::ColorEdit4(name, glm::value_ptr(value));
-	}
+		static bool DragFloat(const char* name, float& value, const float min = 0.0f, const float max = 1.0f, const float step = 0.01f)
+		{
+			return ImGui::DragFloat(name, &value, step, min, max);
+		}
+		static bool RangeFloat(const char* name, float& min, float& max, const float step = 0.01f)
+		{
+			return ImGui::DragFloatRange2(name, &min, &max, step);
+		}
 
-	static bool DragFloat(const char* name, float& value, const float min = 0.0f, const float max = 1.0f, const float step = 0.01f)
-	{
-		return ImGui::DragFloat(name, &value, step, min, max);
-	}
-	static bool RangeFloat(const char* name, float& min, float& max, const float step = 0.01f)
-	{
-		return ImGui::DragFloatRange2(name, &min, &max, step);
-	}
+		static bool Button(const char* name)
+		{
+			return ImGui::Button(name);
+		}
 
-	static bool Button(const char* name)
-	{
-		return ImGui::Button(name);
-	}
-};
+		static bool Path(const char* name, FS::path& value)
+		{
+			auto pathString = FileSystem::ToString(value);
+			bool changed = InspectorFields::DragDropTargetString(name, pathString, "file");
+
+			value = pathString;
+
+			return changed;
+		}
+	};
+
+}

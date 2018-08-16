@@ -141,102 +141,33 @@ namespace EVA
 			glBindTexture(GL_TEXTURE_2D, textureDefaultSpecular->id);
 	}
 
-	void StandardMaterial::LoadAsset(const DataObject data)
+	//virtual void Serialize(DataObject& data) override;
+
+	void StandardMaterial::Serialize(DataObject& data)
 	{
-		Material::LoadAsset(data);
+		Material::Serialize(data);
 
-		// Shininess
-		materialShininess = data.GetFloat("shininess", materialShininess);
+		data.Serialize("shininess", materialShininess);
+		data.Serialize("alphaCutoff", alphaCutoff);
+		data.Serialize("tintDiffuse", tintDiffuse);
 
-		// Alpha cutoff
-		alphaCutoff = data.GetFloat("alphaCutoff", alphaCutoff);
-
-		// Tint
-		tintDiffuse = data.GetVec4("tintDiffuse", tintDiffuse);
-
-		// Diffuse
-		const auto diffusePath = data.GetPath("textureDiffuse", "");
-		if (!diffusePath.empty())
-			SetTexture(Texture::Diffuse, diffusePath);
-
-		// Specular
-		const auto specularPath = data.GetPath("textureSpecular", "");
-		if (!specularPath.empty())
-			SetTexture(Texture::Specular, specularPath);
-
-		// Normal
-		const auto normalPath = data.GetPath("textureNormal", "");
-		if (!normalPath.empty())
-			SetTexture(Texture::Normal, normalPath);
-
-		// Emission
-		const auto emissionPath = data.GetPath("textureEmission", "");
-		if (!emissionPath.empty())
-			SetTexture(Texture::Emission, emissionPath);
-	}
-
-	void StandardMaterial::SaveAsset(DataObject & data) const
-	{
-		Material::SaveAsset(data);
-
-		data.SetFloat("shininess", materialShininess);
-
-		data.SetFloat("alphaCutoff", alphaCutoff);
-
-		if (tintDiffuse != glm::vec4(1.0f))
-			data.SetVec4("tintDiffuse", tintDiffuse);
-
-		if (textureDiffuse != nullptr)
-			data.SetPath("textureDiffuse", textureDiffuse->path);
-
-		if (textureSpecular != nullptr)
-			data.SetPath("textureSpecular", textureSpecular->path);
-
-		if (textureNormal != nullptr)
-			data.SetPath("textureNormal", textureNormal->path);
-
-		if (textureEmission != nullptr)
-			data.SetPath("textureEmission", textureEmission->path);
-	}
-
-	void StandardMaterial::DrawInspector()
-	{
-		Material::DrawInspector();
-
-		if (InspectorFields::Float("Shininess", materialShininess))
-			SaveToFile();
-
-		if (InspectorFields::Float("Alpha cutoff", alphaCutoff))
-			SaveToFile();
-
-		std::string path;
-
-		path = textureDiffuse == nullptr ? "" : FileSystem::ToString(textureDiffuse->path);
-		if (InspectorFields::DragDropTargetString("Diffuse texture", path, "file"))
-		{
+		FS::path path;
+		
+		path = textureDiffuse != nullptr ? textureDiffuse->path : "";
+		if (data.Serialize("textureDiffuse", path) && !path.empty())
 			SetTexture(Texture::Diffuse, path);
-			SaveToFile();
-		}
 
-		path = textureSpecular == nullptr ? "" : FileSystem::ToString(textureSpecular->path);
-		if (InspectorFields::DragDropTargetString("Specular texture", path, "file"))
-		{
+		path = textureSpecular != nullptr ? textureSpecular->path : "";
+		if (data.Serialize("textureSpecular", path) && !path.empty())
 			SetTexture(Texture::Specular, path);
-			SaveToFile();
-		}
 
-		path = textureNormal == nullptr ? "" : FileSystem::ToString(textureNormal->path);
-		if (InspectorFields::DragDropTargetString("Normal texture", path, "file"))
-		{
+		path = textureNormal != nullptr ? textureNormal->path : "";
+		if (data.Serialize("textureNormal", path) && !path.empty())
 			SetTexture(Texture::Normal, path);
-			SaveToFile();
-		}
 
-		path = textureEmission == nullptr ? "" : FileSystem::ToString(textureEmission->path);
-		if (InspectorFields::DragDropTargetString("Emission texture", path, "file"))
-		{
+		path = textureEmission != nullptr ? textureEmission->path : "";
+		if (data.Serialize("textureEmission", path) && !path.empty())
 			SetTexture(Texture::Emission, path);
-			SaveToFile();
-		}
 	}
+
 }

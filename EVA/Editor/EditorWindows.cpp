@@ -640,7 +640,11 @@ namespace EVA
 			if (ImGui::CollapsingHeader((std::to_string(i) + " " + component->GetTypeId()).c_str(), &keep))
 			{
 				ImGui::PushID(i);
-				component->DrawInspector();
+
+				DataObject d;
+				d.mode = DataObject::DataMode::Inspector;
+				component->Serialize(d);
+
 				ImGui::PopID();
 			}
 			if (!keep)
@@ -735,7 +739,13 @@ namespace EVA
 		if (material == nullptr)
 			return;
 
-		material->DrawInspector();
+		DataObject d;
+		d.mode = DataObject::DataMode::Inspector;
+
+		material->Serialize(d);
+
+		if (d.changed)
+			material->SaveToFile();
 	}
 
 	void EditorWindows::ShaderInspector() const

@@ -30,19 +30,20 @@ namespace EVA
 			auto& d = (*sd);
 
 			DataObject data(d);
+			data.mode = DataObject::DataMode::Load;
 
 			auto material = MaterialMap::Create(data.GetString("id", ""));
 
 			if (material != nullptr)
 			{
 				material->path = path;
-				material->LoadAsset(data);
+				material->Serialize(data);
 			}
 
 			return material;
 		}
 
-		static void Save(const Material* material, const FS::path& path)
+		static void Save(Material* material, const FS::path& path)
 		{
 			if (material == nullptr || path.empty())
 				return;
@@ -53,10 +54,11 @@ namespace EVA
 			auto& a = d.GetAllocator();
 
 			DataObject data(d, &a);
+			data.mode = DataObject::DataMode::Save;
 
 			data.SetString("id", material->GetTypeId());
 
-			material->SaveAsset(data);
+			material->Serialize(data);
 
 			Json::Save(&d, path);
 		}

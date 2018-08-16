@@ -44,84 +44,31 @@ namespace EVA
 		m_Mesh->Draw();
 	}
 
-	void MeshRenderer::LoadAsset(const DataObject data)
+	void MeshRenderer::Serialize(DataObject& data)
 	{
-		std::shared_ptr<Mesh> mesh;
-		std::shared_ptr<Material> material;
+		std::shared_ptr<Material> newMaterial = material;
 
 		// Material
-		const auto materialPath = data.GetString("material", "");
-		if (!materialPath.empty())
+		auto materialPath = material != nullptr ? material->path : "";
+		if (data.Serialize("material", materialPath))
 		{
-			material = MaterialManager::LoadMaterial(materialPath);
+			newMaterial = MaterialManager::LoadMaterial(materialPath);
 		}
 
-		// Mesh primitive
-		const auto meshPrimitive = data.GetString("meshPrimitive", "");
-		if (!meshPrimitive.empty())
-		{
-			const auto model = ModelManager::LoadModel(ModelManager::PRIMITIVES_PATH + meshPrimitive + ModelManager::PRIMITIVES_TYPE);
-			if (model->MeshCount() >= 1)
-				mesh = model->GetMesh(0);
-		}
-
-		// Mesh
-		const auto modelPath = data.GetString("mesh", "");
-		const auto meshIndex = data.GetInt("meshIndex", 0);		
-
-		if(!modelPath.empty())
-		{
-			const auto model = ModelManager::LoadModel(modelPath);
-			if(model != nullptr && model->MeshCount() > meshIndex)
-				mesh = model->GetMesh(meshIndex);
-		}
-
-		Set(mesh, material);
-	}
-
-	void MeshRenderer::SaveAsset(DataObject& data) const
-	{
-		if (material != nullptr)
-			data.SetString("material", FileSystem::ToString(material->path));
-
-		if(mesh != nullptr)
-		{
-			data.SetString("mesh", FileSystem::ToString(mesh->path));
-			data.SetInt("meshIndex", mesh->index);
-		}
-	}
-
-	void MeshRenderer::DrawInspector()
-	{
-		auto materialPath = material != nullptr ? FileSystem::ToString(material->path) : "";
-		if (InspectorFields::DragDropTargetString("Material", materialPath, "file"))
-		{
-			if (!materialPath.empty())
-			{
-				Set(m_Mesh, MaterialManager::LoadMaterial(materialPath));
-			}
-		}
-
-		auto modelPath = FileSystem::ToString(m_ModelPath);
-		if (InspectorFields::DragDropTargetString("Model", modelPath, "file"))
-		{
-			if (!modelPath.empty())
-			{
-				SetMesh(modelPath, m_MeshIndex);
-			}
-		}
+		// Model
+		data.Serialize("mesh", m_ModelPath);
 
 		int meshIndex = m_MeshIndex;
-		if(InspectorFields::EnterInt("Mesh index", meshIndex))
+		data.Serialize("meshIndex", meshIndex);
+
+		if (data.changed)
 		{
-			if (meshIndex >= 0)
-			{
-				SetMesh(m_ModelPath, meshIndex);
-			}
+			auto newMesh = GetMesh(m_ModelPath, meshIndex);
+			Set(newMesh, newMaterial);
 		}
 	}
 
-	void MeshRenderer::SetMesh(const FS::path& modelPath, const unsigned meshIndex)
+	std::shared_ptr<Mesh> MeshRenderer::GetMesh(const FS::path& modelPath, const unsigned meshIndex)
 	{
 		m_MeshIndex = meshIndex;
 		m_ModelPath = modelPath;
@@ -132,14 +79,11 @@ namespace EVA
 			if (model == nullptr)
 			{
 				m_ModelPath = "";
-				Set(nullptr, m_Material);
-				return;
+				return nullptr;
 			}
-
-			if (model->MeshCount() > meshIndex)
+			else if (model->MeshCount() > meshIndex)
 			{
-				const auto mesh	= model->GetMesh(meshIndex);
-				Set(mesh, m_Material);
+				return model->GetMesh(meshIndex);
 			}
 		}
 	}

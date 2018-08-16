@@ -26,24 +26,10 @@ namespace EVA
 		transform->SetPosition(glm::mix(transform->position, targetPos, deltaTime * scalar));
 	}
 
-	void FollowTarget::LoadAsset(const DataObject data)
+	void FollowTarget::Serialize(DataObject& data)
 	{
-		offset = data.GetVec3("offset", offset);
-		scalar = data.GetFloat("scalar", scalar);
-		m_TargetName = data.GetString("targetName", m_TargetName);
-	}
-
-	void FollowTarget::SaveAsset(DataObject& data) const
-	{
-		data.SetVec3("offset", offset);
-		data.SetFloat("scalar", scalar);
-		data.SetString("targetName", m_TargetName);
-	}
-
-	void FollowTarget::DrawInspector()
-	{
-		InspectorFields::Float3("Offset", offset);
-		InspectorFields::Float("Scalar", scalar);
-		InspectorFields::EnterString("Target", m_TargetName);
+		data.Serialize("offset", offset);
+		data.Serialize("scalar", scalar);
+		data.Serialize("m_TargetName", m_TargetName);
 	}
 }

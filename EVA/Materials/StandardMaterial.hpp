@@ -42,18 +42,6 @@ namespace EVA
 
 		void SetTextures() const;
 
-		/**
-		* \brief Loads Material values from the given DataObject
-		* \param data The DataObject
-		*/
-		void LoadAsset(const DataObject data) override;
-
-		/**
-		* \brief Saves Material values to the given DataObject
-		* \param data The DataObject
-		*/
-		void SaveAsset(DataObject& data) const override;
-
-		void DrawInspector() override;
+		virtual void Serialize(DataObject& data) override;
 	};
 }

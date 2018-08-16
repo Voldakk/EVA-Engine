@@ -69,28 +69,13 @@ namespace EVA
 			m_Camera->fov -= Input::GetScroll().y;
 	}
 
-	void FreeLook::LoadAsset(const DataObject data)
+	void FreeLook::Serialize(DataObject& data)
 	{
-		mouseSensitivity = data.GetFloat("mouseSensitivity", mouseSensitivity);
-		minMovementSpeed = data.GetFloat("movementSpeed", minMovementSpeed);
-		currentMovementSpeed = minMovementSpeed;
+		data.Serialize("mouseSensitivity", mouseSensitivity);
+		if(data.Serialize("movementSpeed", minMovementSpeed))
+			currentMovementSpeed = minMovementSpeed;
 
-		pitch = data.GetFloat("pitch", 0.0f);
-		yaw = data.GetFloat("yaw", 0.0f);
-	}
-
-	void FreeLook::SaveAsset(DataObject& data) const
-	{
-		data.SetFloat("mouseSensitivity", mouseSensitivity);
-		data.SetFloat("movementSpeed", minMovementSpeed);
-
-		data.SetFloat("pitch", pitch);
-		data.SetFloat("yaw", yaw);
-	}
-
-	void FreeLook::DrawInspector()
-	{
-		InspectorFields::Float("Mouse sensitivity", mouseSensitivity);
-		InspectorFields::Float("Movement speed", minMovementSpeed);
+		data.Serialize("pitch", pitch);
+		data.Serialize("yaw", yaw);
 	}
 }

@@ -10,7 +10,7 @@ namespace EVA
 	/**
 	* \brief Base class for assets
 	*/
-	class Asset
+	class Asset : public ISerializeable
 	{
 
 	public:
@@ -29,18 +29,18 @@ namespace EVA
 		* \brief Saves values to the given DataObject
 		* \param data The DataObject
 		*/
-		virtual void SaveAsset(DataObject& data) const;
+		//virtual void SaveAsset(DataObject& data) const;
 
 		/**
 		* \brief Loads values from the given DataObject
 		* \param data The DataObject
 		*/
-		virtual void LoadAsset(const DataObject data);
+		//virtual void LoadAsset(const DataObject data);
 
 		/**
 		* \brief Draws the asset inspector
 		*/
-		virtual void DrawInspector();
+		//virtual void DrawInspector();
 
 		/**
 		* \brief 

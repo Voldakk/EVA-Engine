@@ -31,22 +31,6 @@ namespace EVA
 
         void LateUpdate() override;
 
-		/**
-		* \brief Loads Component values from the given DataObject
-		* \param data The DataObject
-		*/
-		void LoadAsset(DataObject data) override;
-
-		/**
-		* \brief Saves Component values to the given DataObject
-		* \param data The DataObject
-		*/
-		void SaveAsset(DataObject& data) const override;
-
-
-	    /**
-	     * \brief Draws the component inspector
-	     */
-	    void DrawInspector() override;
+		virtual void Serialize(DataObject& data) override;
     };
 }

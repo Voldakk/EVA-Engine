@@ -14,10 +14,10 @@
 #include "rapidjson/prettywriter.h"
 
 #include "../FileSystem.hpp"
+#include "../Editor/InspectorFields.hpp"
 
 namespace EVA
 {
-	
 
 	class Json
 	{
@@ -41,7 +41,7 @@ namespace EVA
 
 			if (fp == nullptr)
 				return nullptr;
-			
+
 			char readBuffer[65536];
 
 			rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
@@ -85,7 +85,7 @@ namespace EVA
 
 		static float GetFloat(const Value& json, const char* key, const float defaultValue)
 		{
-			if(json.HasMember(key) && json[key].IsNumber())
+			if (json.HasMember(key) && json[key].IsNumber())
 				return (float)json[key].GetDouble();
 
 			return defaultValue;
@@ -99,13 +99,26 @@ namespace EVA
 
 	public:
 
+		enum DataMode
+		{
+			Save,
+			Load,
+			Inspector
+		};
+
+		DataMode mode = Save;
+		bool changed = false;
+
 		Json::Generic& json = m_Json;
 		Json::Allocator* allocator = m_Allocator;
 
-		explicit DataObject(Json::Generic& json) : m_Json(json), m_Allocator(nullptr)
+		DataObject() : m_Json(Json::Generic()), m_Allocator(nullptr), mode(Inspector)
 		{}
 
-		explicit DataObject(Json::Generic& json, Json::Allocator* allocator) : m_Json(json), m_Allocator(allocator)
+		explicit DataObject(Json::Generic& json) : m_Json(json), m_Allocator(nullptr), mode(Load)
+		{}
+
+		explicit DataObject(Json::Generic& json, Json::Allocator* allocator) : m_Json(json), m_Allocator(allocator), mode(Save)
 		{}
 
 		int GetInt(const char* key, const int defaultValue) const
@@ -242,6 +255,220 @@ namespace EVA
 			m_Json.AddMember(key, FileSystem::ToString(value), *m_Allocator);
 		}
 
+
+		bool Serialize(const Json::StringRef& key, int& value)
+		{
+			switch (mode)
+			{
+			case Save: 
+				SetInt(key, value); 
+				break;
+
+			case Load: 
+				value = GetInt(key, value); 
+				changed = true;
+				return true;
+
+			case Inspector: 
+				bool c = InspectorFields::Int(key, value);
+				if (c) changed = true;
+				return c;
+			}
+
+			return false;
+		}
+
+		bool Serialize(const Json::StringRef& key, float& value)
+		{
+			switch (mode)
+			{
+			case Save: 
+				SetFloat(key, value); 
+				break;
+
+			case Load: 
+				value = GetFloat(key, value); 
+				changed = true;
+				return true;
+
+			case Inspector:
+				bool c = InspectorFields::Float(key, value);
+				if (c) changed = true;
+				return c;
+			}
+
+			return false;
+		}
+
+		bool Serialize(const Json::StringRef& key, bool& value)
+		{
+			switch (mode)
+			{
+			case Save: 
+				SetBool(key, value); 
+				break;
+
+			case Load: 
+				value = GetBool(key, value); 
+				changed = true;
+				return true;
+
+			case Inspector:
+				bool c = InspectorFields::Bool(key, value);
+				if (c) changed = true;
+				return c;
+			}
+
+			return false;
+		}
+
+		bool Serialize(const Json::StringRef& key, std::string& value)
+		{
+			switch (mode)
+			{
+			case Save: 
+				SetString(key, value); 
+				break;
+
+			case Load: 
+				value = GetString(key, value); 
+				changed = true;
+				return true;
+
+			case Inspector:
+				bool c = InspectorFields::EnterString(key, value);
+				if (c) changed = true;
+				return c;
+			}
+
+			return false;
+		}
+
+		bool Serialize(const Json::StringRef& key, glm::vec2& value)
+		{
+			switch (mode)
+			{
+			case Save:
+				SetVec2(key, value); 
+				break;
+
+			case Load: 
+				value = GetVec2(key, value); 
+				changed = true;
+				return true;
+
+			case Inspector:
+				bool c = InspectorFields::Float2(key, value);
+				if (c) changed = true;
+				return c;
+			}
+
+			return false;
+		}
+
+		bool Serialize(const Json::StringRef& key, glm::vec3& value)
+		{
+			switch (mode)
+			{
+			case Save: 
+				SetVec3(key, value); 
+				break;
+
+			case Load: 
+				value = GetVec3(key, value); 
+				changed = true;
+				return true;
+
+			case Inspector:
+				bool c = InspectorFields::Float3(key, value);
+				if (c) changed = true;
+				return c;
+			}
+
+			return false;
+		}
+
+		bool Serialize(const Json::StringRef& key, glm::vec4& value)
+		{
+			switch (mode)
+			{
+			case Save:
+				SetVec4(key, value);
+				break;
+
+			case Load:
+				value = GetVec4(key, value);
+				changed = true;
+				return true;
+
+			case Inspector:
+				bool c = InspectorFields::Float4(key, value);
+				if (c) changed = true;
+				return c;
+			}
+
+			return false;
+		}
+
+		bool Serialize(const Json::StringRef& key, glm::quat& value)
+		{
+			glm::vec4 v;
+
+			switch (mode)
+			{
+			case Save:
+				SetVec4(key, { value.x, value.y, value.z, value.w });
+				break;
+
+			case Load:
+				v = GetVec4(key, { value.x, value.y, value.z, value.w });
+				value = glm::quat(v.w, v.x, v.y, v.z);
+				changed = true;
+				return true;
+
+			case Inspector:
+				v = glm::vec4(value.x, value.y, value.z, value.w);
+				bool c = InspectorFields::Float4(key, v);
+				value = glm::quat(v.w, v.x, v.y, v.z);
+
+				if (c) changed = true;
+				return c;
+			}
+
+			return false;
+		}
+
+		bool Serialize(const Json::StringRef& key, FS::path& value)
+		{
+			switch (mode)
+			{
+			case Save: 
+				SetPath(key, value); 
+				break;
+
+			case Load: 
+				value = GetPath(key, value); 
+				changed = true; 
+				return true;
+
+			case Inspector:
+				bool c = InspectorFields::Path(key, value);
+				if (c) changed = true;
+				return c;
+			}
+
+			return false;
+		}
+
+	};
+
+	class ISerializeable
+	{
+	public:
+		virtual void Serialize(DataObject& data)
+		{
+
+		}
 	};
 
 }

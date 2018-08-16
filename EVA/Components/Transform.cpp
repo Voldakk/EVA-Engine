@@ -228,21 +228,13 @@ namespace EVA
 		return m_Children;
 	}
 
-	void Transform::LoadAsset(const DataObject data)
+	void Transform::Serialize(DataObject& data)
 	{
-		m_LocalPosition = data.GetVec3("position", m_LocalPosition);
-		m_LocalScale = data.GetVec3("scale", m_Scale);
+		data.Serialize("position", m_LocalPosition);
+		data.Serialize("scale", m_LocalScale);
+		data.Serialize("orientation", m_LocalOrientation);
 
-		const auto o = data.GetVec4("orientation", { m_LocalOrientation.x, m_LocalOrientation.y, m_LocalOrientation.z, m_LocalOrientation.w });
-		m_LocalOrientation = glm::quat(o.w, o.x, o.y, o.z);
-
-		UpdateModelMatrix();
-	}
-
-	void Transform::SaveAsset(DataObject& data) const
-	{
-		data.SetVec3("position", m_LocalPosition);
-		data.SetVec3("scale", m_LocalScale);
-		data.SetVec4("orientation", { m_LocalOrientation.x, m_LocalOrientation.y, m_LocalOrientation.z, m_LocalOrientation.w });
+		if(data.changed)
+			UpdateModelMatrix();
 	}
 }

@@ -35,7 +35,7 @@ namespace EVA
 
 		void Render() override;
 
-		void DrawInspector() override;
+		virtual void Serialize(DataObject& data) override;
 
 		static std::vector<glm::vec3> GeneratePatch();
 	};

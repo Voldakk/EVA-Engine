@@ -59,11 +59,11 @@ namespace EVA
 		m_Mesh->DrawTerrain(meshData);
 	}
 
-	void Terrain::DrawInspector()
+	void Terrain::Serialize(DataObject& data)
 	{
-		InspectorFields::Int("tessLevelOuter", tessLevelOuter);
-		InspectorFields::Int("tessLevelInner0", tessLevelInner0);
-		InspectorFields::Int("tessLevelInner1", tessLevelInner1);
+		data.Serialize("tessLevelOuter", tessLevelOuter);
+		data.Serialize("tessLevelInner0", tessLevelInner0);
+		data.Serialize("tessLevelInner1", tessLevelInner1);
 	}
 
 	std::vector<glm::vec3> Terrain::GeneratePatch()

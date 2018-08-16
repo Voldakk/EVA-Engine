@@ -69,23 +69,8 @@ namespace EVA
 
 		virtual void SetObjectUniforms(Transform* transform) const;
 
-		/**
-		* \brief Saves Material values to the given DataObject
-		* \param data The DataObject
-		*/
-		virtual void SaveAsset(DataObject& data) const override;
-
-		/**
-		* \brief Loads Material values from the given DataObject
-		* \param data The DataObject
-		*/
-		virtual void LoadAsset(const DataObject data) override;
-
-		/**
-		* \brief Draws the inspector
-		*/
-		virtual void DrawInspector() override;
-
 		void SaveToFile();
+
+		virtual void Serialize(DataObject& data) override;
 	};
 }
