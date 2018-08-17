@@ -36,19 +36,19 @@ namespace EVA
 		DataObject data(d, &a);
 
 		if (!shader->paths->vertex.empty())
-			data.SetString("vertex", FileSystem::ToString(shader->paths->vertex));
+			data.Set("vertex", FileSystem::ToString(shader->paths->vertex));
 
 		if (!shader->paths->fragment.empty())
-			data.SetString("fragment", FileSystem::ToString(shader->paths->fragment));
+			data.Set("fragment", FileSystem::ToString(shader->paths->fragment));
 
 		if (!shader->paths->geometry.empty())
-			data.SetString("geometry", FileSystem::ToString(shader->paths->geometry));
+			data.Set("geometry", FileSystem::ToString(shader->paths->geometry));
 
 		if (!shader->paths->tessControl.empty())
-			data.SetString("tessControl", FileSystem::ToString(shader->paths->tessControl));
+			data.Set("tessControl", FileSystem::ToString(shader->paths->tessControl));
 
 		if (!shader->paths->tessEvaluation.empty())
-			data.SetString("tessEvaluation", FileSystem::ToString(shader->paths->tessEvaluation));
+			data.Set("tessEvaluation", FileSystem::ToString(shader->paths->tessEvaluation));
 
 		Json::Save(&d, path);
 	}

@@ -163,6 +163,78 @@ namespace EVA
 
 			return changed;
 		}
+
+		// Templates
+
+		template <typename T>
+		static bool Default(const char* name, T& value)
+		{
+			return false;
+		}
+
+		template <>
+		static bool Default<int>(const char* name, int& value)
+		{
+			return Int(name, value);
+		}
+
+		template <>
+		static bool Default<bool>(const char* name, bool& value)
+		{
+			return Bool(name, value);
+		}
+
+		template <>
+		static bool Default<std::string>(const char* name, std::string& value)
+		{
+			return EnterString(name, value);
+		}
+
+		template <>
+		static bool Default<float>(const char* name, float& value)
+		{
+			return Float(name, value);
+		}
+
+		template <>
+		static bool Default<glm::vec2>(const char* name, glm::vec2& value)
+		{
+			return Float2(name, value);
+		}
+
+		template <>
+		static bool Default<glm::vec3>(const char* name, glm::vec3& value)
+		{
+			return Float3(name, value);
+		}
+
+		template <>
+		static bool Default<glm::vec4>(const char* name, glm::vec4& value)
+		{
+			return Float4(name, value);
+		}
+
+		template <>
+		static bool Default<glm::quat>(const char* name, glm::quat& value)
+		{
+			auto vec4 = glm::vec4(value.x, value.y, value.z, value.w);
+			bool changed = Float4(name, vec4);
+			
+			value = glm::quat(vec4.w, vec4.x, vec4.y, vec4.z);
+			
+			return changed;
+		}
+
+		template <>
+		static bool Default<FS::path>(const char* name, FS::path& value)
+		{
+			auto pathString = FileSystem::ToString(value);
+			bool changed = DragDropTargetString(name, pathString, "file");
+
+			value = pathString;
+
+			return changed;
+		}
 	};
 
 }

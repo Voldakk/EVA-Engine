@@ -62,26 +62,26 @@ EVA::Light::Light(const Type type, const bool shadows, const unsigned int shadow
 
 EVA::Light::Light(DataObject data) 
 	: Light(
-	data.GetString("type", "directional") == "directional" ? Directional : Point,
-	data.GetBool("shadows", true), 
-	data.GetInt("shadowMapSize", DEFAULT_SHADOW_MAP_SIZE))
+	data.Get<std::string>("type", "directional") == "directional" ? Directional : Point,
+	data.Get("shadows", true),
+	data.Get<int>("shadowMapSize", DEFAULT_SHADOW_MAP_SIZE))
 {
-	color = data.GetVec3("color", color);
-	ambientCoefficient = data.GetFloat("ambientCoefficient", ambientCoefficient);
+	color = data.Get("color", color);
+	ambientCoefficient = data.Get("ambientCoefficient", ambientCoefficient);
 	
-	SetRotation(data.GetVec2("rotation", glm::vec2(0.0f)));
+	SetRotation(data.Get("rotation", glm::vec2(0.0f)));
 
-	directionalShadowDistance = data.GetFloat("directionalShadowDistance", directionalShadowDistance);
+	directionalShadowDistance = data.Get("directionalShadowDistance", directionalShadowDistance);
 
-	directionalNearPlane = data.GetFloat("directionalNearPlane", directionalNearPlane);
-	directionalFarPlane = data.GetFloat("directionalFarPlane", directionalFarPlane);
+	directionalNearPlane = data.Get("directionalNearPlane", directionalNearPlane);
+	directionalFarPlane = data.Get("directionalFarPlane", directionalFarPlane);
 
-	SetPosition(data.GetVec3("position", glm::vec3(0.0f)));
+	SetPosition(data.Get("position", glm::vec3(0.0f)));
 
-	attenuation = data.GetFloat("attenuation", attenuation);
+	attenuation = data.Get("attenuation", attenuation);
 
-	pointNearPlane = data.GetFloat("pointNearPlane", pointNearPlane);
-	pointFarPlane = data.GetFloat("pointFarPlane", pointFarPlane);
+	pointNearPlane = data.Get("pointNearPlane", pointNearPlane);
+	pointFarPlane = data.Get("pointFarPlane", pointFarPlane);
 }
 
 void EVA::Light::SetPosition(const glm::vec3 newPosition)
@@ -104,33 +104,33 @@ void EVA::Light::SetRotation(const glm::vec2 rotation)
 
 void EVA::Light::Save(DataObject& data) const
 {
-	data.SetString("type", m_Type == Directional ? "directional" : "point");
-	data.SetVec3("color", color);
-	data.SetFloat("ambientCoefficient", ambientCoefficient);
+	data.Set<std::string>("type", m_Type == Directional ? "directional" : "point");
+	data.Set("color", color);
+	data.Set("ambientCoefficient", ambientCoefficient);
 
 	if(m_Type == Directional)
 	{
-		data.SetVec2("rotation", m_Rotation);
+		data.Set("rotation", m_Rotation);
 
-		data.SetFloat("directionalShadowDistance", directionalShadowDistance);
+		data.Set("directionalShadowDistance", directionalShadowDistance);
 
-		data.SetFloat("directionalNearPlane", directionalNearPlane);
-		data.SetFloat("directionalFarPlane", directionalFarPlane);
+		data.Set("directionalNearPlane", directionalNearPlane);
+		data.Set("directionalFarPlane", directionalFarPlane);
 	}
 	else
 	{
-		data.SetVec3("position", m_Position);
+		data.Set("position", m_Position);
 
-		data.SetFloat("attenuation", attenuation);
+		data.Set("attenuation", attenuation);
 
-		data.SetFloat("pointNearPlane", pointNearPlane);
-		data.SetFloat("pointFarPlane", pointFarPlane);
+		data.Set("pointNearPlane", pointNearPlane);
+		data.Set("pointFarPlane", pointFarPlane);
 	}
 
-	data.SetBool("shadows", m_Shadows);
+	data.Set("shadows", m_Shadows);
 	if(m_Shadows)
 	{
-		data.SetInt("shadowMapSize", m_ShadowMapSize);
+		data.Set<int>("shadowMapSize", m_ShadowMapSize);
 	}
 }
 

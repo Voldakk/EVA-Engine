@@ -64,32 +64,6 @@ namespace EVA
 			fclose(fp);
 			return r;
 		}
-
-		static bool IsVec4(Value& jsonValue)
-		{
-			if (jsonValue.IsArray())
-			{
-				const auto a = jsonValue.GetArray();
-				if (a.Size() == 4 && a[0].IsDouble() && a[1].IsDouble() && a[2].IsDouble() && a[3].IsDouble())
-					return true;
-			}
-
-			return false;
-		}
-
-		static glm::vec4 GetVec4(Value& jsonValue)
-		{
-			const auto a = jsonValue.GetArray();
-			return { a[0].GetDouble() , a[1].GetDouble() , a[2].GetDouble() , a[3].GetDouble() };
-		}
-
-		static float GetFloat(const Value& json, const char* key, const float defaultValue)
-		{
-			if (json.HasMember(key) && json[key].IsNumber())
-				return (float)json[key].GetDouble();
-
-			return defaultValue;
-		}
 	};
 
 	class DataObject
@@ -121,46 +95,25 @@ namespace EVA
 		explicit DataObject(Json::Generic& json, Json::Allocator* allocator) : m_Json(json), m_Allocator(allocator), mode(Save)
 		{}
 
-		int GetInt(const char* key, const int defaultValue) const
+
+		template <typename T>
+		T Get(const char* key, const T defaultValue) const
 		{
-			if (m_Json.HasMember(key) && m_Json[key].IsInt())
-				return m_Json[key].GetInt();
+			if (m_Json.HasMember(key) && m_Json[key].Is<T>())
+				return m_Json[key].Get<T>();
 
 			return defaultValue;
 		}
 
-		void SetInt(const Json::StringRef& key, const int value) const
+		template <typename T>
+		void Set(const Json::StringRef& key, const T value) const
 		{
 			m_Json.AddMember(key, value, *m_Allocator);
 		}
 
-		bool GetBool(const char* key, const bool defaultValue) const
-		{
-			if (m_Json.HasMember(key) && m_Json[key].IsBool())
-				return m_Json[key].GetBool();
 
-			return defaultValue;
-		}
-
-		void SetBool(const Json::StringRef& key, const bool value) const
-		{
-			m_Json.AddMember(key, value, *m_Allocator);
-		}
-
-		float GetFloat(const char* key, const float defaultValue) const
-		{
-			if (m_Json.HasMember(key) && m_Json[key].IsNumber())
-				return (float)m_Json[key].GetDouble();
-
-			return defaultValue;
-		}
-
-		void SetFloat(const Json::StringRef& key, const float value) const
-		{
-			m_Json.AddMember(key, value, *m_Allocator);
-		}
-
-		glm::vec2 GetVec2(const char* key, const glm::vec2 defaultValue) const
+		template <>
+		glm::vec2 Get<glm::vec2>(const char* key, const glm::vec2 defaultValue) const
 		{
 			if (m_Json.HasMember(key) && m_Json[key].IsArray())
 			{
@@ -172,7 +125,8 @@ namespace EVA
 			return defaultValue;
 		}
 
-		void SetVec2(const Json::StringRef& key, const glm::vec2 value) const
+		template <>
+		void Set<glm::vec2>(const Json::StringRef& key, const glm::vec2 value) const
 		{
 			Json::Value v;
 			v.SetArray();
@@ -182,7 +136,9 @@ namespace EVA
 			m_Json.AddMember(key, v, *m_Allocator);
 		}
 
-		glm::vec3 GetVec3(const char* key, const glm::vec3 defaultValue) const
+
+		template <>
+		glm::vec3 Get<glm::vec3>(const char* key, const glm::vec3 defaultValue) const
 		{
 			if (m_Json.HasMember(key) && m_Json[key].IsArray())
 			{
@@ -194,7 +150,8 @@ namespace EVA
 			return defaultValue;
 		}
 
-		void SetVec3(const Json::StringRef& key, const glm::vec3 value) const
+		template <>
+		void Set<glm::vec3>(const Json::StringRef& key, const glm::vec3 value) const
 		{
 			Json::Value v;
 			v.SetArray();
@@ -205,7 +162,9 @@ namespace EVA
 			m_Json.AddMember(key, v, *m_Allocator);
 		}
 
-		glm::vec4 GetVec4(const char* key, const glm::vec4 defaultValue) const
+
+		template <>
+		glm::vec4 Get<glm::vec4>(const char* key, const glm::vec4 defaultValue) const
 		{
 			if (m_Json.HasMember(key) && m_Json[key].IsArray())
 			{
@@ -217,7 +176,8 @@ namespace EVA
 			return defaultValue;
 		}
 
-		void SetVec4(const Json::StringRef& key, const glm::vec4 value) const
+		template <>
+		void Set<glm::vec4>(const Json::StringRef& key, const glm::vec4 value) const
 		{
 			Json::Value v;
 			v.SetArray();
@@ -229,20 +189,23 @@ namespace EVA
 			m_Json.AddMember(key, v, *m_Allocator);
 		}
 
-		std::string GetString(const char* key, const std::string& defaultValue) const
-		{
-			if (m_Json.HasMember(key) && m_Json[key].IsString())
-				return m_Json[key].GetString();
 
-			return defaultValue;
+		template <>
+		glm::quat Get<glm::quat>(const char* key, const glm::quat defaultValue) const
+		{
+			auto vec4 = Get<glm::vec4>(key, glm::vec4(defaultValue.x, defaultValue.y, defaultValue.z, defaultValue.w));
+			return glm::quat(vec4.w, vec4.x, vec4.y, vec4.z);
 		}
 
-		void SetString(const Json::StringRef& key, const std::string& value) const
+		template <>
+		void Set<glm::quat>(const Json::StringRef& key, const glm::quat value) const
 		{
-			m_Json.AddMember(key, value, *m_Allocator);
+			Set<glm::vec4>(key, glm::vec4(value.x, value.y, value.z, value.w));
 		}
 
-		FS::path GetPath(const char* key, const FS::path& defaultValue) const
+
+		template <>
+		FS::path Get<FS::path>(const char* key, const FS::path defaultValue) const
 		{
 			if (m_Json.HasMember(key) && m_Json[key].IsString())
 				return FS::path(m_Json[key].GetString());
@@ -250,209 +213,29 @@ namespace EVA
 			return defaultValue;
 		}
 
-		void SetPath(const Json::StringRef& key, const FS::path& value) const
+		template <>
+		void Set<FS::path>(const Json::StringRef& key, const FS::path value) const
 		{
 			m_Json.AddMember(key, FileSystem::ToString(value), *m_Allocator);
 		}
 
 
-		bool Serialize(const Json::StringRef& key, int& value)
-		{
-			switch (mode)
-			{
-			case Save: 
-				SetInt(key, value); 
-				break;
-
-			case Load: 
-				value = GetInt(key, value); 
-				changed = true;
-				return true;
-
-			case Inspector: 
-				bool c = InspectorFields::Int(key, value);
-				if (c) changed = true;
-				return c;
-			}
-
-			return false;
-		}
-
-		bool Serialize(const Json::StringRef& key, float& value)
-		{
-			switch (mode)
-			{
-			case Save: 
-				SetFloat(key, value); 
-				break;
-
-			case Load: 
-				value = GetFloat(key, value); 
-				changed = true;
-				return true;
-
-			case Inspector:
-				bool c = InspectorFields::Float(key, value);
-				if (c) changed = true;
-				return c;
-			}
-
-			return false;
-		}
-
-		bool Serialize(const Json::StringRef& key, bool& value)
-		{
-			switch (mode)
-			{
-			case Save: 
-				SetBool(key, value); 
-				break;
-
-			case Load: 
-				value = GetBool(key, value); 
-				changed = true;
-				return true;
-
-			case Inspector:
-				bool c = InspectorFields::Bool(key, value);
-				if (c) changed = true;
-				return c;
-			}
-
-			return false;
-		}
-
-		bool Serialize(const Json::StringRef& key, std::string& value)
-		{
-			switch (mode)
-			{
-			case Save: 
-				SetString(key, value); 
-				break;
-
-			case Load: 
-				value = GetString(key, value); 
-				changed = true;
-				return true;
-
-			case Inspector:
-				bool c = InspectorFields::EnterString(key, value);
-				if (c) changed = true;
-				return c;
-			}
-
-			return false;
-		}
-
-		bool Serialize(const Json::StringRef& key, glm::vec2& value)
+		template <typename T>
+		bool Serialize(const Json::StringRef& key, T& value)
 		{
 			switch (mode)
 			{
 			case Save:
-				SetVec2(key, value); 
-				break;
-
-			case Load: 
-				value = GetVec2(key, value); 
-				changed = true;
-				return true;
-
-			case Inspector:
-				bool c = InspectorFields::Float2(key, value);
-				if (c) changed = true;
-				return c;
-			}
-
-			return false;
-		}
-
-		bool Serialize(const Json::StringRef& key, glm::vec3& value)
-		{
-			switch (mode)
-			{
-			case Save: 
-				SetVec3(key, value); 
-				break;
-
-			case Load: 
-				value = GetVec3(key, value); 
-				changed = true;
-				return true;
-
-			case Inspector:
-				bool c = InspectorFields::Float3(key, value);
-				if (c) changed = true;
-				return c;
-			}
-
-			return false;
-		}
-
-		bool Serialize(const Json::StringRef& key, glm::vec4& value)
-		{
-			switch (mode)
-			{
-			case Save:
-				SetVec4(key, value);
+				Set<T>(key, value);
 				break;
 
 			case Load:
-				value = GetVec4(key, value);
+				value = Get<T>(key, value);
 				changed = true;
 				return true;
 
 			case Inspector:
-				bool c = InspectorFields::Float4(key, value);
-				if (c) changed = true;
-				return c;
-			}
-
-			return false;
-		}
-
-		bool Serialize(const Json::StringRef& key, glm::quat& value)
-		{
-			glm::vec4 v;
-
-			switch (mode)
-			{
-			case Save:
-				SetVec4(key, { value.x, value.y, value.z, value.w });
-				break;
-
-			case Load:
-				v = GetVec4(key, { value.x, value.y, value.z, value.w });
-				value = glm::quat(v.w, v.x, v.y, v.z);
-				changed = true;
-				return true;
-
-			case Inspector:
-				v = glm::vec4(value.x, value.y, value.z, value.w);
-				bool c = InspectorFields::Float4(key, v);
-				value = glm::quat(v.w, v.x, v.y, v.z);
-
-				if (c) changed = true;
-				return c;
-			}
-
-			return false;
-		}
-
-		bool Serialize(const Json::StringRef& key, FS::path& value)
-		{
-			switch (mode)
-			{
-			case Save: 
-				SetPath(key, value); 
-				break;
-
-			case Load: 
-				value = GetPath(key, value); 
-				changed = true; 
-				return true;
-
-			case Inspector:
-				bool c = InspectorFields::Path(key, value);
+				bool c = InspectorFields::Default(key, value);
 				if (c) changed = true;
 				return c;
 			}

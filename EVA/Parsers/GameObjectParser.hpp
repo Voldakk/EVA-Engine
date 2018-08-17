@@ -125,7 +125,7 @@ namespace EVA
 		DataObject data(d, &a);
 
 		// Name
-		data.SetString("name", gameObject->GetName());
+		data.Set("name", gameObject->GetName());
 
 		// Transform
 		gameObject->transform->Serialize(data);
@@ -147,7 +147,7 @@ namespace EVA
 				DataObject componentData(componentValue, &a);
 
 				// Id
-				componentData.SetString("id", component->GetTypeId());
+				componentData.Set("id", component->GetTypeId());
 
 				// Save other data
 				component->Serialize(componentData);

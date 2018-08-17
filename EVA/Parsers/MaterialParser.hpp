@@ -32,7 +32,7 @@ namespace EVA
 			DataObject data(d);
 			data.mode = DataObject::DataMode::Load;
 
-			auto material = MaterialMap::Create(data.GetString("id", ""));
+			auto material = MaterialMap::Create(data.Get("id", ""));
 
 			if (material != nullptr)
 			{
@@ -56,7 +56,7 @@ namespace EVA
 			DataObject data(d, &a);
 			data.mode = DataObject::DataMode::Save;
 
-			data.SetString("id", material->GetTypeId());
+			data.Set("id", material->GetTypeId());
 
 			material->Serialize(data);
 

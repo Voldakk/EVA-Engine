@@ -46,10 +46,10 @@ namespace EVA
 
 	void MeshRenderer::Serialize(DataObject& data)
 	{
-		std::shared_ptr<Material> newMaterial = material;
+		auto newMaterial = m_Material;
 
 		// Material
-		auto materialPath = material != nullptr ? material->path : "";
+		auto materialPath = m_Material != nullptr ? m_Material->path : "";
 		if (data.Serialize("material", materialPath))
 		{
 			newMaterial = MaterialManager::LoadMaterial(materialPath);
@@ -86,5 +86,7 @@ namespace EVA
 				return model->GetMesh(meshIndex);
 			}
 		}
+
+		return nullptr;
 	}
 }
