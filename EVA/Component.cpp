@@ -25,11 +25,6 @@ namespace EVA
 		}
 	}
 
-	void Component::SetScene(Scene* scene)
-	{
-		m_Scene = scene;
-	}
-
 	void Component::SetActive(const bool value)
 	{
 		m_Active = value;

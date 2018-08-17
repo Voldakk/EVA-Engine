@@ -105,12 +105,6 @@ namespace EVA
 		* \param gameObject The GameObject the component is attaced to
 		*/
 		virtual void SetGameObject(GameObject* gameObject);
-
-	    /**
-		 * \brief Sets the scene
-		 * \param scene The new scene
-		 */
-		void SetScene(Scene* scene);
 		
 	    /**
     	 * \brief Sets the component's active state

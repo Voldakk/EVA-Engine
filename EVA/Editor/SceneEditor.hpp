@@ -49,7 +49,12 @@ namespace EVA
 
 		void LoadTemplate()
 		{
+			Clear();
+
 			SceneParser::Load(this, m_TemplateScenePath);
+
+			Awake();
+			Start();
 		}
 
 		explicit SceneEditor(const FS::path& path = "")

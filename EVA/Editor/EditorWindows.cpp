@@ -67,45 +67,6 @@ namespace EVA
 			}
 		}
 
-		// Lights
-		if (ImGui::TreeNodeEx("Lights"))
-		{
-			auto lights = m_Editor->GetLights();
-
-			for (unsigned int i = 0; i < lights.size(); ++i)
-			{
-				const auto nodeFlags =
-					ImGuiTreeNodeFlags_OpenOnDoubleClick |
-					ImGuiTreeNodeFlags_OpenOnArrow |
-					ImGuiTreeNodeFlags_Leaf |
-					(IsSelected(lights[i].get()) ? ImGuiTreeNodeFlags_Selected : 0);
-
-				if (ImGui::TreeNodeEx(("Light #" + std::to_string(i)).c_str(), nodeFlags))
-				{
-					// Select on click
-					if (ImGui::IsItemClicked())
-						SelectLight(lights[i].get());
-
-					// Context menu
-					if (ImGui::BeginPopupContextItem())
-					{
-						if (ImGui::MenuItem("Delete"))
-						{
-							if (IsSelected(lights[i].get()))
-								SelectLight(nullptr);
-							m_Editor->DestroyLight(lights[i].get());
-						}
-
-						ImGui::EndPopup();
-					}
-
-					ImGui::TreePop();
-				}
-			}
-
-			ImGui::TreePop();
-		}
-
 		// Game objects
 		auto gameObjects = m_Editor->GetGameObjects();
 		for (auto& gameObject : gameObjects)
@@ -192,6 +153,8 @@ namespace EVA
 					{
 						m_Editor->Clear();
 						SceneParser::Load(m_Editor, path);
+						m_Editor->Awake();
+						m_Editor->Start();
 					}
 				}
 				if (ImGui::MenuItem("Save as"))
@@ -229,7 +192,6 @@ namespace EVA
 							const auto component = ComponentMap::Create(id);
 							if (component != nullptr)
 							{
-								component->SetScene(SelectedGameObject()->scene.Get());
 								SelectedGameObject()->AttachComponent(component);
 
 								component->Awake();
@@ -237,19 +199,6 @@ namespace EVA
 							}
 						}
 					}
-					ImGui::EndMenu();
-				}
-				if (ImGui::BeginMenu("Light"))
-				{
-					if (ImGui::MenuItem("Directional"))
-					{
-						m_Editor->CreateLight(Light::Directional);
-					}
-					if (ImGui::MenuItem("Point"))
-					{
-						m_Editor->CreateLight(Light::Point);
-					}
-
 					ImGui::EndMenu();
 				}
 
@@ -279,7 +228,6 @@ namespace EVA
 			if (ImGui::Button("OK", ImVec2(120, 0)))
 			{
 				ImGui::CloseCurrentPopup();
-				m_Editor->Clear();
 				m_Editor->LoadTemplate();
 			}
 			ImGui::SetItemDefaultFocus();
@@ -673,7 +621,6 @@ namespace EVA
 					const auto component = ComponentMap::Create(id);
 					if (component != nullptr)
 					{
-						component->SetScene(gameObject->scene.Get());
 						gameObject->AttachComponent(component);
 
 						component->Awake();
@@ -693,31 +640,9 @@ namespace EVA
 		if (light == nullptr)
 			return;
 
-		ImGui::Text(light->GetType() == Light::Directional ? "Directional light" : "Point light");
-
-		ImGui::ColorEdit3("Color", glm::value_ptr(light->color));
-		ImGui::InputFloat("Ambient coefficient", &light->ambientCoefficient);
-
-		if (light->GetType() == Light::Directional)
-		{
-			auto rot = light->rotation;
-			ImGui::InputFloat2("Rotation", glm::value_ptr(rot));
-			light->SetRotation(rot);
-
-			ImGui::InputFloat("Shadow distance", &light->directionalShadowDistance);
-			ImGui::InputFloat("Near plane", &light->directionalNearPlane);
-			ImGui::InputFloat("Far plane", &light->directionalFarPlane);
-		}
-		else
-		{
-			auto position = light->position;
-			ImGui::InputFloat3("Position", glm::value_ptr(position));
-			light->SetPosition(position);
-
-			ImGui::InputFloat("Attenuation", &light->attenuation);
-			ImGui::InputFloat("Near plane", &light->pointNearPlane);
-			ImGui::InputFloat("Far plane", &light->pointFarPlane);
-		}
+		DataObject d;
+		d.mode = DataObject::DataMode::Inspector;
+		light->Serialize(d);
 	}
 
 	void EditorWindows::SkyboxInspector() const

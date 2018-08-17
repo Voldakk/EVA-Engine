@@ -15,12 +15,6 @@ namespace EVA
 {
 	Scene::Scene()
 	{
-		/*m_ShadowMaterial.shader = ShaderManager::CreateOrGetShader("scene_shadow", "shadow.vert", "shadow.frag");
-		m_ShadowMaterialInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_instanced", "shadow_instanced.vert", "shadow.frag");
-	
-		m_ShadowMaterialCube.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube", "shadow_cube.vert", "shadow_cube.frag", "shadow_cube.geom");
-		m_ShadowMaterialCubeInstanced.shader = ShaderManager::CreateOrGetShader("scene_shadow_cube_instanced", "shadow_cube_instanced.vert", "shadow_cube.frag", "shadow_cube.geom");*/
-
 		m_ShadowMaterial.shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "shadow.shader");
 		m_ShadowMaterialInstanced.shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "shadow_instaced.shader");
 
@@ -115,7 +109,7 @@ namespace EVA
 				glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthMapFb());
 				glClear(GL_DEPTH_BUFFER_BIT);
 				
-				RenderShadowCubeMap(light->GetShadowTransforms(), light->position, light->pointFarPlane);
+				RenderShadowCubeMap(light->GetShadowTransforms(), light->transform->position, light->pointFarPlane);
 
 				glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			}
@@ -193,29 +187,16 @@ namespace EVA
 		return gameObject->GetName() + std::to_string(m_NameCounter);
 	}
 
-	std::shared_ptr<Light> Scene::CreateLight(Light::Type type, const bool shadows, const unsigned int shadowSize)
+	void Scene::AddLight(Light* light)
 	{
-		auto light = std::make_shared<Light>(type, shadows, shadowSize);
-
 		m_Lights.push_back(light);
-
-		return light;
 	}
 
-	Light* Scene::CreateLight(DataObject data)
-	{
-		auto light = std::make_shared<Light>(data);
-
-		m_Lights.push_back(light);
-
-		return light.get();
-	}
-
-	void Scene::DestroyLight(Light* light)
+	void Scene::RemoveLight(Light* light)
 	{
 		for (unsigned int i = 0; i < m_Lights.size(); ++i)
 		{
-			if (m_Lights[i].get() == light)
+			if (m_Lights[i] == light)
 			{
 				m_Lights.erase(m_Lights.begin() + i);
 				break;

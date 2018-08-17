@@ -39,17 +39,6 @@ namespace EVA
 			scene->skybox = std::make_unique<Skybox>(DataObject(d["skybox"]));
 		}
 
-		// Lights
-		if (d.HasMember("lights") && d["lights"].IsArray())
-		{
-			auto lights = d["lights"].GetArray();
-
-			for (unsigned int i = 0; i < lights.Size(); ++i)
-			{
-				scene->CreateLight(DataObject(lights[i]));
-			}
-		}
-
 		// Game objects
 		if (d.HasMember("gameObjects") && d["gameObjects"].IsArray())
 		{
@@ -94,33 +83,6 @@ namespace EVA
 
 			// Add it to the document
 			d.AddMember("skybox", skyboxValue, a);
-		}
-
-		// Lights
-		const auto lights = scene->GetLights();
-		if (!lights.empty())
-		{
-			// Create array
-			Json::Value lightsArray;
-			lightsArray.SetArray();
-
-			// For each light
-			for (auto& light : lights)
-			{
-				// Create a data object
-				Json::Value lightValue;
-				lightValue.SetObject();
-				DataObject data(lightValue, &a);
-
-				// Save light data
-				light->Save(data);
-
-				// Add to array
-				lightsArray.PushBack(lightValue, a);
-			}
-
-			// Add the lights array to the document
-			d.AddMember("lights", lightsArray, a);
 		}
 
 		// Game objects

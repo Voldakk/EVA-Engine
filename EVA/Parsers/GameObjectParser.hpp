@@ -64,9 +64,8 @@ namespace EVA
 				const auto component = ComponentMap::Create(id);
 				if (component != nullptr)
 				{
-					component->SetScene(gameObject->scene.Get());
-					component->Serialize(DataObject(c));
 					gameObject->AttachComponent(component);
+					component->Serialize(DataObject(c));
 				}
 			}
 		}

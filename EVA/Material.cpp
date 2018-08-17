@@ -140,7 +140,7 @@ namespace EVA
 
 			if(lights[i]->GetType() == Light::Type::Directional)
 			{
-				shader->SetUniform4Fv(lightNum + "position", lights[i]->GetDirection());
+				shader->SetUniform4Fv(lightNum + "position", glm::vec4(lights[i]->transform->forward, 0.0f));
 
 				if (lights[i]->Shadows())
 				{
@@ -154,7 +154,7 @@ namespace EVA
 			}
 			else if (lights[i]->GetType() == Light::Type::Point)
 			{
-				shader->SetUniform4Fv(lightNum + "position", glm::vec4(lights[i]->position, 1.0f));
+				shader->SetUniform4Fv(lightNum + "position", glm::vec4(lights[i]->transform->position, 1.0f));
 				shader->SetUniform1F(lightNum + "attenuation", lights[i]->attenuation);
 
 				if (lights[i]->Shadows())

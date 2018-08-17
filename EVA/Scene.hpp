@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 
-#include "Light.hpp"
+#include "Components/Light.hpp"
 #include "GameObject.hpp"
 #include "Skybox.hpp"
 #include "Components/MeshRenderer.hpp"
@@ -33,7 +33,7 @@ namespace EVA
 
 		std::vector<std::vector<std::vector<MeshRenderer *>>> m_Materials;
 		std::vector<std::shared_ptr<GameObject>> m_GameObjects;
-		std::vector<std::shared_ptr<Light>> m_Lights;
+		std::vector<Light*> m_Lights;
 
 		std::vector<GameObject*> m_DestroyQueue;
 
@@ -131,23 +131,9 @@ namespace EVA
 		template<class T>
 		T* FindComponentOfType();
 
-		/**
-		 * \brief Creates a new light in the scene
-		 * \param type The type of light
-		 * \param shadows Wheter the light has shadows
-		 * \param shadowSize The size of the shadow map
-		 * \return A pointer to the light
-		 */
-		std::shared_ptr<Light> CreateLight(Light::Type type, bool shadows = false, unsigned int shadowSize = Light::DEFAULT_SHADOW_MAP_SIZE);
+		void AddLight(Light* light);
 
-		/**
-		 * \brief Creates a new light in the scene from the given data
-		 * \param data The data
-		 * \return A pointer to the light
-		 */
-		Light* CreateLight(DataObject data);
-
-		void DestroyLight(Light* light);
+		void RemoveLight(Light* light);
 
 		/**
 		* \brief Registers a mesh renderer to be rendered in the scene
@@ -165,7 +151,7 @@ namespace EVA
 		 * \brief gets all the lights in the scene
 		 * \return A list of lights
 		 */
-		std::vector<std::shared_ptr<Light>> GetLights() const { return m_Lights; }
+		std::vector<Light*> GetLights() const { return m_Lights; }
 
 		/**
 		 * \brief Creates a new UiElement of type T
