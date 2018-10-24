@@ -90,31 +90,31 @@ namespace EVA
 	{
 
 		// Shadows 
-		glDisable(GL_CULL_FACE);
+		GLCall(glDisable(GL_CULL_FACE));
 		for (auto& light : m_Lights)
 		{
 			if (light->GetType() == Light::Directional && light->Shadows())
 			{
-				glViewport(0, 0, light->GetShadwoSize(), light->GetShadwoSize());
-				glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthMapFb());
-				glClear(GL_DEPTH_BUFFER_BIT);
+				GLCall(glViewport(0, 0, light->GetShadwoSize(), light->GetShadwoSize()));
+				GLCall(glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthMapFb()));
+				GLCall(glClear(GL_DEPTH_BUFFER_BIT));
 
 				RenderShadowMap(light->GetLightSpaceMatrix());
 
-				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+				GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 			}
 			else if (light->GetType() == Light::Point && light->Shadows())
 			{
-				glViewport(0, 0, light->GetShadwoSize(), light->GetShadwoSize());
-				glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthMapFb());
-				glClear(GL_DEPTH_BUFFER_BIT);
+				GLCall(glViewport(0, 0, light->GetShadwoSize(), light->GetShadwoSize()));
+				GLCall(glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthMapFb()));
+				GLCall(glClear(GL_DEPTH_BUFFER_BIT));
 				
 				RenderShadowCubeMap(light->GetShadowTransforms(), light->transform->position, light->pointFarPlane);
 
-				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+				GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 			}
 		}
-		glEnable(GL_CULL_FACE);
+		GLCall(glEnable(GL_CULL_FACE));
 
 		// Scene
 		RenderScene();
@@ -317,7 +317,7 @@ namespace EVA
 	void Scene::RenderScene()
 	{
 		const auto ws = Application::GetWindowSize();
-		glViewport(0, 0, ws.x, ws.y);
+		GLCall(glViewport(0, 0, ws.x, ws.y));
 
 		if (skybox != nullptr)
 		{
@@ -522,12 +522,12 @@ namespace EVA
 
 	void Scene::RenderUi()
 	{
-		glDepthMask(GL_FALSE);
+		GLCall(glDepthMask(GL_FALSE));
 		for (const auto& uiElement : m_UiElements)
 		{
 			uiElement->Render();
 		}
-		glDepthMask(GL_TRUE);
+		GLCall(glDepthMask(GL_TRUE));
 	}
 
 	void Scene::ProcessDestroyQueue()

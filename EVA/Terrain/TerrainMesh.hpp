@@ -6,9 +6,9 @@
 #include <vector>
 #include <memory>
 
-#include "../include/EVA/OpenGL.hpp"
+#include "EVA/OpenGL.hpp"
 
-#include "../../dependencies/glm/glm/glm.hpp"
+#include "glm/glm.hpp"
 
 namespace EVA
 {
@@ -74,7 +74,7 @@ namespace EVA
 		
 		m_Data->BufferData(&data[0], data.size() * sizeof(TerrainMeshData));
 
-		glDrawArraysInstanced(GL_PATCHES, 0, m_VertexCount, data.size());
+		GLCall(glDrawArraysInstanced(GL_PATCHES, 0, m_VertexCount, data.size()));
 		m_Va->Unbind();
 	}
 }

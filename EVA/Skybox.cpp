@@ -35,9 +35,9 @@ namespace EVA
 		m_Transform->SetPosition(Application::mainCamera->transform->position);
 		m_Material->Activate(nullptr, m_Transform.get());
 
-		glDepthMask(GL_FALSE);
+		GLCall(glDepthMask(GL_FALSE));
 		m_Model->GetMesh(0)->Draw();
-		glDepthMask(GL_TRUE);
+		GLCall(glDepthMask(GL_TRUE));
 	}
 
 	void Skybox::Set(const std::string& folderPath, const std::string& fileType)

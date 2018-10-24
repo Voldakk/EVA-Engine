@@ -12,7 +12,7 @@ namespace EVA
 
 	void Material::SetMbo(const std::shared_ptr<Mesh>& mesh, const std::vector<glm::mat4>& models)
 	{
-		if(models.size() == 0)
+		if(models.empty())
 			return;
 
 		if(m_MatrixBuffers.find(mesh) == m_MatrixBuffers.end())
@@ -90,17 +90,27 @@ namespace EVA
 			shader->Bind();
 
 			// Culling
-			if(cullBack && !cullFront)
-				glCullFace(GL_BACK);
+			if (cullBack && !cullFront)
+			{
+				GLCall(glCullFace(GL_BACK));
+			}
 			else if (cullFront && !cullBack)
-				glCullFace(GL_FRONT);
-			else if(cullFront && cullBack)
-				glCullFace(GL_FRONT_AND_BACK);
+			{
+				GLCall(glCullFace(GL_FRONT));
+			}
+			else if (cullFront && cullBack)
+			{
+				GLCall(glCullFace(GL_FRONT_AND_BACK));
+			}
 
 			if (cullFront || cullBack)
-				glEnable(GL_CULL_FACE);
-			else
-				glDisable(GL_CULL_FACE);
+			{
+				GLCall(glEnable(GL_CULL_FACE));
+			}
+			else 
+			{
+				GLCall(glDisable(GL_CULL_FACE));
+			}
 
 			// Set uniforms
 			SetMaterialUniforms(scene);
@@ -144,8 +154,8 @@ namespace EVA
 
 				if (lights[i]->Shadows())
 				{
-					glActiveTexture(GL_TEXTURE5 + shadowNum);
-					glBindTexture(GL_TEXTURE_2D, lights[i]->GetDepthMap());
+					GLCall(glActiveTexture(GL_TEXTURE5 + shadowNum));
+					GLCall(glBindTexture(GL_TEXTURE_2D, lights[i]->GetDepthMap()));
 					shader->SetUniform1I(lightNum + "shadowMap", 5 + shadowNum);
 					shader->SetUniformMatrix4Fv(lightNum + "lightSpaceMatrix", lights[i]->GetLightSpaceMatrix());
 
@@ -159,8 +169,8 @@ namespace EVA
 
 				if (lights[i]->Shadows())
 				{
-					glActiveTexture(GL_TEXTURE5 + shadowNum);
-					glBindTexture(GL_TEXTURE_CUBE_MAP, lights[i]->GetDepthMap());
+					GLCall(glActiveTexture(GL_TEXTURE5 + shadowNum));
+					GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, lights[i]->GetDepthMap()));
 					shader->SetUniform1I("shadowCubeMap", 5 + shadowNum);
 					shader->SetUniform1F(lightNum + "farPlane", lights[i]->pointFarPlane);
 

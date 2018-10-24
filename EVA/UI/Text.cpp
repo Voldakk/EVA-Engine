@@ -28,7 +28,7 @@ namespace EVA
 
 		FT_Set_Pixel_Sizes(face, 0, FONT_SIZE);
 
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
+		GLCall(glPixelStorei(GL_UNPACK_ALIGNMENT, 1)); // Disable byte-alignment restriction
 
 		for (GLubyte c = 0; c < 128; c++)
 		{
@@ -41,9 +41,9 @@ namespace EVA
 
 			// Generate texture
 			GLuint texture;
-			glGenTextures(1, &texture);
-			glBindTexture(GL_TEXTURE_2D, texture);
-			glTexImage2D(
+			GLCall(glGenTextures(1, &texture));
+			GLCall(glBindTexture(GL_TEXTURE_2D, texture));
+			GLCall(glTexImage2D(
 				GL_TEXTURE_2D,
 				0,
 				GL_RED,
@@ -53,13 +53,13 @@ namespace EVA
 				GL_RED,
 				GL_UNSIGNED_BYTE,
 				face->glyph->bitmap.buffer
-			);
+			));
 
 			// Set texture options
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 
 			// Now store character for later use
 			Character character = {
@@ -95,7 +95,7 @@ namespace EVA
 		m_Shader->Bind();
 		m_Shader->SetUniform3Fv("textColor", color);
 		m_Shader->SetUniformMatrix4Fv("projection", Application::GetOrthographicMatrix());
-		glActiveTexture(GL_TEXTURE0);
+		GLCall(glActiveTexture(GL_TEXTURE0));
 
 		m_Va->Bind();
 
@@ -121,19 +121,19 @@ namespace EVA
 			};
 
 			// Render glyph texture over quad
-			glBindTexture(GL_TEXTURE_2D, ch.textureId);
+			GLCall(glBindTexture(GL_TEXTURE_2D, ch.textureId));
 
 			// Update content of VBO memory
 			m_Vb->BufferData(vertices, sizeof(vertices));
 
 			// Render quad
-			glDrawArrays(GL_TRIANGLES, 0, 6);
+			GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
 
 			// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
 			x += (ch.advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64)
 		}
 		m_Va->Unbind();
-		glBindTexture(GL_TEXTURE_2D, 0);
+		GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 	}
 
 	BoundingBox Text::GetSize(std::string text, const float scale) const

@@ -11,7 +11,7 @@ namespace EVA
 {
 	REGISTER_COMPONENT_CPP(Light, "EVA::Light")
 
-	Light::~Light()
+		Light::~Light()
 	{
 		if (scene.Get() != nullptr)
 			scene->RemoveLight(this);
@@ -46,7 +46,7 @@ namespace EVA
 	{
 		const auto shadowProj = glm::perspective(glm::radians(90.0f), 1.0f, pointNearPlane, pointFarPlane);
 
-		auto pos = transform->position;
+		const auto pos = transform->position;
 
 		std::vector<glm::mat4> shadowTransforms;
 		shadowTransforms.push_back(shadowProj * glm::lookAt(pos, pos + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
@@ -91,66 +91,71 @@ namespace EVA
 
 		if (data.changed)
 		{
-			if(m_Shadows)
+			if (m_Shadows)
 				GenerateTexturesaAndFrameBuffer();
 		}
 	}
 
 	void Light::GenerateTexturesaAndFrameBuffer()
 	{
-		if (m_DepthMap != 0)
-			glDeleteTextures(1, &m_DepthMap);
+		if (m_DepthMap != 0) 
+		{
+			GLCall(glDeleteTextures(1, &m_DepthMap));
+		}
 
-		if (m_DepthMapFb != 0)
-			glDeleteFramebuffers(1, &m_DepthMapFb);
+		if (m_DepthMapFb != 0) 
+		{
+			GLCall(glDeleteFramebuffers(1, &m_DepthMapFb));
+		}
 
 		if (m_Type == Directional)
 		{
 			// Texture
-			glGenTextures(1, &m_DepthMap);
-			glBindTexture(GL_TEXTURE_2D, m_DepthMap);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
-				m_ShadowMapSize, m_ShadowMapSize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+			GLCall(glGenTextures(1, &m_DepthMap));
+			GLCall(glBindTexture(GL_TEXTURE_2D, m_DepthMap));
+			GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
+				m_ShadowMapSize, m_ShadowMapSize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr));
 
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER));
 
 			float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-			glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+			GLCall(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor));
 
 			// Frame buffer
-			glGenFramebuffers(1, &m_DepthMapFb);
-			glBindFramebuffer(GL_FRAMEBUFFER, m_DepthMapFb);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_DepthMap, 0);
-			glDrawBuffer(GL_NONE);
-			glReadBuffer(GL_NONE);
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			GLCall(glGenFramebuffers(1, &m_DepthMapFb));
+			GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_DepthMapFb));
+			GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_DepthMap, 0));
+			GLCall(glDrawBuffer(GL_NONE));
+			GLCall(glReadBuffer(GL_NONE));
+			GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 		}
 		else
 		{
 			// Texture
-			glGenTextures(1, &m_DepthMap);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, m_DepthMap);
+			GLCall(glGenTextures(1, &m_DepthMap));
+			GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, m_DepthMap));
 
-			for (unsigned int i = 0; i < 6; ++i)
-				glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT,
-					m_ShadowMapSize, m_ShadowMapSize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
+			for (unsigned int i = 0; i < 6; ++i) {
+				GLCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT,
+					m_ShadowMapSize, m_ShadowMapSize, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr));
+			}
 
-			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+			GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+			GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+			GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+			GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+			GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
 
 			// Frame buffer
-			glGenFramebuffers(1, &m_DepthMapFb);
-			glBindFramebuffer(GL_FRAMEBUFFER, m_DepthMapFb);
-			glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_DepthMap, 0);
-			glDrawBuffer(GL_NONE);
-			glReadBuffer(GL_NONE);
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			GLCall(glGenFramebuffers(1, &m_DepthMapFb));
+			GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_DepthMapFb));
+			GLCall(glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, m_DepthMap, 0));
+			GLCall(glDrawBuffer(GL_NONE));
+			GLCall(glReadBuffer(GL_NONE));
+			GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 		}
 	}
 }

@@ -1,7 +1,8 @@
 #include "TextureManager.hpp"
 
 #include <iostream>
-#include "GL/glew.h"
+
+#include "EVA/OpenGL.hpp"
 
 namespace EVA
 {
@@ -26,18 +27,18 @@ namespace EVA
 		if (data)
 		{
 			// Create texture
-			glGenTextures(1, &texture->id);
-			glBindTexture(GL_TEXTURE_2D, texture->id);
+			GLCall(glGenTextures(1, &texture->id));
+			GLCall(glBindTexture(GL_TEXTURE_2D, texture->id));
 
 			// Texture parameters
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR));
 
 			// Save the texture
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, channels == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, data);
-			glGenerateMipmap(GL_TEXTURE_2D);
+			GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, channels == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, data));
+			GLCall(glGenerateMipmap(GL_TEXTURE_2D));
 
 			// Save the id
 			m_Textures[path] = texture;
@@ -70,15 +71,16 @@ namespace EVA
 		texture->path = path;
 
 		// Create texture
-		glActiveTexture(GL_TEXTURE0);
-		glEnable(GL_TEXTURE_CUBE_MAP);
-		glGenTextures(1, &texture->id);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, texture->id);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		GLCall(glActiveTexture(GL_TEXTURE0));
+		// TODO: Figure out if `glEnable(GL_TEXTURE_CUBE_MAP)` is needed
+		// GLCall(glEnable(GL_TEXTURE_CUBE_MAP));
+		GLCall(glGenTextures(1, &texture->id));
+		GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, texture->id));
+		GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+		GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+		GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+		GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+		GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE));
 
 		// Load files
 		stbi_set_flip_vertically_on_load(false);
@@ -102,7 +104,7 @@ namespace EVA
 
 			if (data)
 			{
-				glTexImage2D(sideIds[i], 0, GL_RGBA, width, height, 0, channels == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, data);
+				GLCall(glTexImage2D(sideIds[i], 0, GL_RGBA, width, height, 0, channels == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, data));
 				stbi_image_free(data);
 
 				std::cout << "TextureManager::LoadTextureCubemap - Loaded texture: " << fullPath << "\n";
@@ -112,7 +114,7 @@ namespace EVA
 				stbi_image_free(data);
 
 				std::cout << "TextureManager::LoadTextureCubemap - Failed to load texture: " << fullPath << "\n";
-				glDeleteTextures(1, &texture->id);
+				GLCall(glDeleteTextures(1, &texture->id));
 				return nullptr;
 			}
 		}

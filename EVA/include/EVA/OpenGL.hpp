@@ -2,6 +2,7 @@
 
 #include "GL/glew.h"
 
+#include "../../OpenGL/GLCaller.hpp"
 #include "../../OpenGL/IndexBuffer.hpp"
 #include "../../OpenGL/VertexArray.hpp"
 #include "../../OpenGL/VertexBuffer.hpp"

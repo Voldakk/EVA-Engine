@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "GL/glew.h"
+#include "EVA/OpenGL.hpp"
 #include "Parsers/ShaderParser.hpp"
 
 namespace EVA
@@ -98,24 +98,24 @@ namespace EVA
 		const char *src = &buffer[0];
 
 		// Create shaders
-		const auto shader = glCreateShader(shaderType);
+		GLCall(const auto shader = glCreateShader(shaderType));
 
 		//Attach the shader source code to the shader object
-		glShaderSource(shader, 1, &src, nullptr);
+		GLCall(glShaderSource(shader, 1, &src, nullptr));
 
 		// Compile the shader
-		glCompileShader(shader);
+		GLCall(glCompileShader(shader));
 
 		// Comile the shader, translates into internal representation and checks for errors.
 		GLint compileOk;
-		glGetShaderiv(shader, GL_COMPILE_STATUS, &compileOk);
+		GLCall(glGetShaderiv(shader, GL_COMPILE_STATUS, &compileOk));
 		if (!compileOk)
 		{
 			char infolog[1024];;
-			glGetShaderInfoLog(shader, 1024, nullptr, infolog);
+			GLCall(glGetShaderInfoLog(shader, 1024, nullptr, infolog));
 			std::cout << "The program failed to compile with the error:" << std::endl << infolog << std::endl;
 
-			glDeleteShader(shader);
+			GLCall(glDeleteShader(shader));
 			return -1;
 		}
 		return shader;

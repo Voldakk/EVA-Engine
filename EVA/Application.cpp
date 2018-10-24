@@ -47,8 +47,13 @@ namespace EVA
 
         WindowResizeCallback(m_Window, width, height);
 
-		glEnable(GL_DEBUG_OUTPUT);
-		glDebugMessageCallback(OpenGlMessageCallback, nullptr);
+		// Debug output
+#ifdef _DEBUG
+
+		GLCall(glEnable(GL_DEBUG_OUTPUT));
+		GLCall(glDebugMessageCallback(OpenGlMessageCallback, nullptr));
+
+#endif
 
 		// Text
 		Text::Init();
@@ -64,8 +69,6 @@ namespace EVA
 		ImGui::StyleColorsDark();
 
 		return true;
-
-		
     }
 
 	bool Application::CreateWindow(const std::string &title)
@@ -117,13 +120,13 @@ namespace EVA
         glfwSwapInterval(0);
 
         // Set OpenGL options
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_BLEND);
-        glEnable(GL_CULL_FACE);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		GLCall(glEnable(GL_DEPTH_TEST));
+		GLCall(glEnable(GL_BLEND));
+		GLCall(glEnable(GL_CULL_FACE));
+		GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
         // The window's background color
-        glClearColor(CLEAR_COLOR[0], CLEAR_COLOR[1], CLEAR_COLOR[2], CLEAR_COLOR[3]);
+		GLCall(glClearColor(CLEAR_COLOR[0], CLEAR_COLOR[1], CLEAR_COLOR[2], CLEAR_COLOR[3]));
 
         return true;
     }
@@ -163,7 +166,7 @@ namespace EVA
 			SceneManager::LateUpdate();
 
             // ==== RENDER ====
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
             SceneManager::Render();
 
 			ImGui::Render();

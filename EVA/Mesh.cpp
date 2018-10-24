@@ -53,14 +53,15 @@ namespace EVA
 		// Draw
 		m_Va->Bind();
 
-		if(m_Ib) 
+		if (m_Ib)
 		{
 			m_Ib->Bind();
-			glDrawElements(GL_TRIANGLES, m_Ib->GetCount(), GL_UNSIGNED_INT, nullptr); 
+			GLCall(glDrawElements(GL_TRIANGLES, m_Ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 			m_Ib->Unbind();
 		}
-		else
-			glDrawArrays(GL_TRIANGLES, 0, m_VertexCount);
+		else {
+			GLCall(glDrawArrays(GL_TRIANGLES, 0, m_VertexCount));
+		}
 
 		m_Va->Unbind();
 	}
@@ -81,11 +82,12 @@ namespace EVA
 		if (m_HasFaceIndices)
 		{
 			m_Ib->Bind();
-			glDrawElementsInstanced(GL_TRIANGLES, m_Ib->GetCount(), GL_UNSIGNED_INT, nullptr, instancedMeshData->instanceCount);
+			GLCall(glDrawElementsInstanced(GL_TRIANGLES, m_Ib->GetCount(), GL_UNSIGNED_INT, nullptr, instancedMeshData->instanceCount));
 			m_Ib->Unbind();
 		}
-		else
-			glDrawArraysInstanced(GL_TRIANGLES, 0, m_VertexCount, instancedMeshData->instanceCount);
+		else {
+			GLCall(glDrawArraysInstanced(GL_TRIANGLES, 0, m_VertexCount, instancedMeshData->instanceCount));
+		}
 
 		m_Va->Unbind();
 	}

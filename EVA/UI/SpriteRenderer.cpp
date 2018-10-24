@@ -51,13 +51,13 @@ namespace EVA
 
 		// Texture
 		m_Shader->SetUniform1I("texture", 0);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
+		GLCall(glActiveTexture(GL_TEXTURE0));
+		GLCall(glBindTexture(GL_TEXTURE_2D, texture));
 
 		// VAO
 		m_Va->Bind();
 
 		// Draw
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		GLCall(glDrawArrays(GL_TRIANGLES, 0, 6));
 	}
 }
