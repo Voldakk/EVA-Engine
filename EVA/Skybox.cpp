@@ -29,7 +29,7 @@ namespace EVA
 
 	void Skybox::Render() const
 	{
-		if(m_Texture == nullptr)
+		if (m_Texture == nullptr)
 			return;
 
 		m_Transform->SetPosition(Application::mainCamera->transform->position);
@@ -45,14 +45,15 @@ namespace EVA
 		m_FolderPath = folderPath;
 		m_FileType = fileType;
 
+		m_Material = std::make_unique<SkyBoxMaterial>();
+
 		// Texture
 		m_Texture = TextureManager::LoadTextureCubemap(folderPath, fileType);
-		if(m_Texture != nullptr)
+		if (m_Texture != nullptr)
+		{
 			m_Texture->type = Texture::Diffuse;
-
-		// Material
-		m_Material = std::make_unique<SkyBoxMaterial>();
-		m_Material->SetTexture(m_Texture);
+			m_Material->SetTexture(m_Texture);
+		}
 		m_Material->shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "skybox.shader");
 	}
 
@@ -79,13 +80,13 @@ namespace EVA
 
 	void Skybox::DrawInspector()
 	{
-		if (InspectorFields::DragDropTargetString("Folder path", m_FolderPath, "folder") || 
+		if (InspectorFields::DragDropTargetString("Folder path", m_FolderPath, "folder") ||
 			InspectorFields::EnterString("File type", m_FileType))
 		{
 			Set(m_FolderPath, m_FileType);
 		}
 
-		if(m_Material != nullptr)
+		if (m_Material != nullptr)
 			InspectorFields::ColorPicker("Tint", m_Material->skyTint);
 	}
 }

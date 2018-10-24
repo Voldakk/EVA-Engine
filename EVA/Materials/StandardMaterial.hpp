@@ -40,7 +40,7 @@ namespace EVA
 
 		void SetTexture(const std::shared_ptr<Texture>& texture);
 
-		void SetTextures() const;
+		virtual void SetTextures() const;
 
 		virtual void Serialize(DataObject& data) override;
 	};

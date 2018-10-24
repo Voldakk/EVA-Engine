@@ -17,10 +17,13 @@ namespace EVA
 		shader->SetUniform4Fv("skyTint", skyTint);
 
 		// Cubemap
-		glActiveTexture(GL_TEXTURE0);
+		GLCall(glActiveTexture(GL_TEXTURE0));
 		shader->SetUniform1I("material.texture_diffuse", 0);
+	}
 
+	void SkyBoxMaterial::SetTextures() const
+	{
 		if (textureDiffuse != nullptr)
-			glBindTexture(GL_TEXTURE_CUBE_MAP, textureDiffuse->id);
+			GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, textureDiffuse->id));
 	}
 }

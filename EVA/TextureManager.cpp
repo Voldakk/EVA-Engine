@@ -72,8 +72,6 @@ namespace EVA
 
 		// Create texture
 		GLCall(glActiveTexture(GL_TEXTURE0));
-		// TODO: Figure out if `glEnable(GL_TEXTURE_CUBE_MAP)` is needed
-		// GLCall(glEnable(GL_TEXTURE_CUBE_MAP));
 		GLCall(glGenTextures(1, &texture->id));
 		GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, texture->id));
 		GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
