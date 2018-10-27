@@ -7,18 +7,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EVA-Engine", "EVA-Engine\EV
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{46EDC204-0995-43DD-93F8-6A47B4C8AC67}.Debug|x64.ActiveCfg = Debug|x64
-		{46EDC204-0995-43DD-93F8-6A47B4C8AC67}.Debug|x64.Build.0 = Debug|x64
 		{46EDC204-0995-43DD-93F8-6A47B4C8AC67}.Debug|x86.ActiveCfg = Debug|Win32
 		{46EDC204-0995-43DD-93F8-6A47B4C8AC67}.Debug|x86.Build.0 = Debug|Win32
-		{46EDC204-0995-43DD-93F8-6A47B4C8AC67}.Release|x64.ActiveCfg = Release|x64
-		{46EDC204-0995-43DD-93F8-6A47B4C8AC67}.Release|x64.Build.0 = Release|x64
 		{46EDC204-0995-43DD-93F8-6A47B4C8AC67}.Release|x86.ActiveCfg = Release|Win32
 		{46EDC204-0995-43DD-93F8-6A47B4C8AC67}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
