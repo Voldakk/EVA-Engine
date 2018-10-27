@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EVA\Application.cpp" />
+    <ClCompile Include="EVA\Asset.cpp" />
+    <ClCompile Include="EVA\ClassMap.cpp" />
+    <ClCompile Include="EVA\Component.cpp" />
+    <ClCompile Include="EVA\ComponentMap.cpp" />
+    <ClCompile Include="EVA\Components\BoxCollider.cpp" />
+    <ClCompile Include="EVA\Components\Camera.cpp" />
+    <ClCompile Include="EVA\Components\Collider.cpp" />
+    <ClCompile Include="EVA\Components\FollowTarget.cpp" />
+    <ClCompile Include="EVA\Components\FreeLook.cpp" />
+    <ClCompile Include="EVA\Components\HideOnStart.cpp" />
+    <ClCompile Include="EVA\Components\Light.cpp" />
+    <ClCompile Include="EVA\Components\MeshRenderer.cpp" />
+    <ClCompile Include="EVA\Components\Transform.cpp" />
+    <ClCompile Include="EVA\Components\Transformer.cpp" />
+    <ClCompile Include="EVA\Editor\EditorWindows.cpp" />
+    <ClCompile Include="EVA\GameObject.cpp" />
+    <ClCompile Include="EVA\Input.cpp" />
+    <ClCompile Include="EVA\Material.cpp" />
+    <ClCompile Include="EVA\MaterialManager.cpp" />
+    <ClCompile Include="EVA\MaterialMap.cpp" />
+    <ClCompile Include="EVA\Materials\ShadowMaterial.cpp" />
+    <ClCompile Include="EVA\Materials\SkyBoxMaterial.cpp" />
+    <ClCompile Include="EVA\Materials\StandardMaterial.cpp" />
+    <ClCompile Include="EVA\Mesh.cpp" />
+    <ClCompile Include="EVA\Model.cpp" />
+    <ClCompile Include="EVA\ModelManager.cpp" />
+    <ClCompile Include="EVA\OpenGL\GLCaller.cpp" />
+    <ClCompile Include="EVA\OpenGL\IndexBuffer.cpp" />
+    <ClCompile Include="EVA\OpenGL\VertexArray.cpp" />
+    <ClCompile Include="EVA\OpenGL\VertexBuffer.cpp" />
+    <ClCompile Include="EVA\OpenGL\VertexBufferLayout.cpp" />
+    <ClCompile Include="EVA\Physics.cpp" />
+    <ClCompile Include="EVA\Scene.cpp" />
+    <ClCompile Include="EVA\SceneManager.cpp" />
+    <ClCompile Include="EVA\Shader.cpp" />
+    <ClCompile Include="EVA\ShaderManager.cpp" />
+    <ClCompile Include="EVA\Skybox.cpp" />
+    <ClCompile Include="EVA\Terrain\Terrain.cpp" />
+    <ClCompile Include="EVA\Terrain\TerrainMaterial.cpp" />
+    <ClCompile Include="EVA\TextureManager.cpp" />
+    <ClCompile Include="EVA\UI\Button.cpp" />
+    <ClCompile Include="EVA\UI\Label.cpp" />
+    <ClCompile Include="EVA\UI\Layout.cpp" />
+    <ClCompile Include="EVA\UI\SpriteRenderer.cpp" />
+    <ClCompile Include="EVA\UI\Text.cpp" />
+    <ClCompile Include="EVA\UI\UiElement.cpp" />
+    <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\TestComponent.cpp" />
+    <ClCompile Include="vendor\imgui\imgui.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_demo.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_draw.cpp" />
+    <ClCompile Include="vendor\imgui\imgui_impl_glfw_gl3.cpp" />
+    <ClCompile Include="vendor\stb-image\stb-image.cpp" />
+    <ClCompile Include="vendor\tfd\tinyfiledialogs.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EVA\Application.hpp" />
+    <ClInclude Include="EVA\Asset.hpp" />
+    <ClInclude Include="EVA\ClassMap.hpp" />
+    <ClInclude Include="EVA\Component.hpp" />
+    <ClInclude Include="EVA\ComponentMap.hpp" />
+    <ClInclude Include="EVA\Components\BoxCollider.hpp" />
+    <ClInclude Include="EVA\Components\Camera.hpp" />
+    <ClInclude Include="EVA\Components\Collider.hpp" />
+    <ClInclude Include="EVA\Components\FollowTarget.hpp" />
+    <ClInclude Include="EVA\Components\FreeLook.hpp" />
+    <ClInclude Include="EVA\Components\HideOnStart.hpp" />
+    <ClInclude Include="EVA\Components\Light.hpp" />
+    <ClInclude Include="EVA\Components\MeshRenderer.hpp" />
+    <ClInclude Include="EVA\Components\SceneCamera.hpp" />
+    <ClInclude Include="EVA\Components\Transform.hpp" />
+    <ClInclude Include="EVA\Components\Transformer.hpp" />
+    <ClInclude Include="EVA\ConstPointer.hpp" />
+    <ClInclude Include="EVA\Editor\EditorWindows.hpp" />
+    <ClInclude Include="EVA\Editor\InspectorFields.hpp" />
+    <ClInclude Include="EVA\Editor\SceneEditor.hpp" />
+    <ClInclude Include="EVA\FileSystem.hpp" />
+    <ClInclude Include="EVA\GameObject.hpp" />
+    <ClInclude Include="EVA\include\EVA.hpp" />
+    <ClInclude Include="EVA\include\EVA\Components.hpp" />
+    <ClInclude Include="EVA\include\EVA\Graphics.hpp" />
+    <ClInclude Include="EVA\include\EVA\Input.hpp" />
+    <ClInclude Include="EVA\include\EVA\OpenGL.hpp" />
+    <ClInclude Include="EVA\include\EVA\Parsers.hpp" />
+    <ClInclude Include="EVA\include\EVA\Physics.hpp" />
+    <ClInclude Include="EVA\include\EVA\ResourceManagers.hpp" />
+    <ClInclude Include="EVA\include\EVA\SceneManager.hpp" />
+    <ClInclude Include="EVA\include\EVA\UI.hpp" />
+    <ClInclude Include="EVA\Input.hpp" />
+    <ClInclude Include="EVA\Material.hpp" />
+    <ClInclude Include="EVA\MaterialManager.hpp" />
+    <ClInclude Include="EVA\MaterialMap.hpp" />
+    <ClInclude Include="EVA\Materials\ShadowMaterial.hpp" />
+    <ClInclude Include="EVA\Materials\SkyBoxMaterial.hpp" />
+    <ClInclude Include="EVA\Materials\StandardMaterial.hpp" />
+    <ClInclude Include="EVA\Mesh.hpp" />
+    <ClInclude Include="EVA\Model.hpp" />
+    <ClInclude Include="EVA\ModelManager.hpp" />
+    <ClInclude Include="EVA\OpenGL\GLCaller.hpp" />
+    <ClInclude Include="EVA\OpenGL\IndexBuffer.hpp" />
+    <ClInclude Include="EVA\OpenGL\VertexArray.hpp" />
+    <ClInclude Include="EVA\OpenGL\VertexBuffer.hpp" />
+    <ClInclude Include="EVA\OpenGL\VertexBufferLayout.hpp" />
+    <ClInclude Include="EVA\Parsers\GameObjectParser.hpp" />
+    <ClInclude Include="EVA\Parsers\Json.hpp" />
+    <ClInclude Include="EVA\Parsers\MaterialParser.hpp" />
+    <ClInclude Include="EVA\Parsers\SceneParser.hpp" />
+    <ClInclude Include="EVA\Parsers\ShaderParser.hpp" />
+    <ClInclude Include="EVA\Physics.hpp" />
+    <ClInclude Include="EVA\Scene.hpp" />
+    <ClInclude Include="EVA\SceneManager.hpp" />
+    <ClInclude Include="EVA\ScriptableObject.hpp" />
+    <ClInclude Include="EVA\Shader.hpp" />
+    <ClInclude Include="EVA\ShaderManager.hpp" />
+    <ClInclude Include="EVA\Skybox.hpp" />
+    <ClInclude Include="EVA\Terrain\Quadtree.hpp" />
+    <ClInclude Include="EVA\Terrain\Terrain.hpp" />
+    <ClInclude Include="EVA\Terrain\TerrainMaterial.hpp" />
+    <ClInclude Include="EVA\Terrain\TerrainMesh.hpp" />
+    <ClInclude Include="EVA\TextureManager.hpp" />
+    <ClInclude Include="EVA\UI\BoundingBox.hpp" />
+    <ClInclude Include="EVA\UI\Button.hpp" />
+    <ClInclude Include="EVA\UI\Label.hpp" />
+    <ClInclude Include="EVA\UI\Layout.hpp" />
+    <ClInclude Include="EVA\UI\Padding.hpp" />
+    <ClInclude Include="EVA\UI\SpriteRenderer.hpp" />
+    <ClInclude Include="EVA\UI\Text.hpp" />
+    <ClInclude Include="EVA\UI\UiElement.hpp" />
+    <ClInclude Include="source\TestComponent.hpp" />
+    <ClInclude Include="vendor\imgui\imconfig.h" />
+    <ClInclude Include="vendor\imgui\imgui.h" />
+    <ClInclude Include="vendor\imgui\imgui_impl_glfw_gl3.h" />
+    <ClInclude Include="vendor\imgui\imgui_internal.h" />
+    <ClInclude Include="vendor\imgui\stb_rect_pack.h" />
+    <ClInclude Include="vendor\imgui\stb_textedit.h" />
+    <ClInclude Include="vendor\imgui\stb_truetype.h" />
+    <ClInclude Include="vendor\stb-image\stb_image.h" />
+    <ClInclude Include="vendor\tfd\tinyfiledialogs.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{46edc204-0995-43dd-93f8-6a47b4c8ac67}</ProjectGuid>
+    <RootNamespace>EVA_Engine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
+    <ExtensionsToDeleteOnClean>*.dll;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
+    <ExtensionsToDeleteOnClean>*.dll;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
+    <ExtensionsToDeleteOnClean>*.dll;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
+    <ExtensionsToDeleteOnClean>*.dll;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+    <PostBuildEventUseInBuild>true</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)EVA\include;$(ProjectDir)vendor\imgui;$(ProjectDir)vendor\stb-image;$(ProjectDir)vendor\tfd;$(SolutionDir)Dependencies\glm\include;$(SolutionDir)Dependencies\assimp\include;$(SolutionDir)Dependencies\freetype\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\rapidjson\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_DEPRECATE;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLFW\lib-vc2015;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\assimp\lib;$(SolutionDir)Dependencies\freetype\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc140-mt.lib;freetype.lib;glew32.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;Ole32.lib;Comdlg32.lib</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(SolutionDir)Dependencies\GLEW\lib\*.dll" "$(TargetDir)";
+copy "$(SolutionDir)Dependencies\assimp\lib\*.dll" "$(TargetDir)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy DLLs to Target Directory</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)EVA\include;$(ProjectDir)vendor\imgui;$(ProjectDir)vendor\stb-image;$(ProjectDir)vendor\tfd;$(SolutionDir)Dependencies\glm\include;$(SolutionDir)Dependencies\assimp\include;$(SolutionDir)Dependencies\freetype\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\rapidjson\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_DEPRECATE;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLFW\lib-vc2015;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\assimp\lib;$(SolutionDir)Dependencies\freetype\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc140-mt.lib;freetype.lib;glew32.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;Ole32.lib;Comdlg32.lib</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(SolutionDir)Dependencies\GLEW\lib\*.dll" "$(TargetDir)";
+copy "$(SolutionDir)Dependencies\assimp\lib\*.dll" "$(TargetDir)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy DLLs to Target Directory</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)EVA\include;$(ProjectDir)vendor\imgui;$(ProjectDir)vendor\stb-image;$(ProjectDir)vendor\tfd;$(SolutionDir)Dependencies\glm\include;$(SolutionDir)Dependencies\assimp\include;$(SolutionDir)Dependencies\freetype\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\rapidjson\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_DEPRECATE;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLFW\lib-vc2015;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\assimp\lib;$(SolutionDir)Dependencies\freetype\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc140-mt.lib;freetype.lib;glew32.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;Ole32.lib;Comdlg32.lib</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(SolutionDir)Dependencies\GLEW\lib\*.dll" "$(TargetDir)";
+copy "$(SolutionDir)Dependencies\assimp\lib\*.dll" "$(TargetDir)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy DLLs to Target Directory</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)EVA\include;$(ProjectDir)vendor\imgui;$(ProjectDir)vendor\stb-image;$(ProjectDir)vendor\tfd;$(SolutionDir)Dependencies\glm\include;$(SolutionDir)Dependencies\assimp\include;$(SolutionDir)Dependencies\freetype\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)Dependencies\rapidjson\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);_CRT_SECURE_NO_DEPRECATE;GLM_ENABLE_EXPERIMENTAL</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\GLFW\lib-vc2015;$(SolutionDir)Dependencies\GLEW\lib;$(SolutionDir)Dependencies\assimp\lib;$(SolutionDir)Dependencies\freetype\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc140-mt.lib;freetype.lib;glew32.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib;Ole32.lib;Comdlg32.lib</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(SolutionDir)Dependencies\GLEW\lib\*.dll" "$(TargetDir)";
+copy "$(SolutionDir)Dependencies\assimp\lib\*.dll" "$(TargetDir)"</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy DLLs to Target Directory</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

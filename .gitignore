@@ -2,10 +2,7 @@
 .vs/
 .idea/
 
-build/
-cmake-build-debug/
-CMakeSettings.json
-
-project files/
-
+bin/
 doc/
+
+EVA-Engine/imgui.ini

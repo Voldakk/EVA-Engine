@@ -1,10 +1,9 @@
-#CMAKE FOR GLFW, GLEW, GLM
 cmake_minimum_required(VERSION 3.1)
 
 add_definitions(-DFOO)
 
 # Project name
-project(EVA)
+project(EVA-Engine)
 
 # System type
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
@@ -29,31 +28,20 @@ if(APPLE OR LINUX)
 	find_package(GLEW REQUIRED)
 endif(APPLE OR LINUX)
 
-# Link GLFW and GLEW directories
-add_subdirectory(dependencies/glfw)
-link_directories(${PROJECT_BINARY_DIR})
-link_directories(${GLFW_BINARY_DIR})
-
-add_subdirectory(dependencies/assimp)
-link_directories(${PROJECT_BINARY_DIR})
-link_directories(${ASSIMP_BINARY_DIR})
-
 if(WINDOWS)
-	link_directories(${PROJECT_SOURCE_DIR}/dependencies/glew/lib/)
-	link_directories(${PROJECT_SOURCE_DIR}/dependencies/freetype/lib/)
+	link_directories(${PROJECT_SOURCE_DIR}/Dependencies/GLEW/lib/)
+	link_directories(${PROJECT_SOURCE_DIR}/Dependencies/GLFW/lib-vc2015/)
+	link_directories(${PROJECT_SOURCE_DIR}/Dependencies/freetype/lib/)
+	link_directories(${PROJECT_SOURCE_DIR}/Dependencies/assimp/lib/)
 endif(WINDOWS)
 
 # Main executeable
 file(GLOB SOURCES
-	source/*
-	source/*/*
-	EVA/*
-	EVA/*/*
-	TestScenes/*
-	TestScenes/*/*
-	dependencies/stb-image/*
-	dependencies/imgui/*
-	dependencies/tfd/*
+	EVA-Engine/source/*
+	EVA-Engine/source/*/*
+	EVA-Engine/EVA/*
+	EVA-Engine/EVA/*/*
+	EVA-Engine/vendor/*/*
 )
 
 add_executable(main ${SOURCES})
@@ -67,53 +55,40 @@ set_target_properties(
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
 )
 
-# Link and include
-target_link_libraries(
-	main 
-	glfw 
-	${GLFW_LIBRARIES}
-	assimp
-	${ASSIMP_LIBRARIES}
-	freetype
-	${FREETYPE_LIBRARIES}
-) 
-
+# Include and link
 target_include_directories(
     main 
-	PRIVATE ${PROJECT_SOURCE_DIR}/EVA/include
-	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/glew/include
-	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/glfw/include
-	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/glm
-	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/stb-image
-	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/assimp/include/
-	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/freetype/include/
-	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/rapidjson/include/
-	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/imgui
-	PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/tfd
+	PRIVATE ${PROJECT_SOURCE_DIR}/EVA-Engine/EVA/include
+	
+	PRIVATE ${PROJECT_SOURCE_DIR}/Dependencies/GLEW/include
+	PRIVATE ${PROJECT_SOURCE_DIR}/Dependencies/GLFW/include
+	PRIVATE ${PROJECT_SOURCE_DIR}/Dependencies/glm/include
+	PRIVATE ${PROJECT_SOURCE_DIR}/Dependencies/assimp/include/
+	PRIVATE ${PROJECT_SOURCE_DIR}/Dependencies/freetype/include/
+	PRIVATE ${PROJECT_SOURCE_DIR}/Dependencies/rapidjson/include/
+	
+	PRIVATE ${PROJECT_SOURCE_DIR}/EVA-Engine/vendor/stb-image
+	PRIVATE ${PROJECT_SOURCE_DIR}/EVA-Engine/vendor/imgui
+	PRIVATE ${PROJECT_SOURCE_DIR}/EVA-Engine/vendor/tfd
 )
 
 if(WINDOWS)
 	target_link_libraries(
 		main 
 		glew32
+		glfw3
+		opengl32
+		assimp-vc140-mt
+		freetype
 	) 
-	
-	target_include_directories(
-		main 
-		PRIVATE ${PROJECT_SOURCE_DIR}/dependencies/glew/include
-	)
 
 	file(
-			COPY  ${PROJECT_SOURCE_DIR}/dependencies/dll/glew32.dll
+			COPY  ${PROJECT_SOURCE_DIR}/Dependencies/GLEW/lib/glew32.dll
 			DESTINATION ${PROJECT_BINARY_DIR}/bin
 	)
 	file(
-			COPY  ${PROJECT_SOURCE_DIR}/dependencies/dll/zlib1.dll
+			COPY  ${PROJECT_SOURCE_DIR}/Dependencies/assimp/lib/assimp-vc140-mt.dll
 			DESTINATION ${PROJECT_BINARY_DIR}/bin
-	)
-	file(
-		COPY  ${PROJECT_SOURCE_DIR}/dependencies/freetype/bin/freetype6.dll
-		DESTINATION ${PROJECT_BINARY_DIR}/bin
 	)
 else()
 	target_link_libraries(
@@ -124,7 +99,7 @@ endif(WINDOWS)
 
 if(LINUX)
 	add_library(stdc++fs UNKNOWN IMPORTED)
-	set_property(TARGET stdc++fs PROPERTY IMPORTED_LOCATION "${PROJECT_SOURCE_DIR}/dependencies/stdfs/libstdc++fs.a")
+	set_property(TARGET stdc++fs PROPERTY IMPORTED_LOCATION "${PROJECT_SOURCE_DIR}/Dependencies/stdfs/libstdc++fs.a")
 	target_link_libraries(
 			main
 			stdc++fs
@@ -141,7 +116,7 @@ endif(APPLE)
 
 
 # Copy assets
-file(COPY  ${PROJECT_SOURCE_DIR}/assets DESTINATION ${PROJECT_BINARY_DIR}/bin)
+file(COPY  ${PROJECT_SOURCE_DIR}/EVA-Engine/assets DESTINATION ${PROJECT_BINARY_DIR}/bin)
 
 find_package(Doxygen)
 #Set up doxygen if it is installed
@@ -153,7 +128,7 @@ if(DOXYGEN_FOUND)
 
 	# Setting folders to generate documentation for
 	set(DOXYGEN_INPUT 
-		"${PROJECT_SOURCE_DIR}/source ${PROJECT_SOURCE_DIR}/EVA"
+		"${PROJECT_SOURCE_DIR}/EVA-Engine/source ${PROJECT_SOURCE_DIR}/EVA-Engine/EVA"
 	)
 	set(DOXYGEN_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/doc)
 	set(DOXYGEN_INCLUDE_GRAPH YES)
