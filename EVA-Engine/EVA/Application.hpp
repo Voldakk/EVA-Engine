@@ -1,14 +1,15 @@
 ﻿#pragma once
 
+#include <iostream>
 #include <memory>
 
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
-#include "glm/glm.hpp"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
-#include "Components/Camera.hpp"
+#include "Core.hpp"
 #include "GameObject.hpp"
-#include <iostream>
+#include "Components/Camera.hpp"
 
 namespace EVA
 {
@@ -23,7 +24,7 @@ namespace EVA
 	/**
 	* \brief Controls the application window and main loop
 	*/
-	class Application
+	class EVA_API Application
 	{
 		static Camera* m_DefaultCamera;
 

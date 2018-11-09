@@ -4,7 +4,7 @@
 
 namespace EVA
 {
-	class HideOnStart : public Component, public IUpdateComponent
+	class EVA_API HideOnStart : public Component, public IUpdateComponent
 	{
 	REGISTER_COMPONENT_HPP(HideOnStart);
 

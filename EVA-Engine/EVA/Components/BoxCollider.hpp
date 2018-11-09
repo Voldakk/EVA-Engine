@@ -4,7 +4,7 @@
 
 namespace EVA
 {
-	class BoxCollider : public Collider
+	class EVA_API BoxCollider : public Collider
 	{
 	REGISTER_COMPONENT_HPP(BoxCollider)
 

@@ -9,7 +9,7 @@ namespace EVA
 {
 	class GameObject;
 
-	class Camera : public Component, public ILateUpdateComponent
+	class EVA_API Camera : public Component, public ILateUpdateComponent
 	{
 	REGISTER_COMPONENT_HPP(Camera)
 

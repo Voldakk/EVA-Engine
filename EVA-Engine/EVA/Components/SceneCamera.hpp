@@ -6,7 +6,7 @@
 
 namespace EVA
 {
-	class SceneCamera : public FreeLook
+	class EVA_API SceneCamera : public FreeLook
 	{
 	public:
 

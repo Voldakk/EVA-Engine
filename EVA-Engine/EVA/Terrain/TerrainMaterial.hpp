@@ -7,7 +7,7 @@ namespace EVA
 {
 	class Terrain;
 
-	class TerrainMaterial : public Material
+	class EVA_API TerrainMaterial : public Material
 	{
 	REGISTER_MATERIAL_HPP(TerrainMaterial)
 		Terrain* m_Terrain;

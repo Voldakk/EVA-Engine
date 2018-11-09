@@ -4,17 +4,17 @@
 #include <memory>
 #include <string>
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
+#include "Core.hpp"
 #include "EVA/OpenGL.hpp"
-
 #include "FileSystem.hpp"
 
 namespace EVA
 {
 	struct InstancedMeshData;
 
-	struct Vertex
+	struct EVA_API Vertex
 	{
 		glm::vec3 position;
 		glm::vec3 normal;
@@ -26,7 +26,7 @@ namespace EVA
 	/**
 	 * \brief A mesh
 	 */
-	class Mesh
+	class EVA_API Mesh
 	{
 	protected:
 

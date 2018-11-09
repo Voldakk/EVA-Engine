@@ -4,7 +4,7 @@
 
 namespace EVA
 {
-	class Transformer : public Component, public IUpdateComponent
+	class EVA_API Transformer : public Component, public IUpdateComponent
 	{
 	REGISTER_COMPONENT_HPP(Transformer)
 

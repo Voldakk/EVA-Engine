@@ -1,6 +1,6 @@
 #pragma once
 
-#include "glm/glm.hpp"
+#include <glm/glm.hpp>
 
 #include "Application.hpp"
 #include "GameObject.hpp"
@@ -12,7 +12,7 @@ namespace EVA
 	/**
 	 * \brief A ray for use in ray casting
 	 */
-	struct Ray
+	struct EVA_API Ray
 	{
 		glm::vec3 origin;
 		glm::vec3 direction;
@@ -37,7 +37,7 @@ namespace EVA
 	/**
 	 * \brief Holds information about a raycast hit
 	 */
-	struct RaycastHit
+	struct EVA_API RaycastHit
 	{
 		Ray ray;
 		glm::vec3 point;
@@ -68,7 +68,7 @@ namespace EVA
 	/**
 	 * \brief 
 	 */
-	class Physics
+	class EVA_API Physics
 	{
 	public:
 

@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "EditorWindows.hpp"
+#include "../Core.hpp"
 #include "../Parsers/SceneParser.hpp"
 #include "../Components/SceneCamera.hpp"
 #include "../Physics.hpp"
@@ -13,7 +14,7 @@
 
 namespace EVA
 {
-	class SceneEditor : public Scene
+	class EVA_API SceneEditor : public Scene
 	{
 		GameObject* m_SceneCameraGameObject;
 		SceneCamera* m_SceneCamera;

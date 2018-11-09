@@ -10,7 +10,7 @@
 
 namespace EVA
 {
-	class MeshRenderer : public Component
+	class EVA_API MeshRenderer : public Component
 	{
 	REGISTER_COMPONENT_HPP(MeshRenderer)
 

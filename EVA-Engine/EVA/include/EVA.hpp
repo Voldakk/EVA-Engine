@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Core.hpp"
 #include "../Application.hpp"
 #include "../Scene.hpp"
 #include "../GameObject.hpp"

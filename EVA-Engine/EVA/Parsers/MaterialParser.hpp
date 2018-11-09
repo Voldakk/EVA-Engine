@@ -9,7 +9,7 @@ namespace EVA
 	/**
 	 * \brief Parser for material files
 	 */
-	class MaterialParser
+	class EVA_API MaterialParser
 	{
 	public:
 

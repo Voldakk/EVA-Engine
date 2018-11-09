@@ -8,7 +8,7 @@ namespace EVA
 	/**
 	* \brief A light. Used to light up a Scene
 	*/
-	class Light : public Component
+	class EVA_API Light : public Component
 	{
 	REGISTER_COMPONENT_HPP(Light)
 

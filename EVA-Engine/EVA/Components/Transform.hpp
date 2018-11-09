@@ -15,7 +15,7 @@ namespace EVA
 
 	class GameObject;
 
-	class Transform : public Component
+	class EVA_API Transform : public Component
 	{
 		glm::mat4 m_ModelMatrix;
 

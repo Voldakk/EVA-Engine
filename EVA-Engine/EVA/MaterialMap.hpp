@@ -16,7 +16,7 @@ namespace EVA
 	/**
 	 * \brief Keeps track of all registerd materials
 	 */
-	class MaterialMap : public ClassMap<Material>
+	class EVA_API MaterialMap : public ClassMap<Material>
 	{
 	};
 }

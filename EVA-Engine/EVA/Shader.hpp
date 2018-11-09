@@ -5,11 +5,12 @@
 
 #include <glm/glm.hpp>
 
+#include "Core.hpp"
 #include "FileSystem.hpp"
 
 namespace EVA
 {
-	struct ShaderPaths
+	struct EVA_API ShaderPaths
 	{
 		FS::path shader;
 		FS::path vertex;
@@ -22,7 +23,7 @@ namespace EVA
 	/**
 	 * \brief Used to interact with an OpenGL shader program
 	 */
-	class Shader
+	class EVA_API Shader
 	{
 		int m_ShaderId = -1;
 		std::unordered_map<std::string, int> m_UniformLocationMap;

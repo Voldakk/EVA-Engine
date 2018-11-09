@@ -12,14 +12,14 @@
 
 namespace EVA
 {
-	struct TerrainMeshData
+	struct EVA_API TerrainMeshData
 	{
 		glm::mat4 model;
 		float lod;
 		glm::vec4 lodSides;
 	};
 
-	class TerrainMesh : public Mesh
+	class EVA_API TerrainMesh : public Mesh
 	{
 		std::unique_ptr<VertexBuffer> m_Data;
 

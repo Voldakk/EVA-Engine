@@ -16,7 +16,7 @@ namespace EVA
 	/**
 	 * \brief Handles the loading of models
 	 */
-	class ModelManager
+	class EVA_API ModelManager
 	{
 		static std::map<FS::path, std::shared_ptr<Model>> m_Models;
 

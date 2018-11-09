@@ -9,7 +9,7 @@
 
 namespace EVA
 {
-	class Terrain : public Component, public ILateUpdateComponent, public IRenderComponent
+	class EVA_API Terrain : public Component, public ILateUpdateComponent, public IRenderComponent
 	{
 	REGISTER_COMPONENT_HPP(Terrain);
 

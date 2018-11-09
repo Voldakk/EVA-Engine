@@ -3,12 +3,13 @@
 #include <vector>
 #include <memory>
 
-#include "Components/Light.hpp"
+#include "Core.hpp"
 #include "GameObject.hpp"
 #include "Skybox.hpp"
+#include "Components/Light.hpp"
 #include "Components/MeshRenderer.hpp"
-#include "UI/UiElement.hpp"
 #include "Materials/ShadowMaterial.hpp"
+#include "UI/UiElement.hpp"
 
 namespace EVA
 {
@@ -17,7 +18,7 @@ namespace EVA
 	/**
 	 * \brief A scene that can be run by the SceneManager
 	 */
-	class Scene
+	class EVA_API Scene
 	{
 		bool m_Abort = false;
 

@@ -4,7 +4,7 @@
 
 namespace EVA
 {
-	struct Bounds
+	struct EVA_API Bounds
 	{
 		glm::vec3 center = glm::vec3(0.0f);
 		glm::vec3 extents = glm::vec3(1.0f);
@@ -51,7 +51,7 @@ namespace EVA
 		}
 	};
 
-	class Collider : public Component
+	class EVA_API Collider : public Component
 	{
 	public:
 

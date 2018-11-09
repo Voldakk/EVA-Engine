@@ -8,7 +8,7 @@
 
 namespace EVA
 {
-	class InspectorFields
+	class EVA_API InspectorFields
 	{
 	public:
 

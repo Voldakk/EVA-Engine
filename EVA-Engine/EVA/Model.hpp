@@ -9,7 +9,7 @@ namespace EVA
 	/**
 	 * \brief A model. Holds a collection of meshes
 	 */
-	class Model
+	class EVA_API Model
 	{
 		std::vector<std::shared_ptr<Mesh>> m_Meshes;
 

@@ -7,7 +7,7 @@ namespace EVA
 {
 	class Scene;
 
-	class StandardMaterial : public Material
+	class EVA_API StandardMaterial : public Material
 	{
 	REGISTER_MATERIAL_HPP(StandardMaterial)
 

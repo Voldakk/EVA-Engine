@@ -8,7 +8,7 @@ namespace EVA
 	/**
 	* \brief Parser for game objects, prefabs and components
 	*/
-	class GameObjectParser
+	class EVA_API GameObjectParser
 	{
 	public:
 

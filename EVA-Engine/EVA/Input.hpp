@@ -2,16 +2,18 @@
 
 #include <map>
 
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
-#include "glm/glm.hpp"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+
+#include "Core.hpp"
 
 namespace EVA
 {
 	/**
 	 * \brief Handles all input
 	 */
-	class Input
+	class EVA_API Input
 	{
 		static GLFWwindow* m_Window;
 		static std::map<int, int> m_KeyStates;

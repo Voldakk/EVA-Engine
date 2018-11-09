@@ -18,7 +18,7 @@ namespace EVA
 
 	class Transform;
 
-	struct InstancedMeshData
+	struct EVA_API InstancedMeshData
 	{
 		unsigned int instanceCount = 0;
 		std::unique_ptr<VertexBuffer> matrixBuffer;
@@ -28,7 +28,7 @@ namespace EVA
 	/**
 	 * \brief A material holds a Shader, textures and other material properties
 	 */
-	class Material : public Asset
+	class EVA_API Material : public Asset
 	{
 	protected:
 

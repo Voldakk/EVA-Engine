@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "Core.hpp"
 #include "Parsers/Json.hpp"
 #include "Editor/InspectorFields.hpp"
 
@@ -10,7 +11,7 @@ namespace EVA
 	/**
 	* \brief Base class for assets
 	*/
-	class Asset : public ISerializeable
+	class EVA_API Asset : public ISerializeable
 	{
 	public:
 

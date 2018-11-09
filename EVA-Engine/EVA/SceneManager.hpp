@@ -4,6 +4,7 @@
 #include <memory>
 #include <iostream>
 
+#include "Core.hpp"
 #include "Scene.hpp"
 
 namespace EVA
@@ -11,7 +12,7 @@ namespace EVA
 	/**
 	 * \brief Manages the active scenes in the game
 	 */
-	class SceneManager
+	class EVA_API SceneManager
 	{
 		static std::vector<std::shared_ptr<Scene>> m_Scenes;
 

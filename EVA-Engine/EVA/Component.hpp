@@ -16,7 +16,7 @@ namespace EVA
 	/**
 	* \brief Used to manage the active state a Component
 	*/
-	class IActive
+	class EVA_API IActive
 	{
 		bool m_Active = true;
 
@@ -30,7 +30,7 @@ namespace EVA
 	/**
 	* \brief Gives a Component access to the Update method
 	*/
-	class IUpdateComponent : public IActive
+	class EVA_API IUpdateComponent : public IActive
 	{
 	public:
 
@@ -44,7 +44,7 @@ namespace EVA
 	/**
 	* \brief Gives a Component access to the LateUpdate method
 	*/
-	class ILateUpdateComponent : public IActive
+	class EVA_API ILateUpdateComponent : public IActive
 	{
 	public:
 		/**
@@ -56,7 +56,7 @@ namespace EVA
 	/**
 	* \brief Gives a Component access to the Render method
 	*/
-	class IRenderComponent : public IActive
+	class EVA_API IRenderComponent : public IActive
 	{
 	public:
 		/**
@@ -68,7 +68,7 @@ namespace EVA
 	/**
 	* \brief Base class for components
 	*/
-	class Component : public Asset
+	class EVA_API Component : public Asset
 	{
 		friend GameObject;
 

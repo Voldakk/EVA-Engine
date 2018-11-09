@@ -4,13 +4,13 @@
 
 namespace EVA
 {
-	struct NodeData
+	struct EVA_API NodeData
 	{
 		Bounds bounds;
 		unsigned int lod;
 	};
 
-	class Quadtree
+	class EVA_API Quadtree
 	{
 		unsigned int m_Lod = 0;
 		unsigned int m_MaxLod = 0;

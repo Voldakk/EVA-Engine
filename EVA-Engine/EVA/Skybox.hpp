@@ -2,8 +2,8 @@
 
 #include <string>
 #include <memory>
-#include "Parsers/Json.hpp"
 
+#include "Parsers/Json.hpp"
 #include "Materials/SkyBoxMaterial.hpp"
 
 namespace EVA
@@ -15,7 +15,7 @@ namespace EVA
 	/**
 	 * \brief A skybox
 	 */
-	class Skybox
+	class EVA_API Skybox
 	{
 		std::shared_ptr<Texture> m_Texture;
 

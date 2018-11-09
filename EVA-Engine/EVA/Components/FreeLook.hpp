@@ -7,7 +7,7 @@
 
 namespace EVA
 {
-	class FreeLook : public Component, public IUpdateComponent
+	class EVA_API FreeLook : public Component, public IUpdateComponent
 	{
 	REGISTER_COMPONENT_HPP(FreeLook)
 

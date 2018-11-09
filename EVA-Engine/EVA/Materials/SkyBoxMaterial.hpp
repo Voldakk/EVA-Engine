@@ -7,7 +7,7 @@ namespace EVA
 {
 	class Scene;
 
-	class SkyBoxMaterial : public StandardMaterial
+	class EVA_API SkyBoxMaterial : public StandardMaterial
 	{
 	REGISTER_MATERIAL_HPP(SkyBoxMaterial)
 

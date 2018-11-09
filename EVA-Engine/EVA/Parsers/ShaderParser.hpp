@@ -6,7 +6,7 @@
 
 namespace EVA
 {
-	class ShaderParser
+	class EVA_API ShaderParser
 	{
 	public:
 

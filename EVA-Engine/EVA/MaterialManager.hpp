@@ -4,7 +4,7 @@
 
 namespace EVA
 {
-	class MaterialManager
+	class EVA_API MaterialManager
 	{
 		static std::map<FS::path, std::shared_ptr<Material>> m_Materials;
 

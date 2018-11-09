@@ -4,7 +4,7 @@
 
 namespace EVA
 {
-	class FollowTarget : public Component, public IUpdateComponent
+	class EVA_API FollowTarget : public Component, public IUpdateComponent
 	{
 	REGISTER_COMPONENT_HPP(FollowTarget)
 

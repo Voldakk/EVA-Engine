@@ -4,6 +4,8 @@
 #include <memory>
 #include <vector>
 
+#include "Core.hpp"
+
 namespace EVA
 {
 	// Macro for registering a component. Should be put inside the class declaration
@@ -25,7 +27,7 @@ namespace EVA
 	* \brief Keeps track of all registerd components
 	*/
 	template <class ClassType>
-	class ClassMap
+	class EVA_API ClassMap
 	{
 	public:
 

@@ -7,7 +7,7 @@ namespace EVA
 	/**
 	 * \brief Parser for scene asset files
 	 */
-	class SceneParser
+	class EVA_API SceneParser
 	{
 	public:
 

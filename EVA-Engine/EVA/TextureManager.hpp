@@ -2,13 +2,15 @@
 
 #include <map>
 
+#include <stb_image.h>
+
+#include "Core.hpp"
 #include "FileSystem.hpp"
-#include "stb_image.h"
 
 namespace EVA
 {
 	// Struct for holding texture info
-	struct Texture
+	struct EVA_API Texture
 	{
 		// Different texture types
 		enum Type
@@ -25,7 +27,7 @@ namespace EVA
 		FS::path path;
 	};
 
-	struct RawTexture
+	struct EVA_API RawTexture
 	{
 		unsigned char* data;
 		unsigned int width;
@@ -49,7 +51,7 @@ namespace EVA
 	/**
 	 * \brief A helper class used to load images from file to OpenGL textures
 	 */
-	class TextureManager
+	class EVA_API TextureManager
 	{
 		static std::map<FS::path, std::shared_ptr<Texture>> m_Textures;
 

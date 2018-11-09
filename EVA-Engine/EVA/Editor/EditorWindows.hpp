@@ -10,7 +10,7 @@ namespace EVA
 {
 	class SceneEditor;
 
-	class EditorWindows
+	class EVA_API EditorWindows
 	{
 	public:
 

@@ -14,7 +14,7 @@ namespace EVA
 	/**
      * \brief A game object. Holds different components to build more complex behaviours
      */
-	class GameObject
+	class EVA_API GameObject
 	{
 		Scene* m_Scene;
 		std::unique_ptr<Transform> m_Transform;

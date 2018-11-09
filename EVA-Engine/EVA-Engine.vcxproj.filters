@@ -156,12 +156,6 @@
     <ClCompile Include="EVA\TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\TestComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="vendor\imgui\imgui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -398,9 +392,6 @@
     <ClInclude Include="EVA\TextureManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\TestComponent.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="vendor\imgui\imconfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -428,5 +419,14 @@
     <ClInclude Include="vendor\tfd\tinyfiledialogs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EVA\Core.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EVA\include\EVA\EntryPoint.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

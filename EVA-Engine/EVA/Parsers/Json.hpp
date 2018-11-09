@@ -18,7 +18,7 @@
 
 namespace EVA
 {
-	class Json
+	class EVA_API Json
 	{
 	public:
 
@@ -64,7 +64,7 @@ namespace EVA
 		}
 	};
 
-	class DataObject
+	class EVA_API DataObject
 	{
 		Json::Generic m_Json2;
 		Json::Generic& m_Json;
@@ -247,7 +247,7 @@ namespace EVA
 		}
 	};
 
-	class ISerializeable
+	class EVA_API ISerializeable
 	{
 	public:
 		virtual void Serialize(DataObject& data)

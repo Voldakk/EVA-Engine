@@ -4,13 +4,15 @@
 #include <algorithm>
 #include <experimental/filesystem>
 
-#include "tinyfiledialogs.h"
+#include <tinyfiledialogs.h>
+
+#include "Core.hpp"
 
 namespace FS = std::experimental::filesystem;
 
 namespace EVA
 {
-	class FileSystem
+	class EVA_API FileSystem
 	{
 	public:
 

@@ -16,7 +16,7 @@ namespace EVA
 	/**
 	 * \brief Keeps track of all registerd components
 	 */
-	class ComponentMap : public ClassMap<Component>
+	class EVA_API ComponentMap : public ClassMap<Component>
 	{
 	};
 }

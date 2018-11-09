@@ -14,7 +14,7 @@ namespace EVA
 	/**
 	 * \brief A helper class for loading shaders
 	 */
-	class ShaderManager
+	class EVA_API ShaderManager
 	{
 		static std::map<FS::path, std::shared_ptr<Shader>> m_Shaders;
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core.hpp"
+
 namespace EVA
 {
 	/**
@@ -7,7 +9,7 @@ namespace EVA
 	* \tparam T The class it points to
 	*/
 	template <class T>
-	class ConstPointer
+	class EVA_API ConstPointer
 	{
 		T** m_Pointer;
 
