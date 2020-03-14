@@ -3,6 +3,7 @@
 #include <map>
 #include <memory>
 #include <vector>
+#include <iostream>
 
 namespace EVA
 {
@@ -72,7 +73,11 @@ namespace EVA
 		ClassRegister(std::string const& s)
 		{
 			typeId = s;
-			ClassMap<BaseT>::GetMap()->insert(std::make_pair(s, &ClassMap<BaseT>::CreateT<T>));
+			if (ClassMap<BaseT>::GetMap()->find(s) == ClassMap<BaseT>::GetMap()->end())
+			{
+				std::cout << "ClassRegister - Registering class: " << s << "\n";
+				ClassMap<BaseT>::GetMap()->insert(std::make_pair(s, &ClassMap<BaseT>::CreateT<T>));
+			}
 		}
 	};
 }

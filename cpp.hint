@@ -1,0 +1,6 @@
+// Hint files help the Visual Studio IDE interpret Visual C++ identifiers
+// such as names of functions and macros.
+// For more information see https://go.microsoft.com/fwlink/?linkid=865984
+#define REGISTER_CLASS(BASETYPE, TYPE, NAME) static inline EVA::ClassRegister<BASETYPE, TYPE> m_Register = NAME; public: std::string GetTypeId() const { return m_Register.typeId; } private:
+#define REGISTER_COMPONENT(TYPE, NAME) REGISTER_CLASS(EVA::Component, TYPE, NAME)
+#define REGISTER_MATERIAL(TYPE, NAME) REGISTER_CLASS(Material, TYPE, NAME)

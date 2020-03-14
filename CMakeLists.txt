@@ -54,6 +54,7 @@ file(GLOB SOURCES
 	dependencies/stb-image/*
 	dependencies/imgui/*
 	dependencies/tfd/*
+	cpp.hint
 )
 
 add_executable(main ${SOURCES})

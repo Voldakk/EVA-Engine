@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+
+        <!-- The header contains information describing the snippet. -->
+        <Header>
+          
+          <!-- The Title of the snippet, this will be shown in the snippets manager. -->
+          <Title>Insert Conponent</Title>
+          
+          <!-- The description of the snippet. -->
+          <Description>Inserts an Component</Description>
+          
+          <!-- The author of the snippet. -->
+          <Author>Voldakk</Author>
+          
+          <!-- The set of characters that must be keyed in to insert the snippet. -->
+          <Shortcut>evacomp</Shortcut>
+          
+          <!-- A URL for more help. -->
+          <HelpUrl></HelpUrl>
+          
+          <!-- The set of snippet types we're dealing with - either Expansion or -->
+          <SnippetTypes>
+            <SnippetType>Expansion</SnippetType>
+          </SnippetTypes>          
+          
+        </Header>
+      
+        <!-- Now we have the snippet itself. -->
+        <Snippet>
+                    
+            <!-- Create any declarations that we use in the snippet. -->
+			<Declarations>
+			  <Literal>
+				<ID>ComponentName</ID>
+				<ToolTip>Enter the component name</ToolTip>
+				<Default>Name</Default>
+			  </Literal>
+			</Declarations>
+
+			<!-- Sepecify the code language and the actual snippet content. -->
+            <Code Language="CPP" Kind="any">
+                <![CDATA[#include "EVA.hpp"
+
+namespace EVA
+{
+	class $ComponentName$ : public Component
+	{
+		REGISTER_COMPONENT(Component, "EVA::$ComponentName$")
+
+	public:
+
+		void Start() override;
+	};
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
