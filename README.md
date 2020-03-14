@@ -60,10 +60,6 @@ make
 cd bin
 ./main
 ```
-## Test scenes
-
-Thera are 3 test scenes in addition to a pacman game.
-To run them simply uncomment the line in source/main.cpp
 
 ## Built With
 
