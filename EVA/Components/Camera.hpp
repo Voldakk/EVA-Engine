@@ -7,12 +7,11 @@
 
 namespace EVA
 {
-
     class GameObject;
 
     class Camera : public Component, public ILateUpdateComponent
     {
-		REGISTER_COMPONENT_HPP(Camera)
+		REGISTER_COMPONENT(Camera, "EVA::Camera")
 
 		glm::mat4 m_ViewMatrix;
 

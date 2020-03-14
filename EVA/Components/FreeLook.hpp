@@ -10,7 +10,7 @@ namespace EVA
 
 	class FreeLook : public Component, public IUpdateComponent
 	{
-		REGISTER_COMPONENT_HPP(FreeLook)
+		REGISTER_COMPONENT(FreeLook, "EVA::FreeLook")
 
 		Camera* m_Camera = nullptr;
 

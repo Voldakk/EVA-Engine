@@ -7,8 +7,6 @@
 
 namespace EVA
 {
-	REGISTER_COMPONENT_CPP(Camera, "EVA::Camera")
-
 	Camera::~Camera()
 	{
 		if (Application::mainCamera == this)

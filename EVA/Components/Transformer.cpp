@@ -2,8 +2,6 @@
 
 namespace EVA
 {
-	REGISTER_COMPONENT_CPP(Transformer, "EVA::Transformer")
-
 	void Transformer::Update(const float deltaTime)
 	{
 		transform->Translate(m_Translation * deltaTime);

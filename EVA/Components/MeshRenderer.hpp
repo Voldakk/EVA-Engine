@@ -13,7 +13,7 @@ namespace EVA
 
 	class MeshRenderer : public Component
 	{
-		REGISTER_COMPONENT_HPP(MeshRenderer)
+		REGISTER_COMPONENT(MeshRenderer, "EVA::MeshRenderer")
 
 		std::shared_ptr<Mesh> m_Mesh;
 		std::shared_ptr<Material> m_Material;

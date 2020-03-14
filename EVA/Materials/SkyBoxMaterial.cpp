@@ -5,8 +5,6 @@
 
 namespace EVA
 {
-	REGISTER_MATERIAL_CPP(SkyBoxMaterial, "EVA::SkyBoxMaterial")
-
 	void SkyBoxMaterial::SetMaterialUniforms(Scene* scene) const
 	{
 		StandardMaterial::SetMaterialUniforms(scene);

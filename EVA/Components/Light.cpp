@@ -9,9 +9,7 @@
 
 namespace EVA
 {
-	REGISTER_COMPONENT_CPP(Light, "EVA::Light")
-
-		Light::~Light()
+	Light::~Light()
 	{
 		if (scene.Get() != nullptr)
 			scene->RemoveLight(this);

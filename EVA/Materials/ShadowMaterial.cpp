@@ -5,8 +5,6 @@
 
 namespace EVA
 {
-	REGISTER_MATERIAL_CPP(ShadowMaterial, "EVA::ShadowMaterial")
-
 	void ShadowMaterial::SetMaterialUniforms(Scene* scene) const
 	{
 

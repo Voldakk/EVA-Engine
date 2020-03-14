@@ -7,7 +7,7 @@ namespace EVA
 
 	class Transformer : public Component, public IUpdateComponent
 	{
-		REGISTER_COMPONENT_HPP(Transformer)
+		REGISTER_COMPONENT(Transformer, "EVA::Transformer")
 
 		glm::vec3 m_Translation;
 		glm::vec3 m_Scaling;

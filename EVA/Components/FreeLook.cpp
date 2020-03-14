@@ -6,8 +6,6 @@
 
 namespace EVA
 {
-	REGISTER_COMPONENT_CPP(FreeLook, "EVA::FreeLook")
-
 	void FreeLook::Start()
 	{
 		m_Camera = gameObject->GetComponentOfType<Camera>();

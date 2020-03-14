@@ -4,9 +4,7 @@
 
 namespace EVA
 {
-	REGISTER_MATERIAL_CPP(StandardMaterial, "EVA::StandardMaterial")
-
-		bool StandardMaterial::init = true;
+	bool StandardMaterial::init = true;
 	std::shared_ptr<Texture> StandardMaterial::textureDefaultDiffuse;
 	std::shared_ptr<Texture> StandardMaterial::textureDefaultSpecular;
 	std::shared_ptr<Texture> StandardMaterial::textureDefaultNormal;

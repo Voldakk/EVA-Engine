@@ -6,23 +6,18 @@
 
 namespace EVA
 {
-	// Macro for registering a component. Should be put inside the class declaration
-#define REGISTER_CLASS_HPP(BASETYPE, TYPE) \
-    static EVA::ClassRegister<BASETYPE, TYPE> m_Register;\
+	// Macro for registering a class. Should be put inside the class declaration
+#define REGISTER_CLASS(BASETYPE, TYPE, NAME) \
+    static inline EVA::ClassRegister<BASETYPE, TYPE> m_Register = NAME;\
 	public:\
-	std::string GetTypeId() const;\
-	private:
-
-	// Macro for registering a component
-#define REGISTER_CLASS_CPP(BASETYPE, TYPE, NAME) \
-    EVA::ClassRegister<BASETYPE, TYPE> TYPE::m_Register(NAME);\
-	std::string TYPE::GetTypeId() const\
+	std::string GetTypeId() const\
 	{\
 		return m_Register.typeId;\
-	}
+	}\
+	private:
 
 	/**
-	* \brief Keeps track of all registerd components
+	* \brief Keeps track of all registerd classes
 	*/
 	template <class ClassType>
 	class ClassMap
@@ -74,7 +69,7 @@ namespace EVA
 	struct ClassRegister
 	{
 		std::string typeId;
-		explicit ClassRegister(std::string const& s)
+		ClassRegister(std::string const& s)
 		{
 			typeId = s;
 			ClassMap<BaseT>::GetMap()->insert(std::make_pair(s, &ClassMap<BaseT>::CreateT<T>));

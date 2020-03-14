@@ -9,7 +9,7 @@ namespace EVA
 
 	class StandardMaterial : public Material
 	{
-		REGISTER_MATERIAL_HPP(StandardMaterial)
+		REGISTER_MATERIAL(StandardMaterial, "EVA::StandardMaterial")
 
 		inline static const FS::path DEFAULT_TEXTURES_PATH = "./assets/standard assets/textures/";
 

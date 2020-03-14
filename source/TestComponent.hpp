@@ -4,5 +4,5 @@
 
 class TestComponent : public EVA::Component
 {
-	REGISTER_COMPONENT_HPP(TestComponent)
+	REGISTER_COMPONENT(TestComponent, "TestComponent")
 };

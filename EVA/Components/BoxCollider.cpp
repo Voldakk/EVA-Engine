@@ -2,8 +2,6 @@
 
 namespace EVA
 {
-	REGISTER_COMPONENT_CPP(BoxCollider, "EVA::BoxCollider")
-
 	BoxCollider::BoxCollider(const Bounds bounds)
 	{
 		this->bounds = bounds;

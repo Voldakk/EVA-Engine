@@ -7,7 +7,7 @@ namespace EVA
 
 	class HideOnStart : public Component, public IUpdateComponent
 	{
-		REGISTER_COMPONENT_HPP(HideOnStart);
+		REGISTER_COMPONENT(HideOnStart, "EVA::HideOnStart");
 
 	public:
 		void Update(float deltaTime) override;

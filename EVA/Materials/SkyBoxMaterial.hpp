@@ -9,7 +9,7 @@ namespace EVA
 
 	class SkyBoxMaterial : public StandardMaterial
 	{
-		REGISTER_MATERIAL_HPP(SkyBoxMaterial)
+		REGISTER_MATERIAL(SkyBoxMaterial, "EVA::SkyBoxMaterial")
 
 	public:
 

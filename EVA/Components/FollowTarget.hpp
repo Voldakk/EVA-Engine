@@ -7,7 +7,7 @@ namespace EVA
 
 	class FollowTarget : public Component, public IUpdateComponent
 	{
-		REGISTER_COMPONENT_HPP(FollowTarget)
+		REGISTER_COMPONENT(FollowTarget, "EVA::FollowTarget")
 
 		std::string m_TargetName;
 

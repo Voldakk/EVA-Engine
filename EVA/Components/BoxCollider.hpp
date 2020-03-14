@@ -7,7 +7,7 @@ namespace EVA
 
 	class BoxCollider : public Collider
 	{
-		REGISTER_COMPONENT_HPP(BoxCollider)
+		REGISTER_COMPONENT(BoxCollider, "EVA::BoxCollider")
 
 	public:
 

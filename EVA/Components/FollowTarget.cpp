@@ -5,8 +5,6 @@
 
 namespace EVA
 {
-	REGISTER_COMPONENT_CPP(FollowTarget, "EVA::FollowTarget")
-
 	void FollowTarget::Start()
 	{
 		const auto go = scene->FindGameObjectByName(m_TargetName);

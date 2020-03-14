@@ -5,13 +5,12 @@
 
 namespace EVA
 {
-
 	/**
 	* \brief A light. Used to light up a Scene
 	*/
 	class Light : public Component
 	{
-		REGISTER_COMPONENT_HPP(Light)
+		REGISTER_COMPONENT(Light, "EVA::Light")
 
 	public:
 

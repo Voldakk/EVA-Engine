@@ -9,7 +9,7 @@ namespace EVA
 
 	class ShadowMaterial : public Material
 	{
-		REGISTER_MATERIAL_HPP(ShadowMaterial)
+		REGISTER_MATERIAL(ShadowMaterial, "EVA::ShadowMaterial")
 
 	public:
 		void SetMaterialUniforms(Scene* scene) const override;
