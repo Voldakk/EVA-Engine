@@ -127,9 +127,6 @@
                     ]
                 },
                 {
-                    "id": "Terrain"
-                },
-                {
                     "id": "EVA::MeshRenderer",
                     "material": "./assets/standard assets/materials/terrain.mat",
                     "mesh": "",
