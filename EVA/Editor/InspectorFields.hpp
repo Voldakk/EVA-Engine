@@ -1,5 +1,7 @@
 #pragma once
 
+#include <charconv>
+
 #include "imgui.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -14,6 +16,14 @@ namespace EVA
 	public:
 
 		static const int STRING_LENGTH = 10000;
+		static inline char* NUMBER_STRING = new char[20];
+		static inline char* NUMBER_NONE = new char[20]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+		static char* Number(int number) {
+			memcpy(NUMBER_STRING, NUMBER_NONE, 20);
+			std::to_chars(NUMBER_STRING, NUMBER_STRING + 20, number);
+			return NUMBER_STRING;
+		}
 
 		static void Text(std::string text)
 		{
@@ -40,6 +50,20 @@ namespace EVA
 			}
 
 			return false;
+		}
+
+		template <typename T>
+		static bool Vector(const char* name, std::vector<T>& value)
+		{
+			bool changed = false;
+			if (ImGui::CollapsingHeader(name))
+			{
+				for (auto i = 0; i < value.size(); i++)
+				{
+					changed = changed || Default((std::to_string(i) + "##" + name).c_str(), value[i]);
+				}
+			}			
+			return changed;
 		}
 
 		static bool Bool(const char* name, bool& value)
@@ -173,49 +197,55 @@ namespace EVA
 		}
 
 		template <>
-		static bool Default<int>(const char* name, int& value)
+		static bool Default(const char* name, int& value)
 		{
 			return Int(name, value);
 		}
 
+		template <typename T, typename Alloc>
+		static bool Default(const char* name, std::vector<T, Alloc>& value)
+		{
+			return Vector(name, value);
+		}
+
 		template <>
-		static bool Default<bool>(const char* name, bool& value)
+		static bool Default(const char* name, bool& value)
 		{
 			return Bool(name, value);
 		}
 
 		template <>
-		static bool Default<std::string>(const char* name, std::string& value)
+		static bool Default(const char* name, std::string& value)
 		{
 			return EnterString(name, value);
 		}
 
 		template <>
-		static bool Default<float>(const char* name, float& value)
+		static bool Default(const char* name, float& value)
 		{
 			return Float(name, value);
 		}
 
 		template <>
-		static bool Default<glm::vec2>(const char* name, glm::vec2& value)
+		static bool Default(const char* name, glm::vec2& value)
 		{
 			return Float2(name, value);
 		}
 
 		template <>
-		static bool Default<glm::vec3>(const char* name, glm::vec3& value)
+		static bool Default(const char* name, glm::vec3& value)
 		{
 			return Float3(name, value);
 		}
 
 		template <>
-		static bool Default<glm::vec4>(const char* name, glm::vec4& value)
+		static bool Default(const char* name, glm::vec4& value)
 		{
 			return Float4(name, value);
 		}
 
 		template <>
-		static bool Default<glm::quat>(const char* name, glm::quat& value)
+		static bool Default(const char* name, glm::quat& value)
 		{
 			auto vec4 = glm::vec4(value.x, value.y, value.z, value.w);
 			bool changed = Float4(name, vec4);
@@ -226,7 +256,7 @@ namespace EVA
 		}
 
 		template <>
-		static bool Default<FS::path>(const char* name, FS::path& value)
+		static bool Default(const char* name, FS::path& value)
 		{
 			auto pathString = FileSystem::ToString(value);
 			bool changed = DragDropTargetString(name, pathString, "file");

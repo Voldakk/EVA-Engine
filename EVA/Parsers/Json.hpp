@@ -111,7 +111,6 @@ namespace EVA
 			m_Json.AddMember(key, value, *m_Allocator);
 		}
 
-
 		template <>
 		glm::vec2 Get<glm::vec2>(const char* key, const glm::vec2 defaultValue) const
 		{
@@ -135,7 +134,6 @@ namespace EVA
 
 			m_Json.AddMember(key, v, *m_Allocator);
 		}
-
 
 		template <>
 		glm::vec3 Get<glm::vec3>(const char* key, const glm::vec3 defaultValue) const
@@ -219,6 +217,34 @@ namespace EVA
 			m_Json.AddMember(key, FileSystem::ToString(value), *m_Allocator);
 		}
 
+		template <>
+		std::vector<int> Get<std::vector<int>>(const char* key, const std::vector<int> defaultValue) const
+		{
+			if (m_Json.HasMember(key) && m_Json[key].IsArray())
+			{
+				const auto a = m_Json[key].GetArray();
+				auto arr = std::vector<int>();
+				for (size_t i = 0; i < a.Size(); i++)
+				{
+					arr.push_back(a[i].GetInt());
+				}
+				return arr;
+			}
+
+			return defaultValue;
+		}
+
+		template <>
+		void Set<std::vector<int>>(const Json::StringRef& key, const std::vector<int> value) const
+		{
+			Json::Value v;
+			v.SetArray();
+			for (size_t i = 0; i < value.size(); i++)
+			{
+				v.PushBack(value[i], *m_Allocator);
+			}
+			m_Json.AddMember(key, v, *m_Allocator);
+		}
 
 		template <typename T>
 		bool Serialize(const Json::StringRef& key, T& value)
