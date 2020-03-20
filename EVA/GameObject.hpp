@@ -140,7 +140,7 @@ namespace EVA
         return component.get();
     }
 
-	template <class T>
+	template<class T>
 	T* GameObject::GetComponentOfType()
 	{
 		for (auto component : m_Components)

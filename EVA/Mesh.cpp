@@ -6,6 +6,12 @@
 
 namespace EVA
 {
+	Mesh::Mesh()
+	{
+		index = 0;
+		m_VertexCount = 0;
+		m_HasFaceIndices = false;
+	}
 
 	Mesh::Mesh(const std::vector<Vertex>& vertices, std::string name) 
 		: name(std::move(name)), index(0)

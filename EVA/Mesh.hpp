@@ -44,7 +44,7 @@ namespace EVA
 		FS::path path;
 		unsigned int index;
 
-		Mesh() = default;
+		Mesh();
 
 		explicit Mesh(const std::vector<Vertex>& vertices, std::string name = "");
 

@@ -17,14 +17,14 @@ namespace EVA
 
 	inline void SceneCamera::Update(const float deltaTime)
 	{
-		if (Input::MouseButton(Input::Button::MouseRight))
+		if (Input::GetMouseButton(Input::Mouse::MouseRight))
 		{
-			Input::SetCursorMode(Input::Disabled);
+			Input::SetCursorMode(Input::CursorMode::Disabled);
 			FreeLook::Update(deltaTime);
 		}
 		else
 		{
-			Input::SetCursorMode(Input::Normal);
+			Input::SetCursorMode(Input::CursorMode::Normal);
 		}
 	}
 }

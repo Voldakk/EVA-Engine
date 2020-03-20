@@ -47,9 +47,10 @@ namespace EVA
 		 */
 		static std::shared_ptr<Document> Open(const FS::path& path)
 		{
-			const auto fp = fopen(FileSystem::ToString(path).c_str(), "rb");
+			FILE* fp;
+			const errno_t error = fopen_s(&fp, FileSystem::ToString(path).c_str(), "rb");
 
-			if (fp == nullptr)
+			if (error != 0)
 				return nullptr;
 
 			char* readBuffer = new char[65536];
@@ -64,9 +65,10 @@ namespace EVA
 
 		static bool Save(const Document* d, const FS::path& path)
 		{
-			const auto fp = fopen(FileSystem::ToString(path).c_str(), "wb");
+			FILE* fp;
+			const errno_t error = fopen_s(&fp, FileSystem::ToString(path).c_str(), "wb");
 
-			if (fp == nullptr)
+			if (error != 0)
 				return false;
 
 			char* writeBuffer = new char[65536];

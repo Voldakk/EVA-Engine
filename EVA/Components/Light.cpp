@@ -59,9 +59,9 @@ namespace EVA
 
 	void Light::Serialize(DataObject & data)
 	{
-		std::string type = m_Type == Directional ? "directional" : "point";
+		std::string type = m_Type == Type::Directional ? "directional" : "point";
 		data.Serialize("type", type);
-		m_Type = type == "directional" ? Directional : Point;
+		m_Type = type == "directional" ? Type::Directional : Type::Point;
 
 		data.Serialize("color", color);
 		data.Serialize("ambientCoefficient", ambientCoefficient);
@@ -72,14 +72,14 @@ namespace EVA
 		data.Serialize("shadowMapSize", sms);
 		m_ShadowMapSize = sms;
 
-		if (data.mode != DataObject::DataMode::Inspector || m_Type == Directional)
+		if (data.mode != DataObject::DataMode::Inspector || m_Type == Type::Directional)
 		{
 			data.Serialize("directionalShadowDistance", directionalShadowDistance);
 			data.Serialize("directionalNearPlane", directionalNearPlane);
 			data.Serialize("directionalFarPlane", directionalFarPlane);
 		}
 
-		if (data.mode != DataObject::DataMode::Inspector || m_Type == Point)
+		if (data.mode != DataObject::DataMode::Inspector || m_Type == Type::Point)
 		{
 			data.Serialize("attenuation", attenuation);
 
@@ -106,7 +106,7 @@ namespace EVA
 			GLCall(glDeleteFramebuffers(1, &m_DepthMapFb));
 		}
 
-		if (m_Type == Directional)
+		if (m_Type == Type::Directional)
 		{
 			// Texture
 			GLCall(glGenTextures(1, &m_DepthMap));

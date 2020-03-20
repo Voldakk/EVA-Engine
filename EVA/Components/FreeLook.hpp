@@ -16,15 +16,15 @@ namespace EVA
 
 	public:
 
-		enum Action { Forward, Back, Right, Left, Up, Down };
-		std::map<Action, int> keyBindings = 
+		enum class Action { Forward, Back, Right, Left, Up, Down };
+		std::map<Action, Input::Key> keyBindings =
 		{ 
-			{ Forward, Input::W },
-			{ Back,    Input::S },
-			{ Right,   Input::D },
-			{ Left,    Input::A },
-			{ Up,      Input::Space },
-			{ Down,    Input::LeftShift }
+			{ Action::Forward, Input::Key::W },
+			{ Action::Back,    Input::Key::S },
+			{ Action::Right,   Input::Key::D },
+			{ Action::Left,    Input::Key::A },
+			{ Action::Up,      Input::Key::Space },
+			{ Action::Down,    Input::Key::LeftShift }
 		};
 
 		float mouseSensitivity = 50.0f;

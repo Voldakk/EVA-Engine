@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <type_traits>
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
@@ -8,13 +9,12 @@
 
 namespace EVA
 {
-
+	
 	/**
 	 * \brief Handles all input
 	 */
 	class Input
 	{
-
 		static GLFWwindow *m_Window;
 		static std::map<int, int> m_KeyStates;
 		static std::map<int, int> m_ButtonStates;
@@ -25,6 +25,10 @@ namespace EVA
 		static bool m_ImGui;
 
 	public:
+
+		enum class Key;
+		enum class Modifier;
+		enum class Mouse;
 
 		/// <summary>Sets the window to capture input from</summary>
 		/// <param name="window"></param>
@@ -50,22 +54,25 @@ namespace EVA
 		/// <summary>Checks whether the key is currently held down</summary>
 		/// <param name="key">The key</param>
 		/// <returns>Whether the key is currently held down</returns>
-		static bool Key(int key);
+		static bool GetKey(const Key key);
+		static bool GetKey(const int key);
 
 		/// <summary>Checks whether the key was pressed this frame</summary>
 		/// <param name="key">The key</param>
 		/// <returns>Whether the key was pressed this frame</returns>
-		static bool KeyDown(int key);
+		static bool GetKeyDown(const Key key);
+		static bool GetKeyDown(const int key);
 
 		/// <summary>Checks whether the key was released this frame</summary>
 		/// <param name="key">The key</param>
 		/// <returns>Whether the key was released this frame</returns>
-		static bool KeyUp(int key);
+		static bool GetKeyUp(const Key key);
+		static bool GetKeyUp(const int key);
 
 
 		// ==========   CURSOR MODE   ==========
 
-		enum CursorMode { Normal, Hidden, Disabled };
+		enum class CursorMode { Normal, Hidden, Disabled };
 
 		static void SetCursorMode(CursorMode mode);
 
@@ -109,17 +116,20 @@ namespace EVA
 		/// <summary>Checks whether the mouse button is currently held down</summary>
 		/// <param name="button">The mouse button</param>
 		/// <returns>Whether the mouse button is currently held down</returns>
-		static bool MouseButton(int button);
+		static bool GetMouseButton(const Mouse button);
+		static bool GetMouseButton(const int button);
 
 		/// <summary>Checks whether the mouse button was pressed this frame</summary>
 		/// <param name="button">The mouse button</param>
 		/// <returns>Whether the mouse button was pressed this frame</returns>
-		static bool MouseButtonDown(int button);
+		static bool GetMouseButtonDown(const Mouse button);
+		static bool GetMouseButtonDown(const int button);
 
 		/// <summary>Checks whether the mouse button was released this frame</summary>
 		/// <param name="button">The mouse button</param>
 		/// <returns>Whether the mouse button was released this frame</returns>
-		static bool MouseButtonUp(int button);
+		static bool GetMouseButtonUp(const Mouse button);
+		static bool GetMouseButtonUp(const int button);
 
 
 		// ========== MOUSE SCROLL ==========
@@ -142,7 +152,7 @@ namespace EVA
 		// ==========     KEYS     ==========
 
 
-		enum Key
+		enum class Key
 		{
 			/* Printable keys */
 
@@ -199,7 +209,7 @@ namespace EVA
 			LastKey = Menu
 		};
 
-		enum Modifier
+		enum class Modifier
 		{
 			Shift = GLFW_MOD_SHIFT,
 			Control = GLFW_MOD_CONTROL,
@@ -207,7 +217,7 @@ namespace EVA
 			Super = GLFW_MOD_SUPER
 		};
 
-		enum Button
+		enum class Mouse
 		{
 			Mouse0 = GLFW_MOUSE_BUTTON_1, 
 			Mouse1, Mouse2, Mouse3, Mouse4, Mouse5, Mouse6, Mouse7, Mouse8,
@@ -220,5 +230,4 @@ namespace EVA
 
 		};
 	};
-
 }

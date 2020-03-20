@@ -12,17 +12,14 @@ namespace EVA
 
 	class EditorWindows
 	{
-	public:
-
-		enum SelectedType { GameObject, Light, Skybox, Path };
-
 	private:
 
 		SceneEditor* m_Editor;
 
 		float m_MenuBarHeight = 0.0f;
 
-		SelectedType m_SelectedType;
+		enum class SelectedType { None, GameObject, Light, Skybox, Path };
+		SelectedType m_SelectedType = SelectedType::None;
 		EVA::GameObject* m_SelectedGameObject = nullptr;
 		EVA::Light* m_SelectedLight = nullptr;
 		EVA::Skybox* m_SelectedSkybox = nullptr;
@@ -34,8 +31,8 @@ namespace EVA
 		// Assets browser
 		FS::path m_SelectedAssetFolder = "./assets";
 
-		enum NewAssetType { Folder, Material, Shader };
-		NewAssetType m_NewAssetType;
+		enum class NewAssetType { None, Folder, Material, Shader };
+		NewAssetType m_NewAssetType = NewAssetType::None;
 		FS::path m_NewPath = "";
 
 		FS::path m_RenamePath = "";

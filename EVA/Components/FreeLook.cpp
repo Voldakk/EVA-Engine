@@ -9,41 +9,41 @@ namespace EVA
 	void FreeLook::Start()
 	{
 		m_Camera = gameObject->GetComponentOfType<Camera>();
-		Input::SetCursorMode(Input::Disabled);
+		Input::SetCursorMode(Input::CursorMode::Disabled);
 	}
 
 	void FreeLook::Update(const float deltaTime)
 	{
-		if (Input::Key(keyBindings[Forward]))
-			currentMovementSpeed *= 1.0 + deltaTime;
-		if (Input::KeyUp(keyBindings[Forward]))
+		if (Input::GetKey(keyBindings[Action::Forward]))
+			currentMovementSpeed *= 1.0f + deltaTime;
+		if (Input::GetKeyUp(keyBindings[Action::Forward]))
 			currentMovementSpeed = minMovementSpeed;
 
 		// Movement
 		glm::vec3 movement;
 
 		// Front
-		if (Input::Key(keyBindings[Forward]))
+		if (Input::GetKey(keyBindings[Action::Forward]))
 			movement += transform->forward;
 
 		// Back
-		if (Input::Key(keyBindings[Back]))
+		if (Input::GetKey(keyBindings[Action::Back]))
 			movement -= transform->forward;
 
 		// Right
-		if (Input::Key(keyBindings[Right]))
+		if (Input::GetKey(keyBindings[Action::Right]))
 			movement += transform->right;
 
 		// Left
-		if (Input::Key(keyBindings[Left]))
+		if (Input::GetKey(keyBindings[Action::Left]))
 			movement -= transform->right;
 
 		// Up
-		if (Input::Key(keyBindings[Up]))
+		if (Input::GetKey(keyBindings[Action::Up]))
 			movement += transform->up;
 
 		// Down
-		if (Input::Key(keyBindings[Down]))
+		if (Input::GetKey(keyBindings[Action::Down]))
 			movement -= transform->up;
 
 		transform->Translate(movement * currentMovementSpeed * deltaTime);

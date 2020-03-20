@@ -46,25 +46,40 @@ namespace EVA
         m_MouseOffset = glm::vec2(0.0f, 0.0f);
     }
 
-    bool Input::Key(const int key)
+    bool Input::GetKey(const Key key)
+    {
+        return GetKey(static_cast<int>(key));
+    }
+
+    bool Input::GetKey(const int key)
     {
         return glfwGetKey(m_Window, key) == GLFW_PRESS;
     }
 
-    bool Input::KeyDown(const int key)
+    bool Input::GetKeyDown(const Key key)
     {
-		if (m_ImGui)
-			return ImGui::IsKeyPressed(key);
+        return GetKeyDown(static_cast<int>(key));
+    }
+
+    bool Input::GetKeyDown(const int key)
+    {
+        if (m_ImGui)
+            return ImGui::IsKeyPressed(key);
 
         if (m_KeyStates.count(key))
             return m_KeyStates[key] == GLFW_PRESS;
         return false;
     }
 
-    bool Input::KeyUp(const int key)
+    bool Input::GetKeyUp(const Key key)
     {
-		if (m_ImGui)
-			return ImGui::IsKeyReleased(key);
+        return GetKeyUp(static_cast<int>(key));
+    }
+
+    bool Input::GetKeyUp(const int key)
+    {
+        if (m_ImGui)
+            return ImGui::IsKeyReleased(key);
 
         if (m_KeyStates.count(key))
             return m_KeyStates[key] == GLFW_RELEASE;
@@ -75,13 +90,13 @@ namespace EVA
 	{
 		switch (mode)
 		{
-		case Normal: 
+        case CursorMode::Normal: 
 			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 			return;
-		case Hidden:
+		case CursorMode::Hidden:
 			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 			return;
-		case Disabled:
+		case CursorMode::Disabled:
 			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 			return;
 		}
@@ -123,26 +138,41 @@ namespace EVA
 		m_ButtonStates[button] = action;
     }
 
-    bool Input::MouseButton(const int button)
+    bool Input::GetMouseButton(const Mouse button)
+    {
+        return GetMouseButton(static_cast<int>(button));
+    }
+
+    bool Input::GetMouseButton(const int button)
     {
         const auto state = glfwGetMouseButton(m_Window, button);
         return state == GLFW_PRESS;
     }
 
-    bool Input::MouseButtonDown(const int button)
+    bool Input::GetMouseButtonDown(const Mouse button)
     {
-		if (m_ImGui)
-			return ImGui::IsMouseClicked(button);
+        return GetMouseButtonDown(static_cast<int>(button));
+    }
+
+    bool Input::GetMouseButtonDown(const int button)
+    {
+        if (m_ImGui)
+            return ImGui::IsMouseClicked(button);
 
         if (m_ButtonStates.count(button))
             return m_ButtonStates[button] == GLFW_PRESS;
         return false;
     }
 
-    bool Input::MouseButtonUp(const int button)
+    bool Input::GetMouseButtonUp(const Mouse button)
     {
-		if (m_ImGui)
-			return ImGui::IsMouseReleased(button);
+		return GetMouseButtonUp(static_cast<int>(button));
+    }
+
+    bool Input::GetMouseButtonUp(const int button)
+    {
+        if (m_ImGui)
+            return ImGui::IsMouseReleased(button);
 
         if (m_ButtonStates.count(button))
             return m_ButtonStates[button] == GLFW_RELEASE;

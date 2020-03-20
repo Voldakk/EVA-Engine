@@ -1,6 +1,7 @@
 #pragma once
 
 #include <charconv>
+#include <string.h>
 
 #include "imgui.h"
 #include "glm/glm.hpp"
@@ -15,14 +16,13 @@ namespace EVA
 	{
 	public:
 
-		static const int STRING_LENGTH = 10000;
-		static inline char* NUMBER_STRING = new char[20];
-		static inline char* NUMBER_NONE = new char[20]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		inline static const int STRING_LENGTH = 10000;
+		inline static char* C_STRING = new char[STRING_LENGTH];
 
-		static char* Number(int number) {
-			memcpy(NUMBER_STRING, NUMBER_NONE, 20);
-			std::to_chars(NUMBER_STRING, NUMBER_STRING + 20, number);
-			return NUMBER_STRING;
+		static char* GetCString(const std::string& value)
+		{
+			strcpy_s(C_STRING, 10000, value.c_str());
+			return C_STRING;
 		}
 
 		static void Text(std::string text)
@@ -58,7 +58,7 @@ namespace EVA
 			bool changed = false;
 			if (ImGui::CollapsingHeader(name))
 			{
-				for (auto i = 0; i < value.size(); i++)
+				for (size_t i = 0; i < value.size(); i++)
 				{
 					changed = changed || Default((std::to_string(i) + "##" + name).c_str(), value[i]);
 				}
@@ -93,48 +93,37 @@ namespace EVA
 
 		static bool String(const char* name, std::string& value)
 		{
-			const auto string = new char[STRING_LENGTH];
-			strcpy(string, value.c_str());
+			auto string = GetCString(value);
 
 			bool changed = ImGui::InputText(name, string, STRING_LENGTH);
 
 			value = string;
-
-			delete[] string;
 
 			return changed;
 		}
 
 		static bool EnterString(const char* name, std::string& value)
 		{
-			const auto string = new char[STRING_LENGTH];
-			strcpy(string, value.c_str());
-
+			auto string = GetCString(value);
 			if (ImGui::InputText(name, string, STRING_LENGTH, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
 				value = string;
-				delete[] string;
 				return true;
 			}
 
-			delete[] string;
 			return false;
 		}
 
 		static bool DragDropTargetString(const char* name, std::string& value, const char* payloadType)
 		{
-			const auto string = new char[STRING_LENGTH];
-			strcpy(string, value.c_str());
-
+			auto string = GetCString(value);
 			ImGui::BeginGroup();
 			if (ImGui::InputText(name, string, STRING_LENGTH, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
 				value = string;
-				delete[] string;
 				ImGui::EndGroup();
 				return true;
 			}
-			delete[] string;
 			if (ImGui::BeginDragDropTarget())
 			{
 				const auto payload = ImGui::AcceptDragDropPayload(payloadType);

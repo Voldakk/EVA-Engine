@@ -93,7 +93,7 @@ namespace EVA
 		GLCall(glDisable(GL_CULL_FACE));
 		for (auto& light : m_Lights)
 		{
-			if (light->GetType() == Light::Directional && light->Shadows())
+			if (light->GetType() == Light::Type::Directional && light->Shadows())
 			{
 				GLCall(glViewport(0, 0, light->GetShadwoSize(), light->GetShadwoSize()));
 				GLCall(glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthMapFb()));
@@ -103,7 +103,7 @@ namespace EVA
 
 				GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 			}
-			else if (light->GetType() == Light::Point && light->Shadows())
+			else if (light->GetType() == Light::Type::Point && light->Shadows())
 			{
 				GLCall(glViewport(0, 0, light->GetShadwoSize(), light->GetShadwoSize()));
 				GLCall(glBindFramebuffer(GL_FRAMEBUFFER, light->GetDepthMapFb()));

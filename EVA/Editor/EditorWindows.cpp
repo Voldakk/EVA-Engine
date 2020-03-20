@@ -22,7 +22,7 @@ namespace EVA
 	{
 		delete[] m_NameBuffer;
 	}
-
+	
 	void EditorWindows::SceneHierarchy()
 	{
 		const auto screenSize = Application::GetWindowSize();
@@ -107,16 +107,16 @@ namespace EVA
 
 		switch (m_SelectedType)
 		{
-		case GameObject:
+		case SelectedType::GameObject:
 			GameObjectInspector(windowSize.x);
 			break;
-		case Light:
+		case SelectedType::Light:
 			LightInspector();
 			break;
-		case Skybox:
+		case SelectedType::Skybox:
 			SkyboxInspector();
 			break;
-		case Path:
+		case SelectedType::Path:
 			{
 				const auto extension = FileSystem::ToString(m_SelectedPath.extension());
 				if (extension == ".mat")
@@ -271,21 +271,21 @@ namespace EVA
 			{
 				if (ImGui::MenuItem("Folder"))
 				{
-					m_NewAssetType = Folder;
+					m_NewAssetType = NewAssetType::Folder;
 					m_NewPath = m_SelectedAssetFolder;
-					std::strcpy(m_NameBuffer, "New folder");
+					strcpy_s(m_NameBuffer, m_NameBufferSize, "New folder");
 				}
 				if (ImGui::MenuItem("Material"))
 				{
-					m_NewAssetType = Material;
+					m_NewAssetType = NewAssetType::Material;
 					m_NewPath = m_SelectedAssetFolder;
-					std::strcpy(m_NameBuffer, "New material");
+					strcpy_s(m_NameBuffer, m_NameBufferSize, "New material");
 				}
 				if (ImGui::MenuItem("Shader"))
 				{
-					m_NewAssetType = Shader;
+					m_NewAssetType = NewAssetType::Shader;
 					m_NewPath = m_SelectedAssetFolder;
-					std::strcpy(m_NameBuffer, "New Shader");
+					strcpy_s(m_NameBuffer, m_NameBufferSize, "New Shader");
 				}
 				ImGui::EndMenu();
 			}
@@ -340,7 +340,7 @@ namespace EVA
 				if (ImGui::MenuItem("Rename"))
 				{
 					m_RenamePath = p.path();
-					std::strcpy(m_NameBuffer, m_RenamePath.filename().string().c_str());
+					strcpy_s(m_NameBuffer, m_NameBufferSize, m_RenamePath.filename().string().c_str());
 					
 				}
 				if (ImGui::MenuItem("Delete"))
@@ -389,66 +389,66 @@ namespace EVA
 
 	void EditorWindows::SelectGameObject(EVA::GameObject* gameObject)
 	{
-		m_SelectedType = GameObject;
+		m_SelectedType = SelectedType::GameObject;
 		m_SelectedGameObject = gameObject;
 	}
 
 	bool EditorWindows::IsSelected(EVA::GameObject* gameObject) const
 	{
-		return m_SelectedType == GameObject && m_SelectedGameObject == gameObject;
+		return m_SelectedType == SelectedType::GameObject && m_SelectedGameObject == gameObject;
 	}
 
 	EVA::GameObject* EditorWindows::SelectedGameObject() const
 	{
-		return m_SelectedType == GameObject ? m_SelectedGameObject : nullptr;
+		return m_SelectedType == SelectedType::GameObject ? m_SelectedGameObject : nullptr;
 	}
 
 	void EditorWindows::SelectLight(EVA::Light* light)
 	{
-		m_SelectedType = Light;
+		m_SelectedType = SelectedType::Light;
 		m_SelectedLight = light;
 	}
 
 	bool EditorWindows::IsSelected(EVA::Light* light) const
 	{
-		return m_SelectedType == Light && m_SelectedLight == light;
+		return m_SelectedType == SelectedType::Light && m_SelectedLight == light;
 	}
 
 	EVA::Light* EditorWindows::SelectedLight() const
 	{
-		return m_SelectedType == Light ? m_SelectedLight : nullptr;
+		return m_SelectedType == SelectedType::Light ? m_SelectedLight : nullptr;
 	}
 
 	void EditorWindows::SelectSkybox(EVA::Skybox* skybox)
 	{
-		m_SelectedType = Skybox;
+		m_SelectedType = SelectedType::Skybox;
 		m_SelectedSkybox = skybox;
 	}
 
 	bool EditorWindows::IsSelected(EVA::Skybox* skybox) const
 	{
-		return m_SelectedType == Skybox && m_SelectedSkybox == skybox;
+		return m_SelectedType == SelectedType::Skybox && m_SelectedSkybox == skybox;
 	}
 
 	EVA::Skybox* EditorWindows::SelectedSkybox() const
 	{
-		return m_SelectedType == Skybox ? m_SelectedSkybox : nullptr;
+		return m_SelectedType == SelectedType::Skybox ? m_SelectedSkybox : nullptr;
 	}
 
 	void EditorWindows::SelectPath(const FS::path& path)
 	{
-		m_SelectedType = Path;
+		m_SelectedType = SelectedType::Path;
 		m_SelectedPath = path;
 	}
 
 	bool EditorWindows::IsSelected(const FS::path& path) const
 	{
-		return m_SelectedType == Path && m_SelectedPath == path;
+		return m_SelectedType == SelectedType::Path && m_SelectedPath == path;
 	}
 
 	FS::path EditorWindows::SelectedPath() const
 	{
-		return m_SelectedType == Path ? m_SelectedPath : "";
+		return m_SelectedType == SelectedType::Path ? m_SelectedPath : "";
 	}
 
 	void EditorWindows::DisplayFoldersRecursively(const FS::path& path)
@@ -545,16 +545,11 @@ namespace EVA
 
 		// Name
 		ImGui::Text("Name");
-		const auto gameObjectName = new char[10000];
-
-		std::strcpy(gameObjectName, gameObject->GetName().c_str());
-
+		const auto gameObjectName = InspectorFields::GetCString(gameObject->GetName());
 		if (ImGui::InputText("##Line", gameObjectName, 10000, ImGuiInputTextFlags_EnterReturnsTrue))
 		{
 			gameObject->SetName(gameObjectName);
 		}
-
-		delete[] gameObjectName;
 
 		ImGui::Spacing();
 
@@ -732,12 +727,12 @@ namespace EVA
 			auto path = m_NewPath / m_NameBuffer;
 			switch (m_NewAssetType)
 			{
-			case Folder:
+			case NewAssetType::Folder:
 			{
 				FS::create_directory(path);
 				break;
 			}
-			case Material:
+			case NewAssetType::Material:
 			{
 				const auto newMaterial = std::make_shared<EVA::Material>();
 
@@ -745,7 +740,7 @@ namespace EVA
 				MaterialParser::Save(newMaterial, path);
 			}
 			break;
-			case Shader:
+			case NewAssetType::Shader:
 			{
 				const auto newShader = std::make_shared<EVA::Shader>();
 
@@ -767,12 +762,12 @@ namespace EVA
 			auto path = m_NewPath / m_NameBuffer;
 			switch (m_NewAssetType)
 			{
-			case Folder:
+			case NewAssetType::Folder:
 			{
 				FS::create_directory(path);
 				break;
 			}
-			case Material:
+			case NewAssetType::Material:
 			{
 				const auto newMaterial = std::make_shared<EVA::Material>();
 
@@ -780,7 +775,7 @@ namespace EVA
 				MaterialParser::Save(newMaterial, path);
 			}
 			break;
-			case Shader:
+			case NewAssetType::Shader:
 			{
 				const auto newShader = std::make_shared<EVA::Shader>();
 

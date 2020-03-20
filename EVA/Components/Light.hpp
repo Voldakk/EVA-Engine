@@ -14,14 +14,14 @@ namespace EVA
 
 	public:
 
-		enum Type
+		enum class Type
 		{
 			Directional, Point
 		};
 
 	private:
 
-		Type m_Type = Directional;
+		Type m_Type = Type::Directional;
 
 		// Shadows
 		bool m_Shadows = false;
