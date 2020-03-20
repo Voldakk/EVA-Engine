@@ -30,6 +30,7 @@ namespace EVA
 
 	inline void SceneParser::Load(Scene* scene, const FS::path& path)
 	{
+		std::cout << "SceneParser::Load - " << FileSystem::ToString(path) << std::endl;
 		const auto sd = Json::Open(path);
 		auto& d = *sd;
 

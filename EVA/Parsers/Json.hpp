@@ -18,6 +18,16 @@
 
 namespace EVA
 {
+	class DataObject;
+
+	class ISerializeable
+	{
+	public:
+		virtual void Serialize(DataObject& data)
+		{
+
+		}
+	};
 
 	class Json
 	{
@@ -42,242 +52,285 @@ namespace EVA
 			if (fp == nullptr)
 				return nullptr;
 
-			char readBuffer[65536];
-
+			char* readBuffer = new char[65536];
 			rapidjson::FileReadStream is(fp, readBuffer, sizeof(readBuffer));
-
 			auto d = std::make_shared<Document>();
 			d->ParseStream(is);
 
 			fclose(fp);
+			delete[] readBuffer;
 			return d;
 		}
 
 		static bool Save(const Document* d, const FS::path& path)
 		{
 			const auto fp = fopen(FileSystem::ToString(path).c_str(), "wb");
-			char writeBuffer[65536];
+
+			if (fp == nullptr)
+				return false;
+
+			char* writeBuffer = new char[65536];
 			rapidjson::FileWriteStream os(fp, writeBuffer, sizeof(writeBuffer));
 			rapidjson::PrettyWriter<rapidjson::FileWriteStream> writer(os);
 			const auto r = d->Accept(writer);
 
 			fclose(fp);
+			delete[] writeBuffer;
 			return r;
 		}
 	};
 
 	class DataObject
 	{
+		Json::Generic m_JsonInternal;
 		Json::Generic& m_Json;
 		Json::Allocator* m_Allocator;
 
 	public:
 
-		enum DataMode
+		enum class DataMode
 		{
 			Save,
 			Load,
 			Inspector
 		};
 
-		DataMode mode = Save;
+		DataMode mode = DataMode::Save;
 		bool changed = false;
 
 		Json::Generic& json = m_Json;
 		Json::Allocator* allocator = m_Allocator;
 
-		DataObject() : m_Json(Json::Generic()), m_Allocator(nullptr), mode(Inspector)
+		DataObject() : m_JsonInternal(Json::Generic()), m_Json(m_JsonInternal), m_Allocator(nullptr), mode(DataMode::Inspector)
 		{}
 
-		explicit DataObject(Json::Generic& json) : m_Json(json), m_Allocator(nullptr), mode(Load)
+		explicit DataObject(Json::Generic& json) : m_Json(json), m_Allocator(nullptr), mode(DataMode::Load)
 		{}
 
-		explicit DataObject(Json::Generic& json, Json::Allocator* allocator) : m_Json(json), m_Allocator(allocator), mode(Save)
+		explicit DataObject(Json::Generic& json, Json::Allocator* allocator) : m_Json(json), m_Allocator(allocator), mode(DataMode::Save)
 		{}
 
+		template <typename T>
+		bool Serialize(const Json::StringRef& key, T& value);
 
 		template <typename T>
-		T Get(const char* key, const T defaultValue) const
-		{
-			if (m_Json.HasMember(key) && m_Json[key].Is<T>())
-				return m_Json[key].Get<T>();
-
-			return defaultValue;
-		}
+		T Get(const char* key, const T defaultValue) const;
 
 		template <typename T>
-		void Set(const Json::StringRef& key, const T value) const
-		{
-			m_Json.AddMember(key, value, *m_Allocator);
-		}
-
-		template <>
-		glm::vec2 Get<glm::vec2>(const char* key, const glm::vec2 defaultValue) const
-		{
-			if (m_Json.HasMember(key) && m_Json[key].IsArray())
-			{
-				const auto a = m_Json[key].GetArray();
-				if (a.Size() == 2 && a[0].IsDouble() && a[1].IsDouble())
-					return { a[0].GetDouble(), a[1].GetDouble() };
-			}
-
-			return defaultValue;
-		}
-
-		template <>
-		void Set<glm::vec2>(const Json::StringRef& key, const glm::vec2 value) const
-		{
-			Json::Value v;
-			v.SetArray();
-			v.PushBack(value.x, *m_Allocator);
-			v.PushBack(value.y, *m_Allocator);
-
-			m_Json.AddMember(key, v, *m_Allocator);
-		}
-
-		template <>
-		glm::vec3 Get<glm::vec3>(const char* key, const glm::vec3 defaultValue) const
-		{
-			if (m_Json.HasMember(key) && m_Json[key].IsArray())
-			{
-				const auto a = m_Json[key].GetArray();
-				if (a.Size() == 3 && a[0].IsDouble() && a[1].IsDouble() && a[2].IsDouble())
-					return { a[0].GetDouble(), a[1].GetDouble(), a[2].GetDouble() };
-			}
-
-			return defaultValue;
-		}
-
-		template <>
-		void Set<glm::vec3>(const Json::StringRef& key, const glm::vec3 value) const
-		{
-			Json::Value v;
-			v.SetArray();
-			v.PushBack(value.x, *m_Allocator);
-			v.PushBack(value.y, *m_Allocator);
-			v.PushBack(value.z, *m_Allocator);
-
-			m_Json.AddMember(key, v, *m_Allocator);
-		}
+		void Set(const Json::StringRef& key, const T value) const;
 
 
 		template <>
-		glm::vec4 Get<glm::vec4>(const char* key, const glm::vec4 defaultValue) const
-		{
-			if (m_Json.HasMember(key) && m_Json[key].IsArray())
-			{
-				const auto a = m_Json[key].GetArray();
-				if (a.Size() == 4 && a[0].IsDouble() && a[1].IsDouble() && a[2].IsDouble() && a[3].IsDouble())
-					return { a[0].GetDouble(), a[1].GetDouble(), a[2].GetDouble(), a[3].GetDouble() };
-			}
-
-			return defaultValue;
-		}
+		glm::vec2 Get<glm::vec2>(const char* key, const glm::vec2 defaultValue) const;
 
 		template <>
-		void Set<glm::vec4>(const Json::StringRef& key, const glm::vec4 value) const
-		{
-			Json::Value v;
-			v.SetArray();
-			v.PushBack(value.x, *m_Allocator);
-			v.PushBack(value.y, *m_Allocator);
-			v.PushBack(value.z, *m_Allocator);
-			v.PushBack(value.w, *m_Allocator);
-
-			m_Json.AddMember(key, v, *m_Allocator);
-		}
+		void Set<glm::vec2>(const Json::StringRef& key, const glm::vec2 value) const;
 
 
 		template <>
-		glm::quat Get<glm::quat>(const char* key, const glm::quat defaultValue) const
-		{
-			auto vec4 = Get<glm::vec4>(key, glm::vec4(defaultValue.x, defaultValue.y, defaultValue.z, defaultValue.w));
-			return glm::quat(vec4.w, vec4.x, vec4.y, vec4.z);
-		}
+		glm::vec3 Get<glm::vec3>(const char* key, const glm::vec3 defaultValue) const;
 
 		template <>
-		void Set<glm::quat>(const Json::StringRef& key, const glm::quat value) const
-		{
-			Set<glm::vec4>(key, glm::vec4(value.x, value.y, value.z, value.w));
-		}
+		void Set<glm::vec3>(const Json::StringRef& key, const glm::vec3 value) const;
 
 
 		template <>
-		FS::path Get<FS::path>(const char* key, const FS::path defaultValue) const
-		{
-			if (m_Json.HasMember(key) && m_Json[key].IsString())
-				return FS::path(m_Json[key].GetString());
-
-			return defaultValue;
-		}
+		glm::vec4 Get<glm::vec4>(const char* key, const glm::vec4 defaultValue) const;
 
 		template <>
-		void Set<FS::path>(const Json::StringRef& key, const FS::path value) const
-		{
-			m_Json.AddMember(key, FileSystem::ToString(value), *m_Allocator);
-		}
+		void Set<glm::vec4>(const Json::StringRef& key, const glm::vec4 value) const;
+
 
 		template <>
-		std::vector<int> Get<std::vector<int>>(const char* key, const std::vector<int> defaultValue) const
-		{
-			if (m_Json.HasMember(key) && m_Json[key].IsArray())
-			{
-				const auto a = m_Json[key].GetArray();
-				auto arr = std::vector<int>();
-				for (size_t i = 0; i < a.Size(); i++)
-				{
-					arr.push_back(a[i].GetInt());
-				}
-				return arr;
-			}
-
-			return defaultValue;
-		}
+		glm::quat Get<glm::quat>(const char* key, const glm::quat defaultValue) const;
 
 		template <>
-		void Set<std::vector<int>>(const Json::StringRef& key, const std::vector<int> value) const
-		{
-			Json::Value v;
-			v.SetArray();
-			for (size_t i = 0; i < value.size(); i++)
-			{
-				v.PushBack(value[i], *m_Allocator);
-			}
-			m_Json.AddMember(key, v, *m_Allocator);
-		}
+		void Set<glm::quat>(const Json::StringRef& key, const glm::quat value) const;
 
-		template <typename T>
-		bool Serialize(const Json::StringRef& key, T& value)
-		{
-			switch (mode)
-			{
-			case Save:
-				Set<T>(key, value);
-				break;
 
-			case Load:
-				value = Get<T>(key, value);
-				changed = true;
-				return true;
+		template <>
+		FS::path Get<FS::path>(const char* key, const FS::path defaultValue) const;
 
-			case Inspector:
-				bool c = InspectorFields::Default(key, value);
-				if (c) changed = true;
-				return c;
-			}
+		template <>
+		void Set<FS::path>(const Json::StringRef& key, const FS::path value) const;
 
-			return false;
-		}
 
+		template <typename T, typename Alloc>
+		std::vector<T, Alloc> Get(const char* key, const std::vector<T, Alloc> defaultValue) const;
+
+		template <typename T, typename Alloc>
+		void Set(const Json::StringRef& key, const std::vector<T, Alloc> value) const;
 	};
 
-	class ISerializeable
+	template<typename T>
+	inline bool DataObject::Serialize(const Json::StringRef& key, T& value)
 	{
-	public:
-		virtual void Serialize(DataObject& data)
+		switch (mode)
 		{
+		case DataMode::Save:
+			if (key == "Lod distances")
+				int a = 1;
+			Set(key, value);
+			break;
 
+		case DataMode::Load:
+			value = Get(key, value);
+			changed = true;
+			return true;
+
+		case DataMode::Inspector:
+			bool c = InspectorFields::Default(key, value);
+			if (c) changed = true;
+			return c;
 		}
-	};
 
+		return false;
+	}
+
+	template<typename T>
+	inline T DataObject::Get(const char* key, const T defaultValue) const
+	{
+		if (m_Json.HasMember(key) && m_Json[key].Is<T>())
+			return m_Json[key].Get<T>();
+
+		return defaultValue;
+	}
+
+	template<typename T>
+	inline void DataObject::Set(const Json::StringRef& key, const T value) const
+	{
+		m_Json.AddMember(key, value, *m_Allocator);
+	}
+
+	template<>
+	inline glm::vec2 DataObject::Get(const char* key, const glm::vec2 defaultValue) const
+	{
+		if (m_Json.HasMember(key) && m_Json[key].IsArray())
+		{
+			const auto a = m_Json[key].GetArray();
+			if (a.Size() == 2 && a[0].IsDouble() && a[1].IsDouble())
+				return { a[0].GetDouble(), a[1].GetDouble() };
+		}
+
+		return defaultValue;
+	}
+
+	template<>
+	inline void DataObject::Set(const Json::StringRef& key, const glm::vec2 value) const
+	{
+		Json::Value v;
+		v.SetArray();
+		v.PushBack(value.x, *m_Allocator);
+		v.PushBack(value.y, *m_Allocator);
+
+		m_Json.AddMember(key, v, *m_Allocator);
+	}
+
+	template<>
+	inline glm::vec3 DataObject::Get(const char* key, const glm::vec3 defaultValue) const
+	{
+		if (m_Json.HasMember(key) && m_Json[key].IsArray())
+		{
+			const auto a = m_Json[key].GetArray();
+			if (a.Size() == 3 && a[0].IsDouble() && a[1].IsDouble() && a[2].IsDouble())
+				return { a[0].GetDouble(), a[1].GetDouble(), a[2].GetDouble() };
+		}
+
+		return defaultValue;
+	}
+
+	template<>
+	inline void DataObject::Set(const Json::StringRef& key, const glm::vec3 value) const
+	{
+		Json::Value v;
+		v.SetArray();
+		v.PushBack(value.x, *m_Allocator);
+		v.PushBack(value.y, *m_Allocator);
+		v.PushBack(value.z, *m_Allocator);
+
+		m_Json.AddMember(key, v, *m_Allocator);
+	}
+
+	template<>
+	inline glm::vec4 DataObject::Get(const char* key, const glm::vec4 defaultValue) const
+	{
+		if (m_Json.HasMember(key) && m_Json[key].IsArray())
+		{
+			const auto a = m_Json[key].GetArray();
+			if (a.Size() == 4 && a[0].IsDouble() && a[1].IsDouble() && a[2].IsDouble() && a[3].IsDouble())
+				return { a[0].GetDouble(), a[1].GetDouble(), a[2].GetDouble(), a[3].GetDouble() };
+		}
+
+		return defaultValue;
+	}
+
+	template<>
+	inline void DataObject::Set(const Json::StringRef& key, const glm::vec4 value) const
+	{
+		Json::Value v;
+		v.SetArray();
+		v.PushBack(value.x, *m_Allocator);
+		v.PushBack(value.y, *m_Allocator);
+		v.PushBack(value.z, *m_Allocator);
+		v.PushBack(value.w, *m_Allocator);
+
+		m_Json.AddMember(key, v, *m_Allocator);
+	}
+
+	template<>
+	inline glm::quat DataObject::Get(const char* key, const glm::quat defaultValue) const
+	{
+		auto vec4 = Get<glm::vec4>(key, glm::vec4(defaultValue.x, defaultValue.y, defaultValue.z, defaultValue.w));
+		return glm::quat(vec4.w, vec4.x, vec4.y, vec4.z);
+	}
+
+	template<>
+	inline void DataObject::Set(const Json::StringRef& key, const glm::quat value) const
+	{
+		Set<glm::vec4>(key, glm::vec4(value.x, value.y, value.z, value.w));
+	}
+
+	template<>
+	inline FS::path DataObject::Get(const char* key, const FS::path defaultValue) const
+	{
+		if (m_Json.HasMember(key) && m_Json[key].IsString())
+			return FS::path(m_Json[key].GetString());
+
+		return defaultValue;
+	}
+
+	template<>
+	inline void DataObject::Set(const Json::StringRef& key, const FS::path value) const
+	{
+		m_Json.AddMember(key, FileSystem::ToString(value), *m_Allocator);
+	}
+
+	template<typename T, typename Alloc>
+	inline std::vector<T, Alloc> DataObject::Get(const char* key, const std::vector<T, Alloc> defaultValue) const
+	{
+		if (m_Json.HasMember(key) && m_Json[key].IsArray())
+		{
+			const auto a = m_Json[key].GetArray();
+			auto arr = std::vector<T, Alloc>();
+			for (size_t i = 0; i < a.Size(); i++)
+			{
+				arr.push_back(a[i].Get<T>());
+			}
+			return arr;
+		}
+
+		return defaultValue;
+	}
+
+	template<typename T, typename Alloc>
+	inline void DataObject::Set(const Json::StringRef& key, const std::vector<T, Alloc> value) const
+	{
+		Json::Value v;
+		v.SetArray();
+		for (size_t i = 0; i < value.size(); i++)
+		{
+			v.PushBack(value[i], *m_Allocator);
+		}
+		m_Json.AddMember(key, v, *m_Allocator);
+	}
 }

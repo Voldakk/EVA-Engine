@@ -202,12 +202,6 @@ namespace EVA
 			return Int(name, value);
 		}
 
-		template <typename T, typename Alloc>
-		static bool Default(const char* name, std::vector<T, Alloc>& value)
-		{
-			return Vector(name, value);
-		}
-
 		template <>
 		static bool Default(const char* name, bool& value)
 		{
@@ -218,6 +212,12 @@ namespace EVA
 		static bool Default(const char* name, std::string& value)
 		{
 			return EnterString(name, value);
+		}
+
+		template <typename T, typename Alloc>
+		static bool Default(const char* name, std::vector<T, Alloc>& value)
+		{
+			return Vector(name, value);
 		}
 
 		template <>
@@ -266,5 +266,4 @@ namespace EVA
 			return changed;
 		}
 	};
-
 }
