@@ -48,7 +48,8 @@ namespace EVA
 			gameObject->SetName(document["name"].GetString());
 
 		// Transform
-		gameObject->transform->Serialize(DataObject(document));
+		auto doD = DataObject(document);
+		gameObject->transform->Serialize(doD);
 
 		// Components
 		if (document.HasMember("components") && document["components"].IsArray())
@@ -61,11 +62,12 @@ namespace EVA
 
 				const std::string id = c["id"].GetString();
 
-				const auto component = ComponentMap::Create(id);
+				const auto component = ClassMapEVAComponent::Create(id);
 				if (component != nullptr)
 				{
 					gameObject->AttachComponent(component);
-					component->Serialize(DataObject(c));
+					auto doC = DataObject(c);
+					component->Serialize(doC);
 				}
 			}
 		}

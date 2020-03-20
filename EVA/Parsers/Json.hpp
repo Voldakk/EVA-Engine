@@ -170,8 +170,6 @@ namespace EVA
 		switch (mode)
 		{
 		case DataMode::Save:
-			if (key == "Lod distances")
-				int a = 1;
 			Set(key, value);
 			break;
 

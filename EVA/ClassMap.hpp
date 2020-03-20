@@ -5,79 +5,79 @@
 #include <vector>
 #include <iostream>
 
-namespace EVA
-{
-	// Macro for registering a class. Should be put inside the class declaration
-#define REGISTER_CLASS(BASETYPE, TYPE, NAME) \
-    static inline EVA::ClassRegister<BASETYPE, TYPE> m_Register = NAME;\
-	public:\
-	std::string GetTypeId() const\
-	{\
-		return m_Register.typeId;\
-	}\
-	private:
+/*
+ * Concatenate preprocessor tokens A and B without expanding macro definitions
+ * (however, if invoked from a macro, macro arguments are expanded).
+ */
+#define PPCAT_NX(A, B) A ## B
 
-	/**
-	* \brief Keeps track of all registerd classes
-	*/
-	template <class ClassType>
-	class ClassMap
-	{
-	public:
+ // Macro for registering a class. Should be put inside the class declaration
+#define REGISTER_CLASS(MAPNAME, TYPE, NAME) \
+static inline PPCAT_NX(EVA::ClassRegister, MAPNAME)<TYPE> m_Register = PPCAT_NX(EVA::ClassRegister, MAPNAME)<TYPE>(std::string(NAME)); \
+public: \
+std::string GetTypeId() const override \
+{ \
+	return m_Register.typeId; \
+} \
+private:
 
-		typedef std::map<std::string, std::shared_ptr<ClassType>(*)()> map_type;
-		static map_type * map;
-
-		static map_type * GetMap()
-		{
-			if (!map)
-			{
-				map = new map_type();
-			}
-			return map;
-		}
-
-		static std::shared_ptr<ClassType> Create(const std::string& id)
-		{
-			const auto it = GetMap()->find(id);
-
-			if (it == GetMap()->end())
-				return nullptr;
-
-			return it->second();
-		}
-
-		template<typename T>
-		static std::shared_ptr<ClassType> CreateT()
-		{
-			return std::make_shared<T>();
-		}
-
-		static std::vector<std::string> GetIds()
-		{
-			std::vector<std::string> ids;
-
-			for (map_type::const_iterator it = map->begin(); it != map->end(); ++it)
-			{
-				ids.push_back(it->first);
-			}
-
-			return ids;
-		}
-	};
-
-	template<typename BaseT, typename T>
-	struct ClassRegister
-	{
-		std::string typeId;
-		ClassRegister(std::string const& s)
-		{
-			typeId = s;
-			if (ClassMap<BaseT>::GetMap()->find(s) == ClassMap<BaseT>::GetMap()->end())
-			{
-				std::cout << "ClassRegister - Registering class: " << s << "\n";
-				ClassMap<BaseT>::GetMap()->insert(std::make_pair(s, &ClassMap<BaseT>::CreateT<T>));
-			}
-		}
-	};
+#define CREATE_CLASS_MAP(MAPNAME, TYPE) \
+namespace EVA { \
+	class PPCAT_NX(ClassMap, MAPNAME) \
+	{ \
+	public: \
+		typedef std::map<std::string, std::shared_ptr<TYPE>(*)()> map_type; \
+		inline static map_type * map; \
+		\
+		static map_type * GetMap() \
+		{ \
+			if (!map) \
+			{ \
+				map = new map_type(); \
+			} \
+			return map; \
+		} \
+		\
+		static std::shared_ptr<TYPE> Create(const std::string& id) \
+		{ \
+			const auto it = GetMap()->find(id); \
+			\
+			if (it == GetMap()->end()) \
+				return nullptr; \
+			\
+			return it->second(); \
+		} \
+		\
+		template<typename T> \
+		static std::shared_ptr<TYPE> CreateT() \
+		{ \
+			return std::make_shared<T>(); \
+		} \
+		\
+		static std::vector<std::string> GetIds() \
+		{ \
+			std::vector<std::string> ids; \
+			\
+			for (map_type::const_iterator it = map->begin(); it != map->end(); ++it) \
+			{ \
+				ids.push_back(it->first); \
+			} \
+			\
+			return ids; \
+		} \
+	}; \
+	\
+	template<typename T> \
+	struct PPCAT_NX(ClassRegister, MAPNAME) \
+	{ \
+		std::string typeId; \
+		PPCAT_NX(ClassRegister, MAPNAME)(std::string s) : typeId(s) \
+		{ \
+			if (PPCAT_NX(ClassMap, MAPNAME)::GetMap()->find(s) == PPCAT_NX(ClassMap, MAPNAME)::GetMap()->end()) \
+			{ \
+				std::cout << "ClassRegister - Registering class: " << s << "\n"; \
+				PPCAT_NX(ClassMap, MAPNAME)::GetMap()->insert(std::make_pair(s, &PPCAT_NX(ClassMap, MAPNAME)::CreateT<T>)); \
+			} \
+		} \
+	}; \
 }

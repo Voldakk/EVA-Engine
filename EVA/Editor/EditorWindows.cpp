@@ -183,13 +183,13 @@ namespace EVA
 
 				if (ImGui::BeginMenu("Component", SelectedGameObject() != nullptr))
 				{
-					auto ids = ComponentMap::GetIds();
+					auto ids = ClassMapEVAComponent::GetIds();
 
 					for (const auto& id : ids)
 					{
 						if (ImGui::MenuItem(id.c_str()) && SelectedGameObject() != nullptr)
 						{
-							const auto component = ComponentMap::Create(id);
+							const auto component = ClassMapEVAComponent::Create(id);
 							if (component != nullptr)
 							{
 								SelectedGameObject()->AttachComponent(component);
@@ -606,14 +606,14 @@ namespace EVA
 
 		if (ImGui::BeginPopup("InspectorAddComponentSelect"))
 		{
-			auto ids = ComponentMap::GetIds();
+			auto ids = ClassMapEVAComponent::GetIds();
 			ImGui::Separator();
 
 			for (const auto& id : ids)
 			{
 				if (ImGui::Selectable(id.c_str()))
 				{
-					const auto component = ComponentMap::Create(id);
+					const auto component = ClassMapEVAComponent::Create(id);
 					if (component != nullptr)
 					{
 						gameObject->AttachComponent(component);

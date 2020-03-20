@@ -75,7 +75,7 @@ namespace EVA
 			m_SceneCameraGameObject->Update(deltaTime);
 
 			// Check for clicked object
-			if (Input::MouseButtonDown(Input::MouseLeft) && !ImGui::IsMouseHoveringAnyWindow())
+			if (Input::GetMouseButtonDown(Input::Mouse::MouseLeft) && !ImGui::IsMouseHoveringAnyWindow())
 			{
 				const auto mousePos = Input::MousePosition();
 				const auto ray = Physics::ScreenPosToWorldRay(mousePos, Application::mainCamera);

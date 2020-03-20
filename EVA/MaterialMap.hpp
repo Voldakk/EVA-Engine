@@ -7,17 +7,7 @@
 #include "ClassMap.hpp"
 #include "Material.hpp"
 
-namespace EVA
-{
-	// Macro for registering a component. Should be put inside the class declaration
-	#define REGISTER_MATERIAL(TYPE, NAME) \
-    REGISTER_CLASS(Material, TYPE, NAME)
+CREATE_CLASS_MAP(EVAMaterial, EVA::Material)
 
-	/**
-	 * \brief Keeps track of all registerd components
-	 */
-	class MaterialMap : public ClassMap<Material>
-	{
-
-	};
-}
+// Macro for registering a material. Should be put inside the class declaration
+#define REGISTER_MATERIAL(TYPE, NAME) REGISTER_CLASS(EVAMaterial, TYPE, NAME)

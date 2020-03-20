@@ -62,7 +62,7 @@ namespace EVA
 
 		explicit Scene(const FS::path& path);
 
-		~Scene();
+		virtual ~Scene();
 
 
 		/**

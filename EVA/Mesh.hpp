@@ -45,6 +45,7 @@ namespace EVA
 		unsigned int index;
 
 		Mesh();
+		virtual ~Mesh() = default;
 
 		explicit Mesh(const std::vector<Vertex>& vertices, std::string name = "");
 
