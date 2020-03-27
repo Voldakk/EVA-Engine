@@ -72,7 +72,13 @@ namespace EVA
 		* \brief Translates the transform by the given offset
 		* \param offset The amount the transform should be translated
 		*/
-		void Translate(glm::vec2 offset);
+		void TranslateXY(glm::vec2 offset);
+
+		/**
+		* \brief Translates the transform by the given offset
+		* \param offset The amount the transform should be translated
+		*/
+		void TranslateXZ(glm::vec2 offset);
 
 		/**
 		* \brief Sets the transfrom's position
@@ -85,7 +91,13 @@ namespace EVA
 		* \brief Sets the transfrom's position
 		* \param newPosition The new position
 		*/
-		void SetPosition(glm::vec2 newPosition);
+		void SetPositionXY(glm::vec2 newPosition);
+
+		/**
+		* \brief Sets the transfrom's position
+		* \param newPosition The new position
+		*/
+		void SetPositionXZ(glm::vec2 newPosition);
 
 		/**
 		 * \brief Rotates the transform by the given offset
@@ -152,6 +164,18 @@ namespace EVA
 		void Scale(glm::vec3 amount);
 
 		/**
+		 * \brief Scales the transform by a given amount on each axis
+		 * \param amount The amount
+		 */
+		void ScaleXY(glm::vec2 amount);
+
+		/**
+		 * \brief Scales the transform by a given amount on each axis
+		 * \param amount The amount
+		 */
+		void ScaleXZ(glm::vec2 amount);
+
+		/**
 		 * \brief Scales the transform by a given amount
 		 * \param amount The amount
 		 */
@@ -162,6 +186,18 @@ namespace EVA
 		 * \param newScale The new scale
 		 */
 		void SetScale(glm::vec3 newScale);
+
+		/**
+		 * \brief Sets the transform's scale. (X, Y) => (X, Y, 1)
+		 * \param newScale The new scale
+		 */
+		void SetScaleXY(glm::vec2 newScale);
+
+		/**
+		 * \brief Sets the transform's scale. (X, Y) => (X, 1, Y)
+		 * \param newScale The new scale
+		 */
+		void SetScaleXZ(glm::vec2 newScale);
 
 		/**
 		 * \brief Sets the transform's scale

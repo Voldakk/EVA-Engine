@@ -20,9 +20,15 @@ namespace EVA
 		UpdateModelMatrix();
 	}
 
-	void Transform::Translate(const glm::vec2 offset)
+	void Transform::TranslateXY(const glm::vec2 offset)
 	{
-		m_LocalPosition += glm::vec3(offset, 0.0f);
+		m_LocalPosition += glm::vec3(offset.x, offset.y, 0.0f);
+		UpdateModelMatrix();
+	}
+
+	void Transform::TranslateXZ(const glm::vec2 offset)
+	{
+		m_LocalPosition += glm::vec3(offset.x, 0.0f, offset.y);
 		UpdateModelMatrix();
 	}
 
@@ -32,9 +38,15 @@ namespace EVA
 		UpdateModelMatrix();
 	}
 
-	void Transform::SetPosition(const glm::vec2 newPosition)
+	void Transform::SetPositionXY(const glm::vec2 newPosition)
 	{
-		m_LocalPosition = glm::vec3(newPosition, 0.0f);
+		m_LocalPosition = glm::vec3(newPosition.x, newPosition.y, m_LocalPosition.z);
+		UpdateModelMatrix();
+	}
+
+	void Transform::SetPositionXZ(const glm::vec2 newPosition)
+	{
+		m_LocalPosition = glm::vec3(newPosition.x, m_LocalPosition.y, newPosition.y);
 		UpdateModelMatrix();
 	}
 
@@ -119,6 +131,18 @@ namespace EVA
 		UpdateModelMatrix();
 	}
 
+	void Transform::ScaleXY(const glm::vec2 amount)
+	{
+		m_LocalScale += glm::vec3(amount.x, amount.y, 0.0f);
+		UpdateModelMatrix();
+	}
+
+	void Transform::ScaleXZ(const glm::vec2 amount)
+	{
+		m_LocalScale += glm::vec3(amount.x, 0.0f, amount.y);
+		UpdateModelMatrix();
+	}
+
 	void Transform::Scale(const float amount)
 	{
 		m_LocalScale += glm::vec3(amount);
@@ -128,6 +152,18 @@ namespace EVA
 	void Transform::SetScale(const glm::vec3 newScale)
 	{
 		m_LocalScale = newScale;
+		UpdateModelMatrix();
+	}
+
+	void Transform::SetScaleXY(const glm::vec2 newScale)
+	{
+		m_LocalScale = glm::vec3(newScale.x, newScale.y, 1.0f);
+		UpdateModelMatrix();
+	}
+
+	void Transform::SetScaleXZ(const glm::vec2 newScale)
+	{
+		m_LocalScale = glm::vec3(newScale.x, 1.0f, newScale.y);
 		UpdateModelMatrix();
 	}
 

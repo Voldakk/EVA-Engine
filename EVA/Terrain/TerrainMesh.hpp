@@ -15,8 +15,8 @@ namespace EVA
 	struct TerrainMeshData
 	{
 		glm::mat4 model;
-		float lod;
-		glm::vec4 lodSides;
+		int lod;
+		glm::vec2 index;
 	};
 
 	class TerrainMesh : public EVA::Mesh
@@ -25,12 +25,12 @@ namespace EVA
 
 	public:
 
-		explicit TerrainMesh(const std::vector<glm::vec3>& vertices);
+		explicit TerrainMesh(const std::vector<glm::vec2>& vertices);
 
 		void DrawTerrain(const std::vector<TerrainMeshData>& data);
 	};
 
-	inline TerrainMesh::TerrainMesh(const std::vector<glm::vec3>& vertices)
+	inline TerrainMesh::TerrainMesh(const std::vector<glm::vec2>& vertices)
 	{
 		m_VertexCount = vertices.size();
 		m_HasFaceIndices = false;
@@ -38,10 +38,10 @@ namespace EVA
 		m_Va = std::make_unique<VertexArray>();
 
 		{
-			m_Vb = std::make_unique<VertexBuffer>(&vertices[0], vertices.size() * sizeof(float) * 3);
+			m_Vb = std::make_unique<VertexBuffer>(&vertices[0], vertices.size() * sizeof(float) * 2);
 
 			VertexBufferLayout layout;
-			layout.Push<float>(3); // Position
+			layout.Push<float>(2); // Position
 
 			layout.patchSize = vertices.size();
 
@@ -56,8 +56,8 @@ namespace EVA
 			layout.Push<float>(4, 1); // Model matrix
 			layout.Push<float>(4, 1); // Model matrix
 			layout.Push<float>(4, 1); // Model matrix
-			layout.Push<float>(1, 1); // Lod
-			layout.Push<float>(4, 1); // Lod sides
+			layout.Push<int>(1, 1);   // Lod
+			layout.Push<float>(2, 1); // Index
 
 			layout.patchSize = vertices.size();
 

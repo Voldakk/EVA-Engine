@@ -85,9 +85,9 @@
                 0.0
             ],
             "scale": [
-                2.0,
                 1.0,
-                2.0
+                1.0,
+                1.0
             ],
             "orientation": [
                 0.0,
@@ -98,16 +98,98 @@
             "components": [
                 {
                     "id": "EVA::Terrain",
+                    "m_TargetName": "Target",
                     "Lod distances": [
-                        2000,
-                        1000,
                         500,
-                        250,
+                        200,
                         100,
                         50,
+                        20,
                         10,
+                        5,
                         0
                     ]
+                }
+            ]
+        },
+        {
+            "name": "Cube 0,0",
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/wireframe.mat",
+                    "mesh": "./assets/standard assets/models/cube.obj",
+                    "meshIndex": 0
+                }
+            ]
+        },
+        {
+            "name": "Cube 100, 100",
+            "position": [
+                100.0,
+                0.0,
+                100.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/wireframe.mat",
+                    "mesh": "./assets/standard assets/models/cube.obj",
+                    "meshIndex": 0
+                }
+            ]
+        },
+        {
+            "name": "Target",
+            "position": [
+                40.0,
+                10.0,
+                40.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/uv.mat",
+                    "mesh": "./assets/standard assets/models/cube.obj",
+                    "meshIndex": 0
                 }
             ]
         }

@@ -1,45 +1,36 @@
 #pragma once
 
 #include "../Components/Collider.hpp"
+#include "../Bounds.hpp"
 
 namespace EVA
 {
 	struct NodeData
 	{
-		Bounds bounds;
-		unsigned int lod;
+		Bounds2 bounds;
+		glm::vec2 index;
+		int lod;
 	};
 
 	class Terrain;
 
 	class Quadtree
 	{
-		unsigned int m_Lod = 0;
-
+		NodeData m_Data;
 		bool m_Leaf = true;
-
-		Bounds m_Bounds;
 
 		Terrain* m_Terrain;
 
-		std::unique_ptr<Quadtree> m_NorthWest;
-		std::unique_ptr<Quadtree> m_NorthEast;
-		std::unique_ptr<Quadtree> m_SouthWest;
-		std::unique_ptr<Quadtree> m_SouthEast;
+		std::vector<std::unique_ptr<Quadtree>> m_Children;
 
 	public:
 
 		bool& leaf = m_Leaf;
-		Bounds& bounds = m_Bounds;
+		std::vector<std::unique_ptr<Quadtree>>& children = m_Children;
 
-		std::unique_ptr<Quadtree>& northWest = m_NorthWest;
-		std::unique_ptr<Quadtree>& northEast = m_NorthEast;
-		std::unique_ptr<Quadtree>& southWest = m_SouthWest;
-		std::unique_ptr<Quadtree>& southEast = m_SouthEast;
+		explicit Quadtree(Terrain* terrain, glm::vec2 index, Bounds2 bounds);
 
-		explicit Quadtree(Terrain* terrain, const glm::vec3 extents);
-
-		explicit Quadtree(Terrain* terrain, const Bounds bounds, const int x, const int z, const unsigned int lod);
+		explicit Quadtree(Terrain* terrain, glm::vec2 index, Bounds2 bounds, const int lod);
 
 		void Subdivide();
 

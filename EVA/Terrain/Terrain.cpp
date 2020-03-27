@@ -3,6 +3,10 @@
 #include "EVA/ResourceManagers.hpp"
 #include "TerrainMaterial.hpp"
 
+#include "glm/glm.hpp"
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtx\quaternion.hpp>
+
 namespace EVA
 {
 	void Terrain::Start()
@@ -15,7 +19,11 @@ namespace EVA
 		auto v = GeneratePatch();
 		m_Mesh = std::make_shared<TerrainMesh>(v);
 
-		m_Quadtree = std::make_unique<Quadtree>(this, m_Extents);
+		m_Quadtree = std::make_unique<Quadtree>(this, glm::vec2(0, 0), Bounds2::MinMax(glm::vec2(0.0f), glm::vec2(100.0f)));
+
+		const auto go = scene->FindGameObjectByName(m_TargetName);
+		if (go != nullptr)
+			m_Target = go->transform.get();
 
 		LateUpdate();
 	}
@@ -25,26 +33,27 @@ namespace EVA
 		if (m_Material == nullptr)
 			return;
 
-		m_Quadtree->Update(Application::mainCamera->transform->position);
+		glm::vec3 targetPos = Application::mainCamera->transform->position;
+		if (m_Target != nullptr)
+		{
+			glm::vec3 targetScale = glm::vec3(1.0f);
+			if (m_Target->parent.Get() != nullptr)
+				targetScale = m_Target->parent->scale;
+			targetPos = m_Target->position / targetScale;
+		}
+
+		m_Quadtree->Update(targetPos - transform->position);
 
 		std::vector<NodeData> leafData;
 		m_Quadtree->GetLeafData(leafData);
 
-		const auto position = transform->localPosition;
-		const auto scale = transform->localScale;
-
-		meshData.clear();
+		m_MeshData.clear();
 		for (const auto data : leafData)
 		{
-			transform->SetPosition(data.bounds.center);
-			transform->SetScale(data.bounds.extents);
-			const auto modelMatrix = transform->modelMatrix;
-
-			meshData.push_back({ modelMatrix, (float)data.lod, glm::vec4(1.0f) });
+			auto modelMatrix = glm::translate(transform->modelMatrix, glm::vec3(data.bounds.GetMin().x, 1.0f, data.bounds.GetMin().y));
+			modelMatrix = glm::scale(modelMatrix, glm::vec3(data.bounds.GetSize().x, 1.0f, data.bounds.GetSize().y));
+			m_MeshData.push_back({ modelMatrix, data.lod, data.index });
 		}
-
-		transform->SetPosition(position);
-		transform->SetScale(scale);
 	}
 
 	void Terrain::Render()
@@ -53,22 +62,28 @@ namespace EVA
 			return;
 
 		m_Material->Activate(scene.Get(), nullptr);
-		m_Mesh->DrawTerrain(meshData);
+		m_Mesh->DrawTerrain(m_MeshData);
 	}
 
 	void Terrain::Serialize(DataObject& data)
 	{
+		if (data.Serialize("m_TargetName", m_TargetName))
+		{
+			const auto go = scene->FindGameObjectByName(m_TargetName);
+			if (go != nullptr)
+				m_Target = go->transform.get();
+		}
 		data.Serialize("Lod distances", m_LodDistances);
 	}
 
-	std::vector<glm::vec3> Terrain::GeneratePatch()
+	std::vector<glm::vec2> Terrain::GeneratePatch()
 	{
-		std::vector<glm::vec3> vertices(4);
+		std::vector<glm::vec2> vertices(4);
 
-		vertices[0] = { -1.0f, 0.0f, -1.0f };
-		vertices[1] = { 1.0f, 0.0f, -1.0f };
-		vertices[2] = { -1.0f, 0.0f,  1.0f };
-		vertices[3] = { 1.0f, 0.0f,  1.0f };
+		vertices[0] = { 0.0f, 0.0f };
+		vertices[1] = { 1.0f, 0.0f };
+		vertices[2] = { 0.0f, 1.0f };
+		vertices[3] = { 1.0f, 1.0f };
 
 		return vertices;
 	}

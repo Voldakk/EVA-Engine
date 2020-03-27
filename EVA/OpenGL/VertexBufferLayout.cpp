@@ -21,6 +21,13 @@ void EVA::VertexBufferLayout::Push<unsigned int>(const unsigned int count, const
 }
 
 template<>
+void EVA::VertexBufferLayout::Push<int>(const unsigned int count, const unsigned int divisor)
+{
+    m_Elements.push_back({ GL_INT, count, GL_FALSE, divisor });
+    m_Stride += count * VertexBufferElement::GetSizeOfType(GL_INT);
+}
+
+template<>
 void EVA::VertexBufferLayout::Push<float>(const unsigned int count, const unsigned int divisor)
 {
     m_Elements.push_back({ GL_FLOAT, count, GL_FALSE, divisor });

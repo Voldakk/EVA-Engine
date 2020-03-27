@@ -131,6 +131,7 @@ namespace EVA
 		// View and projection
 		shader->SetUniformMatrix4Fv("view", Application::mainCamera->viewMatrix);
 		shader->SetUniformMatrix4Fv("projection", Application::GetPerspectiveMatrix());
+		shader->SetUniformMatrix4Fv("viewProjection", Application::GetPerspectiveMatrix() * Application::mainCamera->viewMatrix);
 
 		if (scene == nullptr)
 			return;

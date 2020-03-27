@@ -8,8 +8,10 @@ namespace EVA
 	{
 		Material::SetMaterialUniforms(scene);
 
-		//if(m_Terrain != nullptr)
-		//	shader->SetUniform1I("maxLod", m_Terrain->maxTessLod);
+		if (m_Terrain != nullptr) 
+		{
+			
+		}
 	}
 
 	void TerrainMaterial::SetTerrain(Terrain * terrain)

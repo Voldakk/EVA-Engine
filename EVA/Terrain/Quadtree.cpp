@@ -4,22 +4,20 @@
 
 namespace EVA
 {
-	Quadtree::Quadtree(Terrain* terrain, const glm::vec3 extents)
+	Quadtree::Quadtree(Terrain* terrain, glm::vec2 index, Bounds2 bounds)
 	{
 		m_Terrain = terrain;
-		m_Lod = 0;
-		m_Bounds.center = glm::vec3(0.0f);
-		m_Bounds.extents = extents;
-		m_Bounds.extents.y = 0.01f;
+		m_Data.lod = 0;
+		m_Data.index = index;
+		m_Data.bounds = bounds;
 	}
 
-	Quadtree::Quadtree(Terrain* terrain, const Bounds bounds, const int x, const int z, const unsigned int lod)
+	Quadtree::Quadtree(Terrain* terrain, glm::vec2 index, Bounds2 bounds, int lod)
 	{
 		m_Terrain = terrain;
-		m_Lod = lod;
-		m_Bounds.center = bounds.center + glm::vec3(bounds.extents.x * x, 0.0f, bounds.extents.z * z) / 2.0f;
-		m_Bounds.extents = bounds.extents / 2.0f;
-		m_Bounds.extents.y = 0.01f;
+		m_Data.lod = lod;
+		m_Data.index = index;
+		m_Data.bounds = bounds;
 	}
 
 	void Quadtree::Subdivide()
@@ -29,10 +27,20 @@ namespace EVA
 
 		m_Leaf = false;
 
-		m_NorthWest = std::make_unique<Quadtree>(m_Terrain, m_Bounds, -1, 1, m_Lod + 1);
-		m_NorthEast = std::make_unique<Quadtree>(m_Terrain, m_Bounds, 1, 1, m_Lod + 1);
-		m_SouthWest = std::make_unique<Quadtree>(m_Terrain, m_Bounds, -1, -1, m_Lod + 1);
-		m_SouthEast = std::make_unique<Quadtree>(m_Terrain, m_Bounds, 1, -1, m_Lod + 1);
+		for (size_t i = 0; i < 2; i++)
+		{
+			for (size_t j = 0; j < 2; j++)
+			{
+				m_Children.push_back(std::make_unique<Quadtree>(
+					m_Terrain,
+					glm::vec2(i, j),
+					Bounds2::MinSize(
+						m_Data.bounds.GetMin() + glm::vec2(m_Data.bounds.GetExtents().x * i, m_Data.bounds.GetExtents().y * j),
+						m_Data.bounds.GetExtents()),
+					m_Data.lod + 1
+					));
+			}
+		}
 	}
 
 	void Quadtree::Merge()
@@ -42,45 +50,45 @@ namespace EVA
 
 		m_Leaf = true;
 
-		m_NorthWest.reset(nullptr);
-		m_NorthEast.reset(nullptr);
-		m_SouthWest.reset(nullptr);
-		m_SouthEast.reset(nullptr);
+		children.clear();
 	}
 
 	void Quadtree::GetLeafData(std::vector<NodeData>& leafData) const
 	{
-		if (m_Leaf) 
+		if (m_Leaf)
 		{
-			leafData.push_back({ m_Bounds, m_Lod });
+			leafData.push_back(m_Data);
 		}
 		else
 		{
-			m_NorthWest->GetLeafData(leafData);
-			m_NorthEast->GetLeafData(leafData);
-			m_SouthWest->GetLeafData(leafData);
-			m_SouthEast->GetLeafData(leafData);
+			for (size_t i = 0; i < m_Children.size(); i++)
+			{
+				m_Children[i]->GetLeafData(leafData);
+			}
 		}
 	}
 
 	void Quadtree::Update(const glm::vec3 cameraPosition)
 	{
-		if (m_Lod >= m_Terrain->lodDistances.size())
+		if (m_Data.lod >= m_Terrain->lodDistances.size())
 			return;
 
-		const auto dist = m_Bounds.Distance(cameraPosition);
+		Bounds2 b = m_Data.bounds;
+		b.ScaleXZ(m_Terrain->transform->scale);
 
-		if (dist < m_Terrain->lodDistances[m_Lod])
+		const auto dist = b.DistanceXZ(cameraPosition);
+
+		if (dist < m_Terrain->lodDistances[m_Data.lod])
 			Subdivide();
-		else if (dist >= m_Terrain->lodDistances[m_Lod])
+		else if (dist >= m_Terrain->lodDistances[m_Data.lod])
 			Merge();
 
 		if (!leaf)
 		{
-			m_NorthWest->Update(cameraPosition);
-			m_NorthEast->Update(cameraPosition);
-			m_SouthWest->Update(cameraPosition);
-			m_SouthEast->Update(cameraPosition);
+			for (size_t i = 0; i < m_Children.size(); i++)
+			{
+				m_Children[i]->Update(cameraPosition);
+			}
 		}
 	}
 }

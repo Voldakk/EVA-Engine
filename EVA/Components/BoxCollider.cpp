@@ -9,12 +9,12 @@ namespace EVA
 
 	Bounds BoxCollider::GetBounds()
 	{
-		return Bounds(bounds.center + transform->position, bounds.extents * transform->scale);
+		return Bounds(bounds.GetCenter() + transform->position, bounds.GetExtents() * transform->scale);
 	}
 
 	void BoxCollider::Serialize(DataObject& data)
 	{
-		data.Serialize("center", bounds.center);
-		data.Serialize("extents", bounds.extents);
+		//data.Serialize("center", bounds.center);
+		//data.Serialize("extents", bounds.extents);
 	}
 }
