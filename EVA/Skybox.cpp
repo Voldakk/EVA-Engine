@@ -51,7 +51,7 @@ namespace EVA
 		m_Texture = TextureManager::LoadTextureCubemap(folderPath, fileType);
 		if (m_Texture != nullptr)
 		{
-			m_Texture->type = Texture::Diffuse;
+			m_Texture->type = TextureType::Diffuse;
 			m_Material->SetTexture(m_Texture);
 		}
 		m_Material->shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "skybox.shader");

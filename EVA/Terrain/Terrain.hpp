@@ -21,16 +21,22 @@ namespace EVA
 
 		std::vector<TerrainMeshData> m_MeshData;
 
+		std::shared_ptr<Texture> m_Heightmap;
+
 		std::string m_TargetName;
 		Transform* m_Target;
 
 		std::vector<int> m_LodDistances = std::vector<int>(8);
+
+		float m_Scale = 500;
 
 		float m_TessFactor = 500;
 		float m_TessSlope = 2.0f;
 		float m_TessShift = 0.1f;
 
 	public:
+
+		const std::shared_ptr<Texture>& heightmap = m_Heightmap;
 
 		const std::vector<int>& lodDistances = m_LodDistances;
 

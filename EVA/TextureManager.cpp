@@ -2,13 +2,11 @@
 
 #include <iostream>
 
-#include "EVA/OpenGL.hpp"
-
 namespace EVA
 {
 	std::map<FS::path, std::shared_ptr<Texture>> TextureManager::m_Textures;
 
-	std::shared_ptr<Texture> TextureManager::LoadTexture(const FS::path& path)
+	std::shared_ptr<Texture> TextureManager::LoadTexture(const FS::path& path, const TextureWrapping wrapping, const TextureMinFilter minFilter, const TextureMagFilter magFilter)
 	{
 		// Return the id if the texture's already loaded
 		if (m_Textures.count(path))
@@ -31,10 +29,10 @@ namespace EVA
 			GLCall(glBindTexture(GL_TEXTURE_2D, texture->id));
 
 			// Texture parameters
-			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLint)wrapping));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLint)wrapping));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLint)minFilter));
+			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint)magFilter));
 
 			// Save the texture
 			GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, channels == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, data));

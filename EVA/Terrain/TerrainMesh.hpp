@@ -14,7 +14,8 @@ namespace EVA
 {
 	struct TerrainMeshData
 	{
-		glm::mat4 model;
+		glm::mat4 world;
+		glm::mat4 local;
 	};
 
 	class TerrainMesh : public EVA::Mesh
@@ -50,10 +51,15 @@ namespace EVA
 			m_Data = std::make_unique<VertexBuffer>(0);
 
 			VertexBufferLayout layout;
-			layout.Push<float>(4, 1); // Model matrix
-			layout.Push<float>(4, 1); // Model matrix
-			layout.Push<float>(4, 1); // Model matrix
-			layout.Push<float>(4, 1); // Model matrix
+			layout.Push<float>(4, 1); // World matrix
+			layout.Push<float>(4, 1); // World matrix
+			layout.Push<float>(4, 1); // World matrix
+			layout.Push<float>(4, 1); // World matrix
+
+			layout.Push<float>(4, 1); // Local matrix
+			layout.Push<float>(4, 1); // Local matrix
+			layout.Push<float>(4, 1); // Local matrix
+			layout.Push<float>(4, 1); // Local matrix
 
 			layout.patchSize = vertices.size();
 

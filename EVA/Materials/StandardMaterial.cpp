@@ -35,26 +35,26 @@ namespace EVA
 		SetTextures();
 	}
 
-	void StandardMaterial::SetTexture(const Texture::Type type, const FS::path& path)
+	void StandardMaterial::SetTexture(const TextureType type, const FS::path& path)
 	{
 		const auto t = TextureManager::LoadTexture(path);
 		if (t == nullptr)
 		{
 			switch (type)
 			{
-			case Texture::Diffuse:
+			case TextureType::Diffuse:
 				textureDiffuse = nullptr;
 				break;
-			case Texture::Specular:
+			case TextureType::Specular:
 				textureSpecular = nullptr;
 				break;
-			case Texture::Normal:
+			case TextureType::Normal:
 				textureNormal = nullptr;
 				break;
-			case Texture::Height:
+			case TextureType::Height:
 				textureHeight = nullptr;
 				break;
-			case Texture::Emission:
+			case TextureType::Emission:
 				textureEmission = nullptr;
 				break;
 			default:
@@ -71,19 +71,19 @@ namespace EVA
 	{
 		switch (texture->type)
 		{
-		case Texture::Diffuse:
+		case TextureType::Diffuse:
 			textureDiffuse = texture;
 			break;
-		case Texture::Specular:
+		case TextureType::Specular:
 			textureSpecular = texture;
 			break;
-		case Texture::Normal:
+		case TextureType::Normal:
 			textureNormal = texture;
 			break;
-		case Texture::Height:
+		case TextureType::Height:
 			textureHeight = texture;
 			break;
-		case Texture::Emission:
+		case TextureType::Emission:
 			textureEmission = texture;
 			break;
 		default:
@@ -162,18 +162,18 @@ namespace EVA
 		auto path = textureDiffuse != nullptr ? textureDiffuse->path : "";
 
 		if (data.Serialize("textureDiffuse", path) && !path.empty())
-			SetTexture(Texture::Diffuse, path);
+			SetTexture(TextureType::Diffuse, path);
 
 		path = textureSpecular != nullptr ? textureSpecular->path : "";
 		if (data.Serialize("textureSpecular", path) && !path.empty())
-			SetTexture(Texture::Specular, path);
+			SetTexture(TextureType::Specular, path);
 
 		path = textureNormal != nullptr ? textureNormal->path : "";
 		if (data.Serialize("textureNormal", path) && !path.empty())
-			SetTexture(Texture::Normal, path);
+			SetTexture(TextureType::Normal, path);
 
 		path = textureEmission != nullptr ? textureEmission->path : "";
 		if (data.Serialize("textureEmission", path) && !path.empty())
-			SetTexture(Texture::Emission, path);
+			SetTexture(TextureType::Emission, path);
 	}
 }

@@ -36,7 +36,7 @@ namespace EVA
 
 		void SetMaterialUniforms(Scene* scene) const override;
 		
-		void SetTexture(Texture::Type type, const FS::path& path);
+		void SetTexture(TextureType type, const FS::path& path);
 
 		void SetTexture(const std::shared_ptr<Texture>& texture);
 

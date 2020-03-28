@@ -2,6 +2,9 @@
 
 layout(vertices = 16) out;
 
+in vec2 uvTC[];
+out vec2 uvTE[];
+
 const int AB = 2;
 const int BC = 3;
 const int CD = 0;
@@ -40,6 +43,8 @@ void main()
 		gl_TessLevelInner[0] = (gl_TessLevelOuter[BC] + gl_TessLevelOuter[DA])/4;
 		gl_TessLevelInner[1] = (gl_TessLevelOuter[AB] + gl_TessLevelOuter[CD])/4;
 	}
+
+	uvTE[gl_InvocationID] = uvTC[gl_InvocationID];
 	
 	gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
 }

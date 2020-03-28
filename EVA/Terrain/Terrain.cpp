@@ -27,8 +27,6 @@ namespace EVA
 		if (go != nullptr)
 			m_Target = go->transform.get();
 
-		transform->SetScale(glm::vec3(1000, 0, 1000));
-
 		LateUpdate();
 	}
 
@@ -68,9 +66,9 @@ namespace EVA
 			m_MeshData.reserve(leafData.size());
 			for (const auto data : leafData)
 			{
-				auto modelMatrix = glm::translate(transform->modelMatrix, glm::vec3(data.bounds.GetMin().x, 0.0f, data.bounds.GetMin().y));
-				modelMatrix = glm::scale(modelMatrix, glm::vec3(data.bounds.GetSize().x, 0.0f, data.bounds.GetSize().y));
-				m_MeshData.push_back({ modelMatrix });
+				auto localMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(data.bounds.GetMin().x, 0.0f, data.bounds.GetMin().y));
+				localMatrix = glm::scale(localMatrix, glm::vec3(data.bounds.GetSize().x, 0.0f, data.bounds.GetSize().y));
+				m_MeshData.push_back({ transform->modelMatrix, localMatrix });
 			}
 		}
 	}
@@ -89,6 +87,12 @@ namespace EVA
 
 	void Terrain::Serialize(DataObject& data)
 	{
+		auto path = m_Heightmap != nullptr ? m_Heightmap->path : "";
+		if (data.Serialize("Heightmap", path))
+		{
+			m_Heightmap = TextureManager::LoadTexture(path, TextureWrapping::ClampToEdge, TextureMinFilter::Linear, TextureMagFilter::Linear);
+		}
+
 		data.Serialize("Tesselation factor", m_TessFactor);
 		data.Serialize("Tesselation slope", m_TessSlope);
 		data.Serialize("Tesselation shift", m_TessShift);
@@ -96,8 +100,15 @@ namespace EVA
 		if (data.Serialize("Target", m_TargetName))
 		{
 			const auto go = scene->FindGameObjectByName(m_TargetName);
-			if (go != nullptr)
+			if (go != nullptr) 
+			{
 				m_Target = go->transform.get();
+			}
+			else
+			{
+				m_TargetName = "";
+				m_Target = nullptr;
+			}
 		}
 
 		data.Serialize("Lod distances", m_LodDistances);

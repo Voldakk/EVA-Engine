@@ -85,9 +85,9 @@
                 0.0
             ],
             "scale": [
-                2000.0,
-                0.0,
-                2000.0
+                1000.0,
+                300.0,
+                1000.0
             ],
             "orientation": [
                 0.0,
@@ -98,19 +98,20 @@
             "components": [
                 {
                     "id": "EVA::Terrain",
+                    "Heightmap": "./assets/heightmaps/trondheim.png",
                     "Tesselation factor": 500.0,
                     "Tesselation slope": 2.0,
-                    "Tesselation shift": 0.10000000149011612,
+                    "Tesselation shift": 0.20000000298023225,
                     "Target": "",
                     "Lod distances": [
-                        800,
-                        400,
+                        500,
                         200,
                         100,
-                        50,
-                        25,
-                        10,
-                        5
+                        80,
+                        60,
+                        40,
+                        20,
+                        10
                     ]
                 }
             ]
@@ -124,61 +125,7 @@
             ],
             "scale": [
                 1.0,
-                1.0,
-                1.0
-            ],
-            "orientation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "id": "EVA::MeshRenderer",
-                    "material": "./assets/standard assets/materials/wireframe.mat",
-                    "mesh": "./assets/standard assets/models/cube.obj",
-                    "meshIndex": 0
-                }
-            ]
-        },
-        {
-            "name": "Cube 100, 100",
-            "position": [
-                100.0,
-                0.0,
-                100.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "orientation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "id": "EVA::MeshRenderer",
-                    "material": "./assets/standard assets/materials/wireframe.mat",
-                    "mesh": "./assets/standard assets/models/cube.obj",
-                    "meshIndex": 0
-                }
-            ]
-        },
-        {
-            "name": "Target",
-            "position": [
-                50.0,
-                10.0,
-                50.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
+                1000.0,
                 1.0
             ],
             "orientation": [
