@@ -15,8 +15,6 @@ namespace EVA
 	struct TerrainMeshData
 	{
 		glm::mat4 model;
-		int lod;
-		glm::vec2 index;
 	};
 
 	class TerrainMesh : public EVA::Mesh
@@ -56,8 +54,6 @@ namespace EVA
 			layout.Push<float>(4, 1); // Model matrix
 			layout.Push<float>(4, 1); // Model matrix
 			layout.Push<float>(4, 1); // Model matrix
-			layout.Push<int>(1, 1);   // Lod
-			layout.Push<float>(2, 1); // Index
 
 			layout.patchSize = vertices.size();
 

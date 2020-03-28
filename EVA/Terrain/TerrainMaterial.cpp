@@ -10,7 +10,9 @@ namespace EVA
 
 		if (m_Terrain != nullptr) 
 		{
-			
+			shader->SetUniform1F("tessFactor", m_Terrain->tessFactor);
+			shader->SetUniform1F("tessSlope", m_Terrain->tessSlope);
+			shader->SetUniform1F("tessShift", m_Terrain->tessShift);
 		}
 	}
 

@@ -8,8 +8,8 @@ namespace EVA
 	struct NodeData
 	{
 		Bounds2 bounds;
-		glm::vec2 index;
 		int lod;
+		glm::vec2 index;
 	};
 
 	class Terrain;

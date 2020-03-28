@@ -7,6 +7,8 @@
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtx\quaternion.hpp>
 
+#include "../ScopeTimer.hpp"
+
 namespace EVA
 {
 	void Terrain::Start()
@@ -19,11 +21,13 @@ namespace EVA
 		auto v = GeneratePatch();
 		m_Mesh = std::make_shared<TerrainMesh>(v);
 
-		m_Quadtree = std::make_unique<Quadtree>(this, glm::vec2(0, 0), Bounds2::MinMax(glm::vec2(0.0f), glm::vec2(100.0f)));
+		m_Quadtree = std::make_unique<Quadtree>(this, glm::vec2(0, 0), Bounds2::MinMax(glm::vec2(0.0f), glm::vec2(1.0f)));
 
 		const auto go = scene->FindGameObjectByName(m_TargetName);
 		if (go != nullptr)
 			m_Target = go->transform.get();
+
+		transform->SetScale(glm::vec3(1000, 0, 1000));
 
 		LateUpdate();
 	}
@@ -33,26 +37,41 @@ namespace EVA
 		if (m_Material == nullptr)
 			return;
 
-		glm::vec3 targetPos = Application::mainCamera->transform->position;
-		if (m_Target != nullptr)
 		{
-			glm::vec3 targetScale = glm::vec3(1.0f);
-			if (m_Target->parent.Get() != nullptr)
-				targetScale = m_Target->parent->scale;
-			targetPos = m_Target->position / targetScale;
+			ScopeTimer timer("Quadtree Update"); // 1.1 ms
+
+			glm::vec3 targetPos = Application::mainCamera->transform->position;
+			if (m_Target != nullptr)
+			{
+				glm::vec3 targetScale = glm::vec3(1.0f);
+				if (m_Target->parent.Get() != nullptr)
+					targetScale = m_Target->parent->scale;
+				targetPos = m_Target->position / targetScale;
+			}
+			targetPos -= transform->position;
+
+			m_Quadtree->Update(targetPos);
 		}
 
-		m_Quadtree->Update(targetPos - transform->position);
-
 		std::vector<NodeData> leafData;
-		m_Quadtree->GetLeafData(leafData);
 
-		m_MeshData.clear();
-		for (const auto data : leafData)
 		{
-			auto modelMatrix = glm::translate(transform->modelMatrix, glm::vec3(data.bounds.GetMin().x, 1.0f, data.bounds.GetMin().y));
-			modelMatrix = glm::scale(modelMatrix, glm::vec3(data.bounds.GetSize().x, 1.0f, data.bounds.GetSize().y));
-			m_MeshData.push_back({ modelMatrix, data.lod, data.index });
+			ScopeTimer timer("Quadtree GetLeafData"); // 1.3 ms
+
+			m_Quadtree->GetLeafData(leafData);
+		}
+
+		{
+			ScopeTimer timer("Terrain update mesh data"); // 3.5 ms
+
+			m_MeshData.clear();
+			m_MeshData.reserve(leafData.size());
+			for (const auto data : leafData)
+			{
+				auto modelMatrix = glm::translate(transform->modelMatrix, glm::vec3(data.bounds.GetMin().x, 0.0f, data.bounds.GetMin().y));
+				modelMatrix = glm::scale(modelMatrix, glm::vec3(data.bounds.GetSize().x, 0.0f, data.bounds.GetSize().y));
+				m_MeshData.push_back({ modelMatrix });
+			}
 		}
 	}
 
@@ -61,29 +80,54 @@ namespace EVA
 		if (m_Material == nullptr)
 			return;
 
-		m_Material->Activate(scene.Get(), nullptr);
-		m_Mesh->DrawTerrain(m_MeshData);
+		{
+			ScopeTimer timer("Terrain Render");
+			m_Material->Activate(scene.Get(), nullptr);
+			m_Mesh->DrawTerrain(m_MeshData);
+		}
 	}
 
 	void Terrain::Serialize(DataObject& data)
 	{
-		if (data.Serialize("m_TargetName", m_TargetName))
+		data.Serialize("Tesselation factor", m_TessFactor);
+		data.Serialize("Tesselation slope", m_TessSlope);
+		data.Serialize("Tesselation shift", m_TessShift);
+
+		if (data.Serialize("Target", m_TargetName))
 		{
 			const auto go = scene->FindGameObjectByName(m_TargetName);
 			if (go != nullptr)
 				m_Target = go->transform.get();
 		}
+
 		data.Serialize("Lod distances", m_LodDistances);
 	}
 
 	std::vector<glm::vec2> Terrain::GeneratePatch()
 	{
-		std::vector<glm::vec2> vertices(4);
+		std::vector<glm::vec2> vertices(16);
 
-		vertices[0] = { 0.0f, 0.0f };
-		vertices[1] = { 1.0f, 0.0f };
-		vertices[2] = { 0.0f, 1.0f };
-		vertices[3] = { 1.0f, 1.0f };
+		int index = 0;
+
+		vertices[index++] = glm::vec2(0, 0);
+		vertices[index++] = glm::vec2(0.333f, 0);
+		vertices[index++] = glm::vec2(0.666f, 0);
+		vertices[index++] = glm::vec2(1, 0);
+
+		vertices[index++] = glm::vec2(0, 0.333f);
+		vertices[index++] = glm::vec2(0.333f, 0.333f);
+		vertices[index++] = glm::vec2(0.666f, 0.333f);
+		vertices[index++] = glm::vec2(1, 0.333f);
+
+		vertices[index++] = glm::vec2(0, 0.666f);
+		vertices[index++] = glm::vec2(0.333f, 0.666f);
+		vertices[index++] = glm::vec2(0.666f, 0.666f);
+		vertices[index++] = glm::vec2(1, 0.666f);
+
+		vertices[index++] = glm::vec2(0, 1);
+		vertices[index++] = glm::vec2(0.333f, 1);
+		vertices[index++] = glm::vec2(0.666f, 1);
+		vertices[index++] = glm::vec2(1, 1);
 
 		return vertices;
 	}

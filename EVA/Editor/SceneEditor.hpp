@@ -41,9 +41,9 @@ namespace EVA
 			m_SceneCameraGameObject->AddComponent<Camera>();
 			m_SceneCamera = m_SceneCameraGameObject->AddComponent<SceneCamera>();
 
-			m_SceneCameraGameObject->transform->SetPosition({-50.0f, 50.0f, -50.0f});
-			m_SceneCamera->yaw = -45.0f;
-			m_SceneCamera->pitch = -30.0f;
+			m_SceneCameraGameObject->transform->SetPosition({20.0f, 70.0f, 50.0f});
+			m_SceneCamera->yaw = 90.0f;
+			m_SceneCamera->pitch = -80.0f;
 			m_SceneCamera->FreeLook::Update(0.0f);
 		}
 

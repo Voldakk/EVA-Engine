@@ -21,14 +21,22 @@ namespace EVA
 
 		std::vector<TerrainMeshData> m_MeshData;
 
-		std::vector<int> m_LodDistances = std::vector<int>(8);
-
 		std::string m_TargetName;
 		Transform* m_Target;
 
+		std::vector<int> m_LodDistances = std::vector<int>(8);
+
+		float m_TessFactor = 500;
+		float m_TessSlope = 2.0f;
+		float m_TessShift = 0.1f;
+
 	public:
 
-		const std::vector<int>& lodDistances = m_LodDistances;		
+		const std::vector<int>& lodDistances = m_LodDistances;
+
+		const float& tessFactor = m_TessFactor;
+		const float& tessSlope = m_TessSlope;
+		const float& tessShift = m_TessShift;
 
 		void Start() override;
 		void LateUpdate() override;
