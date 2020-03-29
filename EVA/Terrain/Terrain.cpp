@@ -2,12 +2,13 @@
 
 #include "EVA/ResourceManagers.hpp"
 #include "TerrainMaterial.hpp"
+#include "NormalMapRenderer.hpp"
+#include "../ScopeTimer.hpp"
 
 #include "glm/glm.hpp"
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtx\quaternion.hpp>
 
-#include "../ScopeTimer.hpp"
 
 namespace EVA
 {
@@ -91,6 +92,12 @@ namespace EVA
 		if (data.Serialize("Heightmap", path))
 		{
 			m_Heightmap = TextureManager::LoadTexture(path, TextureWrapping::ClampToEdge, TextureMinFilter::Linear, TextureMagFilter::Linear);
+
+			{
+				ScopeTimer timer("Terrain generate normalmap");
+				NormalMapRenderer nmr;
+				m_Normalmap = nmr.Render(m_Heightmap, m_Heightmap->width, 4);
+			}
 		}
 
 		data.Serialize("Tesselation factor", m_TessFactor);

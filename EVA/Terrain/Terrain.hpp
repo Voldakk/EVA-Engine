@@ -22,6 +22,7 @@ namespace EVA
 		std::vector<TerrainMeshData> m_MeshData;
 
 		std::shared_ptr<Texture> m_Heightmap;
+		std::shared_ptr<Texture> m_Normalmap;
 
 		std::string m_TargetName;
 		Transform* m_Target;
@@ -37,6 +38,7 @@ namespace EVA
 	public:
 
 		const std::shared_ptr<Texture>& heightmap = m_Heightmap;
+		const std::shared_ptr<Texture>& normalmap = m_Normalmap;
 
 		const std::vector<int>& lodDistances = m_LodDistances;
 

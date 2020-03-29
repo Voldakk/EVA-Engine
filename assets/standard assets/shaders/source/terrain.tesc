@@ -3,6 +3,7 @@
 layout(vertices = 16) out;
 
 in vec2 uvTC[];
+
 out vec2 uvTE[];
 
 const int AB = 2;

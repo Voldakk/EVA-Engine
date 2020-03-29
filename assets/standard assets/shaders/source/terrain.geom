@@ -1,9 +1,11 @@
 #version 330
 
 layout (triangles) in;
-layout (triangle_strip, max_vertices=4) out;
+layout (triangle_strip, max_vertices=3) out;
 
-out vec3 fragWireframeDist;
+in vec2 uvGeo[];
+
+out vec2 uvFrag;
 
 uniform mat4 viewProjection;
 
@@ -12,14 +14,9 @@ void main(void)
     for (int i = 0; i < gl_in.length(); ++i)
     {
         gl_Position = viewProjection * gl_in[i].gl_Position;
-
-		fragWireframeDist = vec3(0.0);
-        fragWireframeDist[i] = 1.0;
+        uvFrag = uvGeo[i];
         EmitVertex();
     }
-
-	gl_Position = viewProjection * gl_in[0].gl_Position;
-    EmitVertex();
 	
 	EndPrimitive();
 }

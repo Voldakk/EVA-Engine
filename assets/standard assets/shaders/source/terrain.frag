@@ -1,24 +1,25 @@
 #version 150 core
 
-// Material settings
-uniform struct Material
+in vec2 uvFrag;
+
+out vec4 outputColor;
+
+uniform sampler2D normalmap;
+
+const vec3 direction = vec3(0.1, -1, 0.1);
+const float intensity = 1.2;
+const vec3 color = vec3(0.1, 1, 0.1);
+
+float diffuse(vec3 direction, vec3 normal, float intensity)
 {
-   vec4 tint_diffuse;
-
-} material;
-
-// In
-in vec3 fragWireframeDist;
-
-// Out color
-out vec4 finalColor;
+	return max(0.01, dot(normal, -direction) * intensity);
+}
 
 void main()
 {
-    vec3 d = fwidth(fragWireframeDist);
- 
-    vec3 a3 = smoothstep(vec3(0.0), d * 1.5, fragWireframeDist);
-    float edgeFactor = min(min(a3.x, a3.y), a3.z);
- 
-    finalColor = vec4(mix(vec3(1.0), vec3(0.5), edgeFactor), 1.0);
+	vec3 normal = texture(normalmap, uvFrag).rgb;
+
+	float diffuse = diffuse(direction, normal, intensity);
+
+	outputColor = vec4(color * diffuse, 1.0);
 }

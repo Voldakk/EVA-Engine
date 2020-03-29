@@ -2,7 +2,8 @@
 
 layout(quads, fractional_odd_spacing, cw) in;
 
-in vec2 uvTE[];
+in vec2 uvTese[];
+
 out vec2 uvGeo;
 
 uniform sampler2D heightmap;
@@ -21,10 +22,10 @@ void main()
 	 (1 - u) *    v    * gl_in[15].gl_Position);
 
 	uvGeo =
-	((1 - u) * (1 - v) * uvTE[12] +
-	    u    * (1 - v) * uvTE[ 0] +
-	    u    *    v    * uvTE[ 3] +
-	 (1 - u) *    v    * uvTE[15]);
+	((1 - u) * (1 - v) * uvTese[12] +
+	    u    * (1 - v) * uvTese[ 0] +
+	    u    *    v    * uvTese[ 3] +
+	 (1 - u) *    v    * uvTese[15]);
 	
 	float height = texture(heightmap, uvGeo).r;
 

@@ -50,6 +50,9 @@ namespace EVA
 		if (!shader->paths->tessEvaluation.empty())
 			data.Set("tessEvaluation", FileSystem::ToString(shader->paths->tessEvaluation));
 
+		if (!shader->paths->compute.empty())
+			data.Set("compute", FileSystem::ToString(shader->paths->compute));
+
 		Json::Save(&d, path);
 	}
 

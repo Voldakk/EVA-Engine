@@ -41,6 +41,7 @@ namespace EVA
 			shaderPaths->geometry = data.Get<FS::path>("geometry", "");
 			shaderPaths->tessControl = data.Get<FS::path>("tessControl", "");
 			shaderPaths->tessEvaluation = data.Get<FS::path>("tessEvaluation", "");
+			shaderPaths->compute = data.Get<FS::path>("compute", "");
 
 			return shaderPaths;
 		}

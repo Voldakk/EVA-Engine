@@ -3,6 +3,7 @@
 #include "EVA/OpenGL.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "ShaderManager.hpp"
+#include <iostream>
 
 namespace EVA
 {
@@ -14,6 +15,11 @@ namespace EVA
 	Shader::Shader(const std::shared_ptr<ShaderPaths>& paths)
 	{
 		SetPaths(paths);
+	}
+
+	Shader::~Shader()
+	{
+		GLCall(glDeleteProgram(m_ShaderId));
 	}
 
 	void Shader::SetPaths(const std::shared_ptr<ShaderPaths>& paths)
@@ -87,13 +93,53 @@ namespace EVA
 				m_Paths->tessEvaluation = "";
 		}
 
+		if (!m_Paths->compute.empty())
+		{
+			const auto computeShader = ShaderManager::LoadAndCompileShader(m_Paths->compute, GL_COMPUTE_SHADER);
+			if (computeShader != -1)
+			{
+				GLCall(glAttachShader(m_ShaderId, computeShader));
+				GLCall(glDeleteShader(computeShader));
+			}
+			else
+				m_Paths->compute = "";
+		}
+
 		GLCall(glLinkProgram(m_ShaderId));
+		GLint linkOk;
+		GLCall(glGetProgramiv(m_ShaderId, GL_LINK_STATUS, &linkOk));
+		if (!linkOk)
+		{
+			char infolog[1024];;
+			GLCall(glGetShaderInfoLog(m_ShaderId, 1024, nullptr, infolog));
+			std::cout << "The program failed to link with the error:" << std::endl << infolog << std::endl;
+
+			GLCall(glDeleteShader(m_ShaderId));
+		}
+
+		glValidateProgram(m_ShaderId);
+		GLint validateOk;
+		GLCall(glGetProgramiv(m_ShaderId, GL_VALIDATE_STATUS, &validateOk));
+		if (!validateOk)
+		{
+			char infolog[1024];;
+			GLCall(glGetShaderInfoLog(m_ShaderId, 1024, nullptr, infolog));
+			std::cout << "The program failed to validate with the error:" << std::endl << infolog << std::endl;
+
+			GLCall(glDeleteShader(m_ShaderId));
+		}
+
 		GLCall(glUseProgram(m_ShaderId));
 	}
 
-	Shader::~Shader()
+	void Shader::Bind() const
 	{
-		GLCall(glDeleteProgram(m_ShaderId));
+		GLCall(glUseProgram(m_ShaderId));
+	}
+
+	void Shader::Unbind()
+	{
+		GLCall(glUseProgram(0));
 	}
 
 	int Shader::GetUniformLocation(const std::string& name)
@@ -136,13 +182,27 @@ namespace EVA
 		GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, value_ptr(value)));
 	}
 
-	void Shader::Bind() const
+	void Shader::BindTexture(std::shared_ptr<Texture> texture, const std::string& name, const int unit)
 	{
-		GLCall(glUseProgram(m_ShaderId));
+		SetUniform1I(name, unit);
+		GLCall(glActiveTexture(GL_TEXTURE0 + unit));
+
+		if (texture != nullptr) 
+		{
+			GLCall(glBindTexture(GL_TEXTURE_2D, texture->id));
+		}
+		else 
+		{
+			GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+		}
 	}
 
-	void Shader::Unbind()
+	void Shader::BindImageTexture(std::shared_ptr<Texture> texture, const ImageAccess access, const int unit, const int level, const bool layered, const int layer)
 	{
-		GLCall(glUseProgram(0));
+		GLCall(glBindImageTexture(unit, texture->id, level, layered, layer, (GLenum)access, (GLenum)texture->format));
+	}
+	void Shader::DispatchCompute(unsigned int numGroupsX, unsigned int numGroupsY, unsigned int numGroupsZ)
+	{
+		GLCall(glDispatchCompute(numGroupsX, numGroupsY, numGroupsZ));
 	}
 }

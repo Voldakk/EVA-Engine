@@ -86,7 +86,7 @@
             ],
             "scale": [
                 1000.0,
-                300.0,
+                100.0,
                 1000.0
             ],
             "orientation": [
@@ -98,7 +98,7 @@
             "components": [
                 {
                     "id": "EVA::Terrain",
-                    "Heightmap": "./assets/heightmaps/trondheim.png",
+                    "Heightmap": "./assets/heightmaps/trondheim_normalized_blur.png",
                     "Tesselation factor": 500.0,
                     "Tesselation slope": 2.0,
                     "Tesselation shift": 0.20000000298023225,

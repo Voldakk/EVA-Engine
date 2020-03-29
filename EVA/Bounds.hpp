@@ -29,8 +29,8 @@ public:
 
 	Bounds(const glm::vec3 center, const glm::vec3 extents)
 	{
-		m_Center = m_Center;
-		m_Extents = m_Extents;
+		m_Center = center;
+		m_Extents = extents;
 		RecalculateMinMax();
 	}
 

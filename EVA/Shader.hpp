@@ -6,10 +6,10 @@
 #include <glm/glm.hpp>
 
 #include "FileSystem.hpp"
+#include "TextureManager.hpp"
 
 namespace EVA
 {
-
 	struct ShaderPaths
 	{
 		FS::path shader;
@@ -18,6 +18,14 @@ namespace EVA
 		FS::path geometry;
 		FS::path tessControl;
 		FS::path tessEvaluation;
+		FS::path compute;
+	};
+
+	enum class ImageAccess : GLenum
+	{
+		ReadOnly = GL_READ_ONLY,
+		WriteOnly = GL_WRITE_ONLY,
+		ReadWrite = GL_READ_WRITE
 	};
 
 	/**
@@ -36,9 +44,9 @@ namespace EVA
 		Shader();
 		explicit Shader(const std::shared_ptr<ShaderPaths>& paths);
 
-		void SetPaths(const std::shared_ptr<ShaderPaths>& paths);
-
 		~Shader();
+		
+		void SetPaths(const std::shared_ptr<ShaderPaths>& paths);
 
 		void Bind() const;
 
@@ -55,6 +63,11 @@ namespace EVA
 		void SetUniform4Fv(const std::string& name, glm::vec4 value);
 
 		void SetUniformMatrix4Fv(const std::string& name, glm::mat4 value);
+
+		void BindTexture(std::shared_ptr<Texture> texture, const std::string& name, const int unit = 0);
+		void BindImageTexture(std::shared_ptr<Texture> texture, const ImageAccess access, const int unit = 0, const int level = 0, const bool layered = false, const int layer = 0);
+
+		void DispatchCompute(unsigned int numGroupsX, unsigned int numGroupsY, unsigned int numGroupsZ = 1);
 
 	private:
 
