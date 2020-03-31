@@ -16,19 +16,11 @@
 #include "../FileSystem.hpp"
 #include "../Editor/InspectorFields.hpp"
 
+#include "ISerializeable.hpp"
+#include "../Asset.hpp"
+
 namespace EVA
 {
-	class DataObject;
-
-	class ISerializeable
-	{
-	public:
-		virtual void Serialize(DataObject& data)
-		{
-
-		}
-	};
-
 	class Json
 	{
 
@@ -123,38 +115,38 @@ namespace EVA
 
 
 		template <>
-		glm::vec2 Get<glm::vec2>(const char* key, const glm::vec2 defaultValue) const;
+		glm::vec2 Get(const char* key, const glm::vec2 defaultValue) const;
 
 		template <>
-		void Set<glm::vec2>(const Json::StringRef& key, const glm::vec2 value) const;
-
-
-		template <>
-		glm::vec3 Get<glm::vec3>(const char* key, const glm::vec3 defaultValue) const;
-
-		template <>
-		void Set<glm::vec3>(const Json::StringRef& key, const glm::vec3 value) const;
+		void Set(const Json::StringRef& key, const glm::vec2 value) const;
 
 
 		template <>
-		glm::vec4 Get<glm::vec4>(const char* key, const glm::vec4 defaultValue) const;
+		glm::vec3 Get(const char* key, const glm::vec3 defaultValue) const;
 
 		template <>
-		void Set<glm::vec4>(const Json::StringRef& key, const glm::vec4 value) const;
-
-
-		template <>
-		glm::quat Get<glm::quat>(const char* key, const glm::quat defaultValue) const;
-
-		template <>
-		void Set<glm::quat>(const Json::StringRef& key, const glm::quat value) const;
+		void Set(const Json::StringRef& key, const glm::vec3 value) const;
 
 
 		template <>
-		FS::path Get<FS::path>(const char* key, const FS::path defaultValue) const;
+		glm::vec4 Get(const char* key, const glm::vec4 defaultValue) const;
 
 		template <>
-		void Set<FS::path>(const Json::StringRef& key, const FS::path value) const;
+		void Set(const Json::StringRef& key, const glm::vec4 value) const;
+
+
+		template <>
+		glm::quat Get(const char* key, const glm::quat defaultValue) const;
+
+		template <>
+		void Set(const Json::StringRef& key, const glm::quat value) const;
+
+
+		template <>
+		FS::path Get(const char* key, const FS::path defaultValue) const;
+
+		template <>
+		void Set(const Json::StringRef& key, const FS::path value) const;
 
 
 		template <typename T, typename Alloc>
@@ -162,6 +154,20 @@ namespace EVA
 
 		template <typename T, typename Alloc>
 		void Set(const Json::StringRef& key, const std::vector<T, Alloc> value) const;
+
+
+		template <typename T = typename ISerializeable>
+		std::shared_ptr<T> DataObject::Get(const char* key, const std::shared_ptr<T> defaultValue) const;
+
+		template <typename T = typename ISerializeable>
+		void Set(const Json::StringRef& key, const std::shared_ptr<T> value) const;
+
+
+		/*template <typename T = typename Asset>
+		std::shared_ptr<T> DataObject::Get(const char* key, const std::shared_ptr<T> defaultValue) const;
+
+		template <typename T = typename Asset>
+		void Set(const Json::StringRef& key, const std::shared_ptr<T> value) const;*/
 	};
 
 	template<typename T>
@@ -331,6 +337,38 @@ namespace EVA
 		{
 			v.PushBack(value[i], *m_Allocator);
 		}
+		m_Json.AddMember(key, v, *m_Allocator);
+	}
+
+	template<class T>
+	inline std::shared_ptr<T> DataObject::Get(const char* key, const std::shared_ptr<T> defaultValue) const
+	{
+		if (m_Json.HasMember(key) && m_Json[key].IsObject())
+		{
+			auto o = std::make_shared<T>();
+			auto data = DataObject(m_Json[key]);
+			data.mode = DataMode::Load;
+			o->Serialize(data);
+			return o;
+		}
+
+		return defaultValue;
+	}
+
+	template<class T>
+	inline void DataObject::Set(const Json::StringRef& key, const std::shared_ptr<T> value) const
+	{
+		if (value == nullptr)
+			return;
+
+		Json::Value v;
+		v.SetObject();
+
+		DataObject data(v, m_Allocator);
+		data.mode = DataMode::Save;
+
+		value->Serialize(data);
+
 		m_Json.AddMember(key, v, *m_Allocator);
 	}
 }

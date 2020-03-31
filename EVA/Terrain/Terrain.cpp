@@ -9,11 +9,14 @@
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtx\quaternion.hpp>
 
+#include "../Parsers/Json.hpp"
+
 
 namespace EVA
 {
 	void Terrain::Start()
 	{
+		//m_materials = std::make_shared<DiffNormHeightMaterial>();
 		m_Material = std::make_shared<TerrainMaterial>();
 		m_Material->SetTerrain(this);
 		m_Material->shader = ShaderManager::LoadShader("./assets/standard assets/shaders/terrain.shader");
@@ -93,6 +96,7 @@ namespace EVA
 		{
 			m_Heightmap = TextureManager::LoadTexture(path, TextureWrapping::ClampToEdge, TextureMinFilter::Linear, TextureMagFilter::Linear);
 
+			if(m_Heightmap != nullptr)
 			{
 				ScopeTimer timer("Terrain generate normalmap");
 				NormalMapRenderer nmr;
@@ -119,6 +123,14 @@ namespace EVA
 		}
 
 		data.Serialize("Lod distances", m_LodDistances);
+
+		auto materialPath = m_Materials[0] != nullptr ? m_Materials[0]->path : "";
+		if (data.Serialize("material", materialPath))
+			m_Materials[0] = std::dynamic_pointer_cast<StandardMaterial>(MaterialManager::LoadMaterial(materialPath));
+
+		materialPath = m_Materials[1] != nullptr ? m_Materials[1]->path : "";
+		if (data.Serialize("material", materialPath))
+			m_Materials[1] = std::dynamic_pointer_cast<StandardMaterial>(MaterialManager::LoadMaterial(materialPath));
 	}
 
 	std::vector<glm::vec2> Terrain::GeneratePatch()

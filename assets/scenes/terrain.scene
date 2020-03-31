@@ -85,9 +85,9 @@
                 0.0
             ],
             "scale": [
-                1000.0,
                 100.0,
-                1000.0
+                10.0,
+                100.0
             ],
             "orientation": [
                 0.0,
@@ -98,7 +98,7 @@
             "components": [
                 {
                     "id": "EVA::Terrain",
-                    "Heightmap": "./assets/heightmaps/trondheim_normalized_blur.png",
+                    "Heightmap": "./assets/terrain/heightmaps/trondheim_normalized_blur.png",
                     "Tesselation factor": 500.0,
                     "Tesselation slope": 2.0,
                     "Tesselation shift": 0.20000000298023225,
@@ -112,7 +112,9 @@
                         40,
                         20,
                         10
-                    ]
+                    ],
+                    "material": "./assets/terrain/ground_forest.mat",
+                    "material": "./assets/terrain/granite.mat"
                 }
             ]
         },

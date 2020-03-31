@@ -22,7 +22,7 @@ namespace EVA
 		m_Transform = std::make_unique<Transform>();
 	}
 
-	Skybox::Skybox(DataObject data) : Skybox(data.Get<std::string>("folderPath", ""), data.Get<std::string>("fileExtension", ""))
+	Skybox::Skybox(DataObject data) : Skybox(data.Get("folderPath", std::string("")), data.Get("fileExtension", std::string("")))
 	{
 
 	}

@@ -2,8 +2,8 @@
 
 #include <string>
 
-#include "Parsers/Json.hpp"
-#include "Editor/InspectorFields.hpp"
+#include "FileSystem.hpp"
+#include "Parsers/ISerializeable.hpp"
 
 namespace EVA
 {
@@ -14,6 +14,8 @@ namespace EVA
 	{
 
 	public:
+
+		FS::path path;
 
 		/**
 		* \brief Default constructor

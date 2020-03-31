@@ -29,6 +29,8 @@ namespace EVA
 
 		glm::vec4 tintDiffuse = glm::vec4(1.0f);
 
+		glm::vec2 tiling = glm::vec2(1.0f);
+		float heightScale = 1.0f;
 		float materialShininess = 32.0f;
 		float alphaCutoff = 0.0f;
 

@@ -6,10 +6,10 @@
 #include "Quadtree.hpp"
 #include "TerrainMaterial.hpp"
 #include "TerrainMesh.hpp"
+#include "../Materials/StandardMaterial.hpp"
 
 namespace EVA
 {
-
 	class Terrain : public Component, public ILateUpdateComponent, public IRenderComponent
 	{
 		REGISTER_COMPONENT(Terrain, "EVA::Terrain");
@@ -29,6 +29,8 @@ namespace EVA
 
 		std::vector<int> m_LodDistances = std::vector<int>(8);
 
+		std::vector<std::shared_ptr<StandardMaterial>> m_Materials = std::vector<std::shared_ptr<StandardMaterial>>(2);
+
 		float m_Scale = 500;
 
 		float m_TessFactor = 500;
@@ -39,6 +41,7 @@ namespace EVA
 
 		const std::shared_ptr<Texture>& heightmap = m_Heightmap;
 		const std::shared_ptr<Texture>& normalmap = m_Normalmap;
+		const std::vector<std::shared_ptr<StandardMaterial>>& materials = m_Materials;
 
 		const std::vector<int>& lodDistances = m_LodDistances;
 

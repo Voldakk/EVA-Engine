@@ -36,12 +36,12 @@ namespace EVA
 
 			DataObject data(d);
 
-			shaderPaths->vertex = data.Get<FS::path>("vertex", "");
-			shaderPaths->fragment = data.Get<FS::path>("fragment", "");
-			shaderPaths->geometry = data.Get<FS::path>("geometry", "");
-			shaderPaths->tessControl = data.Get<FS::path>("tessControl", "");
-			shaderPaths->tessEvaluation = data.Get<FS::path>("tessEvaluation", "");
-			shaderPaths->compute = data.Get<FS::path>("compute", "");
+			shaderPaths->vertex = data.Get("vertex", FS::path());
+			shaderPaths->fragment = data.Get("fragment", FS::path());
+			shaderPaths->geometry = data.Get("geometry", FS::path());
+			shaderPaths->tessControl = data.Get("tessControl", FS::path());
+			shaderPaths->tessEvaluation = data.Get("tessEvaluation", FS::path());
+			shaderPaths->compute = data.Get("compute", FS::path());
 
 			return shaderPaths;
 		}

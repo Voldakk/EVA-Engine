@@ -32,7 +32,7 @@ namespace EVA
 			DataObject data(d);
 			data.mode = DataObject::DataMode::Load;
 
-			auto material = ClassMapEVAMaterial::Create(data.Get("id", ""));
+			auto material = ClassMapEVAMaterial::Create(data.Get<std::string>("id", std::string("")));
 
 			if (material != nullptr)
 			{
@@ -69,5 +69,4 @@ namespace EVA
 				Save(material.get(), path);
 		}
 	};
-
 }

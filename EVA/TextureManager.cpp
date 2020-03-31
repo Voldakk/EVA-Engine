@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "EVA/OpenGL.hpp"
+
 namespace EVA
 {
 	std::map<FS::path, std::shared_ptr<Texture>> TextureManager::m_Textures;
@@ -11,6 +13,8 @@ namespace EVA
 		// Return the id if the texture's already loaded
 		if (m_Textures.count(path))
 			return m_Textures[path];
+
+		std::cout << "TextureManager::LoadTexture - Loading texture: " << FileSystem::ToString(path) << "\n";
 
 		auto texture = std::make_shared<Texture>();
 		texture->wrapping = wrapping;
@@ -30,7 +34,25 @@ namespace EVA
 		{
 			texture->width = width;
 			texture->height = height;
-			texture->format = channels == 3 ? TextureFormat::RGB : TextureFormat::RGBA;
+
+			TextureFormat format;
+			switch (channels)
+			{
+			case 1:
+				format = TextureFormat::RED;
+				break;
+			case 2:
+				format = TextureFormat::RG;
+				break;
+			case 3:
+				format = TextureFormat::RGB;
+				break;
+			default:
+				format = TextureFormat::RGBA;
+				break;
+			}
+			texture->format = format;
+
 			// Create texture
 			GLCall(glGenTextures(1, &texture->id));
 			GLCall(glBindTexture(GL_TEXTURE_2D, texture->id));
@@ -48,7 +70,7 @@ namespace EVA
 			// Save the id
 			m_Textures[path] = texture;
 			
-			std::cout << "TextureManager::LoadTexture - Loaded image: " << FileSystem::ToString(path) << "\n";
+			
 			std::cout << "TextureManager::LoadTexture - Texture id:   " << texture->id << "\n";
 
 			stbi_image_free(data);

@@ -155,9 +155,11 @@ namespace EVA
 	{
 		Material::Serialize(data);
 
+		data.Serialize("tintDiffuse", tintDiffuse);
+		data.Serialize("tiling", tiling);
+		data.Serialize("heightScale", heightScale);
 		data.Serialize("shininess", materialShininess);
 		data.Serialize("alphaCutoff", alphaCutoff);
-		data.Serialize("tintDiffuse", tintDiffuse);
 
 		auto path = textureDiffuse != nullptr ? textureDiffuse->path : "";
 
@@ -175,5 +177,9 @@ namespace EVA
 		path = textureEmission != nullptr ? textureEmission->path : "";
 		if (data.Serialize("textureEmission", path) && !path.empty())
 			SetTexture(TextureType::Emission, path);
+
+		path = textureHeight != nullptr ? textureHeight->path : "";
+		if (data.Serialize("textureHeight", path) && !path.empty())
+			SetTexture(TextureType::Height, path);
 	}
 }
