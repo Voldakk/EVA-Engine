@@ -20,6 +20,7 @@ namespace EVA
 		static std::shared_ptr<Texture> textureDefaultSpecular;
 		static std::shared_ptr<Texture> textureDefaultNormal;
 		static std::shared_ptr<Texture> textureDefaultEmission;
+		static std::shared_ptr<Texture> textureDefaultHeight;
 
 		std::shared_ptr<Texture> textureDiffuse;
 		std::shared_ptr<Texture> textureSpecular;
@@ -36,13 +37,13 @@ namespace EVA
 
 		StandardMaterial();
 
-		void SetMaterialUniforms(Scene* scene) const override;
+		void SetMaterialUniforms(Scene* scene) override;
 		
 		void SetTexture(TextureType type, const FS::path& path);
 
 		void SetTexture(const std::shared_ptr<Texture>& texture);
 
-		virtual void SetTextures() const;
+		virtual void SetTextures();
 
 		virtual void Serialize(DataObject& data) override;
 	};

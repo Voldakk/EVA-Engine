@@ -65,9 +65,9 @@ namespace EVA
 		
 		void Activate(Scene* scene, Transform* transform);
 
-		virtual void SetMaterialUniforms(Scene* scene) const;
+		virtual void SetMaterialUniforms(Scene* scene);
 
-		virtual void SetObjectUniforms(Transform* transform) const;
+		virtual void SetObjectUniforms(Transform* transform);
 
 		void SaveToFile();
 

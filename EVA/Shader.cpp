@@ -182,19 +182,34 @@ namespace EVA
 		GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, value_ptr(value)));
 	}
 
-	void Shader::BindTexture(std::shared_ptr<Texture> texture, const std::string& name, const int unit)
+	void Shader::BindTexture(std::shared_ptr<Texture> texture, const std::string& name, const TextureTarget target)
 	{
+		BindTexture(texture, name, m_TextureUnit++, target);
+	}
+
+	void Shader::BindTexture(std::shared_ptr<Texture> texture, const std::string& name, const int unit, const TextureTarget target)
+	{
+		if (texture != nullptr)
+			BindTexture(texture->id, name, unit, target);
+		else
+			BindTexture(0, name, unit, target);
+	}
+
+	void Shader::BindTexture(unsigned int texture, const std::string& name, const TextureTarget target)
+	{
+		BindTexture(texture, name, m_TextureUnit++, target);
+	}
+
+	void Shader::BindTexture(unsigned int texture, const std::string& name, const int unit, const TextureTarget target)
+	{
+		if (unit >= OpenGL::MaxTextureImageUnits) {
+			std::cout << "Shader::BindTexture - Exceding MaxTextureImageUnits" << std::endl;
+			return;
+		}
+
 		SetUniform1I(name, unit);
 		GLCall(glActiveTexture(GL_TEXTURE0 + unit));
-
-		if (texture != nullptr) 
-		{
-			GLCall(glBindTexture(GL_TEXTURE_2D, texture->id));
-		}
-		else 
-		{
-			GLCall(glBindTexture(GL_TEXTURE_2D, 0));
-		}
+		GLCall(glBindTexture((GLenum)target, texture));
 	}
 
 	void Shader::BindImageTexture(std::shared_ptr<Texture> texture, const ImageAccess access, const int unit, const int level, const bool layered, const int layer)
@@ -204,5 +219,9 @@ namespace EVA
 	void Shader::DispatchCompute(unsigned int numGroupsX, unsigned int numGroupsY, unsigned int numGroupsZ)
 	{
 		GLCall(glDispatchCompute(numGroupsX, numGroupsY, numGroupsZ));
+	}
+	void Shader::ResetTextureUnit()
+	{
+		m_TextureUnit = 0;
 	}
 }

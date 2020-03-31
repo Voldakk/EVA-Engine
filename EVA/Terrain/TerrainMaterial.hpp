@@ -15,7 +15,7 @@ namespace EVA
 		
 	public:
 
-		void SetMaterialUniforms(Scene* scene) const override;
+		void SetObjectUniforms(Transform* transform) override;
 		void SetTerrain(Terrain* terrain);
 	};
 }

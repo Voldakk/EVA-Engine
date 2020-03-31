@@ -14,6 +14,8 @@
 #include "Input.hpp"
 #include "SceneManager.hpp"
 
+#include "OpenGL/OpenGL.hpp"
+
 namespace EVA
 {
 
@@ -54,6 +56,9 @@ namespace EVA
 		GLCall(glDebugMessageCallback(OpenGlMessageCallback, nullptr));
 
 #endif
+
+        OpenGL::LoadParameters();
+
 
 		// Text
 		Text::Init();

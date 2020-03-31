@@ -4,21 +4,19 @@
 
 namespace EVA
 {
-	void TerrainMaterial::SetMaterialUniforms(Scene* scene) const
+	inline void TerrainMaterial::SetObjectUniforms(Transform* transform)
 	{
-		Material::SetMaterialUniforms(scene);
+		Material::SetObjectUniforms(transform);
 
-		if (m_Terrain != nullptr) 
+		if (m_Terrain != nullptr)
 		{
-			int unit = 0;
-
 			shader->SetUniform1F("tessFactor", m_Terrain->tessFactor);
 			shader->SetUniform1F("tessSlope", m_Terrain->tessSlope);
 			shader->SetUniform1F("tessShift", m_Terrain->tessShift);
 			shader->SetUniform1F("scaleY", m_Terrain->transform->scale.y);
 
-			shader->BindTexture(m_Terrain->heightmap, "heightmap", unit++);
-			shader->BindTexture(m_Terrain->normalmap, "normalmap", unit++);
+			shader->BindTexture(m_Terrain->heightmap, "heightmap");
+			shader->BindTexture(m_Terrain->normalmap, "normalmap");
 
 			for (size_t i = 0; i < m_Terrain->materials.size(); i++)
 			{
@@ -26,17 +24,16 @@ namespace EVA
 					continue;
 
 				auto var = "materials[" + std::to_string(i) + "].";
-				shader->BindTexture(m_Terrain->materials[i]->textureDiffuse, var + "diffusemap", unit++);
-				shader->BindTexture(m_Terrain->materials[i]->textureNormal, var + "normalmap", unit++);
-				shader->BindTexture(m_Terrain->materials[i]->textureHeight, var + "heightmap", unit++);
+				shader->BindTexture(m_Terrain->materials[i]->textureDiffuse, var + "diffusemap");
+				shader->BindTexture(m_Terrain->materials[i]->textureNormal, var + "normalmap");
+				shader->BindTexture(m_Terrain->materials[i]->textureHeight, var + "heightmap");
 
 				shader->SetUniform1F(var + "heightScale", m_Terrain->materials[i]->heightScale);
 				shader->SetUniform2Fv(var + "tiling", m_Terrain->materials[i]->tiling);
 			}
 		}
 	}
-
-	void TerrainMaterial::SetTerrain(Terrain * terrain)
+	void TerrainMaterial::SetTerrain(Terrain* terrain)
 	{
 		m_Terrain = terrain;
 	}

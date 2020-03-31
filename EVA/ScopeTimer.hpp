@@ -5,6 +5,12 @@
 #include <string>
 #include <unordered_map>
 
+#ifdef _DEBUG
+	#define SCOPE_TIMER(MESSAGE) ScopeTimer scopeTimer(MESSAGE);
+#else
+	#define SCOPE_TIMER(MESSAGE);
+#endif
+
 class ScopeTimer
 {
 	struct Stats

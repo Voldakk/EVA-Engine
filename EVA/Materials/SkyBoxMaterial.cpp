@@ -5,7 +5,7 @@
 
 namespace EVA
 {
-	void SkyBoxMaterial::SetMaterialUniforms(Scene* scene) const
+	void SkyBoxMaterial::SetMaterialUniforms(Scene* scene)
 	{
 		StandardMaterial::SetMaterialUniforms(scene);
 
@@ -13,15 +13,10 @@ namespace EVA
 		shader->SetUniformMatrix4Fv("projection", Application::GetPerspectiveMatrix());
 
 		shader->SetUniform4Fv("skyTint", skyTint);
-
-		// Cubemap
-		GLCall(glActiveTexture(GL_TEXTURE0));
-		shader->SetUniform1I("material.texture_diffuse", 0);
 	}
 
-	void SkyBoxMaterial::SetTextures() const
+	void SkyBoxMaterial::SetTextures()
 	{
-		if (textureDiffuse != nullptr)
-			GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, textureDiffuse->id));
+		shader->BindTexture(textureDiffuse, "material.texture_diffuse", TextureTarget::TextureCubeMap);
 	}
 }

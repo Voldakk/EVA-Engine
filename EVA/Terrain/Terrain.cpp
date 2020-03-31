@@ -40,7 +40,7 @@ namespace EVA
 			return;
 
 		{
-			ScopeTimer timer("Quadtree Update"); // 1.1 ms
+			SCOPE_TIMER("Quadtree Update"); // 1.1 ms
 
 			glm::vec3 targetPos = Application::mainCamera->transform->position;
 			if (m_Target != nullptr)
@@ -58,13 +58,13 @@ namespace EVA
 		std::vector<NodeData> leafData;
 
 		{
-			ScopeTimer timer("Quadtree GetLeafData"); // 1.3 ms
+			SCOPE_TIMER("Quadtree GetLeafData"); // 1.3 ms
 
 			m_Quadtree->GetLeafData(leafData);
 		}
 
 		{
-			ScopeTimer timer("Terrain update mesh data"); // 3.5 ms
+			SCOPE_TIMER("Terrain update mesh data"); // 3.5 ms
 
 			m_MeshData.clear();
 			m_MeshData.reserve(leafData.size());
@@ -83,8 +83,8 @@ namespace EVA
 			return;
 
 		{
-			ScopeTimer timer("Terrain Render");
-			m_Material->Activate(scene.Get(), nullptr);
+			SCOPE_TIMER("Terrain Render");
+			m_Material->Activate(scene.Get(), transform.Get());
 			m_Mesh->DrawTerrain(m_MeshData);
 		}
 	}

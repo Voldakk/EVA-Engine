@@ -140,7 +140,6 @@ if(APPLE)
 	)
 endif(APPLE)
 
-
 # Copy assets
 file(COPY  ${PROJECT_SOURCE_DIR}/assets DESTINATION ${PROJECT_BINARY_DIR}/bin)
 

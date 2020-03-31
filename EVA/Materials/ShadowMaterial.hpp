@@ -12,6 +12,6 @@ namespace EVA
 		REGISTER_MATERIAL(ShadowMaterial, "EVA::ShadowMaterial")
 
 	public:
-		void SetMaterialUniforms(Scene* scene) const override;
+		void SetMaterialUniforms(Scene* scene) override;
 	};
 }

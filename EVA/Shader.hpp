@@ -34,6 +34,7 @@ namespace EVA
 	class Shader
 	{
 		int m_ShaderId = -1;
+		unsigned int m_TextureUnit = 0;
 		std::unordered_map<std::string, int> m_UniformLocationMap;
 		std::shared_ptr<ShaderPaths> m_Paths;
 
@@ -64,10 +65,17 @@ namespace EVA
 
 		void SetUniformMatrix4Fv(const std::string& name, glm::mat4 value);
 
-		void BindTexture(std::shared_ptr<Texture> texture, const std::string& name, const int unit = 0);
+		void BindTexture(std::shared_ptr<Texture> texture, const std::string& name, const TextureTarget target = TextureTarget::Texture2D);
+		void BindTexture(std::shared_ptr<Texture> texture, const std::string& name, const int unit, const TextureTarget target = TextureTarget::Texture2D);
+
+		void BindTexture(unsigned int texture, const std::string& name, const TextureTarget target = TextureTarget::Texture2D);
+		void BindTexture(unsigned int texture, const std::string& name, const int unit, const TextureTarget target = TextureTarget::Texture2D);
+
 		void BindImageTexture(std::shared_ptr<Texture> texture, const ImageAccess access, const int unit = 0, const int level = 0, const bool layered = false, const int layer = 0);
 
 		void DispatchCompute(unsigned int numGroupsX, unsigned int numGroupsY, unsigned int numGroupsZ = 1);
+
+		void ResetTextureUnit();
 
 	private:
 

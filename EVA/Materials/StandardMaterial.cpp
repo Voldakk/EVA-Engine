@@ -9,6 +9,7 @@ namespace EVA
 	std::shared_ptr<Texture> StandardMaterial::textureDefaultSpecular;
 	std::shared_ptr<Texture> StandardMaterial::textureDefaultNormal;
 	std::shared_ptr<Texture> StandardMaterial::textureDefaultEmission;
+	std::shared_ptr<Texture> StandardMaterial::textureDefaultHeight;
 
 	StandardMaterial::StandardMaterial()
 	{
@@ -19,14 +20,17 @@ namespace EVA
 			textureDefaultSpecular = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_specular.png");
 			textureDefaultNormal = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_normal.png");
 			textureDefaultEmission = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_emission.png");
+			textureDefaultHeight = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_height.png");
 		}
 	}
 
-	void StandardMaterial::SetMaterialUniforms(Scene *scene) const
+	void StandardMaterial::SetMaterialUniforms(Scene *scene)
 	{
 		Material::SetMaterialUniforms(scene);
 
 		// Material
+		shader->SetUniform2Fv("material.tiling", tiling);
+		shader->SetUniform1F("material.heightScale", heightScale);
 		shader->SetUniform1F("material.shininess", materialShininess);
 		shader->SetUniform4Fv("material.tint_diffuse", tintDiffuse);
 		shader->SetUniform1F("material.alphaCutoff", alphaCutoff);
@@ -91,65 +95,38 @@ namespace EVA
 		}
 	}
 
-	void StandardMaterial::SetTextures() const
+	void StandardMaterial::SetTextures()
 	{
 		// Diffuse
-		GLCall(glActiveTexture(GL_TEXTURE0));
-		shader->SetUniform1I("material.texture_diffuse", 0);
-
-		if (textureDiffuse != nullptr) {
-			GLCall(glBindTexture(GL_TEXTURE_2D, textureDiffuse->id));
-		}
-		else {
-			GLCall(glBindTexture(GL_TEXTURE_2D, textureDefaultDiffuse->id));
-		}
+		if (textureDiffuse != nullptr)
+			shader->BindTexture(textureDiffuse, "material.texture_diffuse");
+		else
+			shader->BindTexture(textureDefaultDiffuse, "material.texture_diffuse");
 
 		// Specular
-		GLCall(glActiveTexture(GL_TEXTURE1));
-		shader->SetUniform1I("material.texture_specular", 1);
-
-		if (textureSpecular != nullptr) {
-			GLCall(glBindTexture(GL_TEXTURE_2D, textureSpecular->id));
-		}
-		else {
-			GLCall(glBindTexture(GL_TEXTURE_2D, textureDefaultSpecular->id));
-		}
+		if (textureSpecular != nullptr)
+			shader->BindTexture(textureSpecular, "material.texture_specular");
+		else
+			shader->BindTexture(textureDefaultSpecular, "material.texture_specular");
 
 		// Normal
-		GLCall(glActiveTexture(GL_TEXTURE2));
-		shader->SetUniform1I("material.texture_normal", 2);
-
-		if (textureNormal != nullptr) {
-			GLCall(glBindTexture(GL_TEXTURE_2D, textureNormal->id));
-		}
-		else {
-			GLCall(glBindTexture(GL_TEXTURE_2D, textureDefaultNormal->id));
-		}
+		if (textureNormal != nullptr)
+			shader->BindTexture(textureNormal, "material.texture_normal");
+		else
+			shader->BindTexture(textureDefaultNormal, "material.texture_normal");
 
 		// Emission
-		GLCall(glActiveTexture(GL_TEXTURE3));
-		shader->SetUniform1I("material.texture_emission", 3);
-
-		if (textureEmission != nullptr) {
-			GLCall(glBindTexture(GL_TEXTURE_2D, textureEmission->id));
-		}
-		else {
-			GLCall(glBindTexture(GL_TEXTURE_2D, textureDefaultEmission->id));
-		}
+		if (textureEmission != nullptr)
+			shader->BindTexture(textureEmission, "material.texture_emission");
+		else
+			shader->BindTexture(textureDefaultEmission, "material.texture_emission");
 
 		// Height
-		GLCall(glActiveTexture(GL_TEXTURE4));
-		shader->SetUniform1I("material.texture_height", 4);
-
-		if (textureHeight != nullptr) {
-			GLCall(glBindTexture(GL_TEXTURE_2D, textureHeight->id));
-		}
-		else {
-			GLCall(glBindTexture(GL_TEXTURE_2D, textureDefaultSpecular->id));
-		}
+		if (textureHeight != nullptr)
+			shader->BindTexture(textureHeight, "material.texture_height");
+		else
+			shader->BindTexture(textureDefaultHeight, "material.texture_height");
 	}
-
-	//virtual void Serialize(DataObject& data) override;
 
 	void StandardMaterial::Serialize(DataObject& data)
 	{

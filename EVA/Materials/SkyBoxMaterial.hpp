@@ -17,7 +17,7 @@ namespace EVA
 
 		SkyBoxMaterial() = default;
 
-		void SetMaterialUniforms(Scene* scene) const override;
-		void SetTextures() const override;
+		void SetMaterialUniforms(Scene* scene) override;
+		void SetTextures() override;
 	};
 }

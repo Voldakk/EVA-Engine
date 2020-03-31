@@ -5,7 +5,7 @@
 
 namespace EVA
 {
-	void ShadowMaterial::SetMaterialUniforms(Scene* scene) const
+	void ShadowMaterial::SetMaterialUniforms(Scene* scene)
 	{
 
 	}

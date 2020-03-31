@@ -113,6 +113,7 @@ namespace EVA
 			}
 
 			// Set uniforms
+			shader->ResetTextureUnit();
 			SetMaterialUniforms(scene);
 		}
 
@@ -120,7 +121,7 @@ namespace EVA
 			SetObjectUniforms(transform);
 	}
 
-	void Material::SetMaterialUniforms(Scene *scene) const
+	void Material::SetMaterialUniforms(Scene *scene)
 	{
 		// Material
 		shader->SetUniform1I("instancing", useInstancing);
@@ -140,8 +141,6 @@ namespace EVA
 		auto lights = scene->GetLights();
 		shader->SetUniform1I("numLights", lights.size());
 
-		auto shadowNum = 0;
-
 		for (unsigned int i = 0; i < lights.size(); ++i)
 		{
 			const auto lightNum = "allLights[" + std::to_string(i) + "].";
@@ -155,12 +154,8 @@ namespace EVA
 
 				if (lights[i]->Shadows())
 				{
-					GLCall(glActiveTexture(GL_TEXTURE5 + shadowNum));
-					GLCall(glBindTexture(GL_TEXTURE_2D, lights[i]->GetDepthMap()));
-					shader->SetUniform1I(lightNum + "shadowMap", 5 + shadowNum);
+					shader->BindTexture(lights[i]->GetDepthMap(), lightNum + "shadowMap");
 					shader->SetUniformMatrix4Fv(lightNum + "lightSpaceMatrix", lights[i]->GetLightSpaceMatrix());
-
-					shadowNum++;
 				}
 			}
 			else if (lights[i]->GetType() == Light::Type::Point)
@@ -170,12 +165,8 @@ namespace EVA
 
 				if (lights[i]->Shadows())
 				{
-					GLCall(glActiveTexture(GL_TEXTURE5 + shadowNum));
-					GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, lights[i]->GetDepthMap()));
-					shader->SetUniform1I("shadowCubeMap", 5 + shadowNum);
+					shader->BindTexture(lights[i]->GetDepthMap(),  "shadowCubeMap", TextureTarget::TextureCubeMap);
 					shader->SetUniform1F(lightNum + "farPlane", lights[i]->pointFarPlane);
-
-					shadowNum++;
 				}
 				else
 				{
@@ -185,10 +176,13 @@ namespace EVA
 		}
 	}
 
-	void Material::SetObjectUniforms(Transform *transform) const
+	void Material::SetObjectUniforms(Transform *transform)
 	{
-		// Position
-		shader->SetUniformMatrix4Fv("model", transform->modelMatrix);
+		if (transform != nullptr)
+		{
+			// Position
+			shader->SetUniformMatrix4Fv("model", transform->modelMatrix);
+		}
 	}
 
 	void Material::SaveToFile()
