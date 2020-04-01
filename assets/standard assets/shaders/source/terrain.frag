@@ -32,49 +32,49 @@ float diffuse(vec3 direction, vec3 normal, float intensity)
 
 void main()
 {
-    float dist = length(cameraPosition - posFrag);
-    float height = posFrag.y;
+	float dist = length(cameraPosition - posFrag);
+	float height = posFrag.y;
 
-	vec3 normal = normalize(texture(normalmap, uvFrag).rgb);
+	vec3 normal = normalize(texture(normalmap, uvFrag).rbg);
+	
+	vec3 material0Color = texture(materials[0].diffusemap, uvFrag * materials[0].tiling).rgb;
+	vec3 material1Color = texture(materials[1].diffusemap, uvFrag * materials[1].tiling).rgb;
 
-    vec3 material0Color = texture(materials[0].diffusemap, uvFrag * materials[0].tiling).rgb;
-    vec3 material1Color = texture(materials[1].diffusemap, uvFrag * materials[1].tiling).rgb;
+	float[2] materialAlpha = float[](0,0);
+	
+	if (normal.y > 0.5){
+		materialAlpha[1] = 1;
+	}
+	else{
+		materialAlpha[0] = 1;
+	}
+	
+	if (dist < tbnRange-50)
+	{
+		float attenuation = clamp(-dist/(tbnRange-50) + 1,0.0,1.0);
+		
+		vec3 bitangent = normalize(cross(tangentFrag, normal));
+		mat3 TBN = mat3(bitangent,normal,tangentFrag);
+		
+		vec3 bumpNormal;
+		for (int i=0; i<2; i++){
+			
+			bumpNormal += (2*(texture(materials[i].normalmap, uvFrag * materials[i].tiling).rbg) - 1) * materialAlpha[i];
+		}
+		
+		bumpNormal = normalize(bumpNormal);
+		
+		bumpNormal.xz *= attenuation;
+		
+		normal = normalize(TBN * bumpNormal);
+	}
+	
+	vec3 fragColor = material0Color * materialAlpha[0] + 
+				     material1Color * materialAlpha[1];
+	
+	float diffuse = diffuse(direction, normal, intensity);
 
-    float[2] materialAlpha = float[](0, 0);
-    if(normal.y > 0.5)
-    {
-        materialAlpha[1] = 1;
-    }
-    else
-    {
-        materialAlpha[0] = 1;
-    }
-
-    if(dist < tbnRange - 50)
-    {
-        float attenuation = clamp(dist / (tbnRange - 50) + 1, 0.0, 1.0);
-
-        vec3 bitangent = normalize(cross(tangentFrag, normal));
-        mat3 tbn = mat3(bitangent, normal, tangentFrag);
-
-        vec3 bumpNormal;
-        for (int i = 0; i < 2; i++)
-        {
-            bumpNormal += (2 * (texture(materials[i].normalmap, uvFrag * materials[i].tiling).rbg) - 1) * materialAlpha[i];
-        }
-
-        bumpNormal = normalize(bumpNormal);
-
-        bumpNormal.xz *= attenuation;
-
-        normal = normalize(tbn * bumpNormal);
-    }
-
-    vec3 fragColor = material0Color * materialAlpha[0] + material1Color * materialAlpha[1];
-
-	float diff = diffuse(direction, normal, intensity);
-
-    fragColor *= diff;
-
-	outputColor = vec4(fragColor, 1.0);
+	fragColor *= diffuse;
+	
+	outputColor = vec4(fragColor,1.0);
 }

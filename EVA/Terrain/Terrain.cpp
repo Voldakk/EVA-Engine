@@ -100,13 +100,14 @@ namespace EVA
 			{
 				ScopeTimer timer("Terrain generate normalmap");
 				NormalMapRenderer nmr;
-				m_Normalmap = nmr.Render(m_Heightmap, m_Heightmap->width, 4);
+				m_Normalmap = nmr.Render(m_Heightmap, m_Heightmap->width, 10);
 			}
 		}
 
 		data.Serialize("Tesselation factor", m_TessFactor);
 		data.Serialize("Tesselation slope", m_TessSlope);
 		data.Serialize("Tesselation shift", m_TessShift);
+		data.Serialize("TBN range", m_TbnRange);
 
 		if (data.Serialize("Target", m_TargetName))
 		{

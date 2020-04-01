@@ -31,11 +31,10 @@ namespace EVA
 
 		std::vector<std::shared_ptr<StandardMaterial>> m_Materials = std::vector<std::shared_ptr<StandardMaterial>>(2);
 
-		float m_Scale = 500;
-
 		float m_TessFactor = 500;
 		float m_TessSlope = 2.0f;
 		float m_TessShift = 0.1f;
+		int m_TbnRange = 200;
 
 	public:
 
@@ -48,6 +47,7 @@ namespace EVA
 		const float& tessFactor = m_TessFactor;
 		const float& tessSlope = m_TessSlope;
 		const float& tessShift = m_TessShift;
+		const int& tbnRange = m_TbnRange;
 
 		void Start() override;
 		void LateUpdate() override;

@@ -14,6 +14,7 @@ namespace EVA
 			shader->SetUniform1F("tessSlope", m_Terrain->tessSlope);
 			shader->SetUniform1F("tessShift", m_Terrain->tessShift);
 			shader->SetUniform1F("scaleY", m_Terrain->transform->scale.y);
+			shader->SetUniform1I("tbnRange", m_Terrain->tbnRange);
 
 			shader->BindTexture(m_Terrain->heightmap, "heightmap");
 			shader->BindTexture(m_Terrain->normalmap, "normalmap");
