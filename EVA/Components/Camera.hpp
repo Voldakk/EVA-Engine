@@ -19,7 +19,7 @@ namespace EVA
 
         float fov = 90.0f;
         float near = 0.1f;
-        float far = 1000.0f;
+        float far = 6000.0f;
 
 		const glm::mat4& viewMatrix = m_ViewMatrix;
 

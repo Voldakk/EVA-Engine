@@ -1,0 +1,25 @@
+{
+  "id": "EVA::StandardMaterial",
+  "shader": "./assets/standard assets/shaders/standard.shader",
+  "useInstancing": false,
+  "cullFront": false,
+  "cullBack": true,
+  "tintDiffuse": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "tiling": [
+    200.0,
+    200.0
+  ],
+  "heightScale": 1.0,
+  "shininess": 32.0,
+  "alphaCutoff": 0.0,
+  "textureDiffuse": "./assets/terrain/rock_moss/Ground_17_DIF.jpg",
+  "textureSpecular": "",
+  "textureNormal": "./assets/terrain/rock_moss/Ground_17_NRM.jpg",
+  "textureEmission": "",
+  "textureHeight": "./assets/terrain/rock_moss/Ground_17_DISP.jpg"
+}

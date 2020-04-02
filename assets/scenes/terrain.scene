@@ -85,9 +85,9 @@
                 0.0
             ],
             "scale": [
-                1000.0,
-                100.0,
-                1000.0
+                6000.0,
+                500.0,
+                6000.0
             ],
             "orientation": [
                 0.0,
@@ -98,23 +98,26 @@
             "components": [
                 {
                     "id": "EVA::Terrain",
-                    "Heightmap": "./assets/terrain/heightmaps/test.bmp",
                     "Tesselation factor": 500.0,
-                    "Tesselation slope": 2.0,
-                    "Tesselation shift": 0.20000000298023225,
+                    "Tesselation slope": 1.100000023841858,
+                    "Tesselation shift": 0.30000001192092898,
+                    "TBN range": 200,
+                    "Normal strength": 20,
                     "Target": "",
+                    "Heightmap": "./assets/terrain/heightmaps/test.bmp",
+                    "material0": "./assets/terrain/grass.mat",
+                    "material1": "./assets/terrain/sand.mat",
+                    "material2": "./assets/terrain/rock.mat",
                     "Lod distances": [
-                        500,
-                        200,
-                        100,
+                        1080,
+                        640,
+                        320,
+                        160,
                         80,
-                        60,
                         40,
                         20,
                         10
-                    ],
-                    "material": "./assets/terrain/ground11.mat",
-                    "material": "./assets/terrain/ground11.mat"
+                    ]
                 }
             ]
         },

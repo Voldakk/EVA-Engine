@@ -18,6 +18,7 @@ namespace EVA
 
 			shader->BindTexture(m_Terrain->heightmap, "heightmap");
 			shader->BindTexture(m_Terrain->normalmap, "normalmap");
+			shader->BindTexture(m_Terrain->splatmap, "splatmap");
 
 			for (size_t i = 0; i < m_Terrain->materials.size(); i++)
 			{

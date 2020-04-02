@@ -16,8 +16,9 @@ in vec3 tangentFrag;
 out vec4 outputColor;
 
 uniform sampler2D normalmap;
+uniform sampler2D splatmap;
 uniform vec3 cameraPosition;
-uniform Material materials[2];
+uniform Material materials[3];
 uniform int tbnRange;
 
 
@@ -37,29 +38,20 @@ void main()
 
 	vec3 normal = normalize(texture(normalmap, uvFrag).rbg);
 	
-	vec3 material0Color = texture(materials[0].diffusemap, uvFrag * materials[0].tiling).rgb;
-	vec3 material1Color = texture(materials[1].diffusemap, uvFrag * materials[1].tiling).rgb;
-
-	float[2] materialAlpha = float[](0,0);
+	vec4 blendValues = texture(splatmap, uvFrag).rgba;
+	float[4] blendValuesArray = float[](blendValues.r, blendValues.g, blendValues.b, blendValues.a);
 	
-	if (normal.y > 0.5){
-		materialAlpha[1] = 1;
-	}
-	else{
-		materialAlpha[0] = 1;
-	}
-	
-	if (dist < tbnRange-50)
+	if (dist < tbnRange - 50)
 	{
-		float attenuation = clamp(-dist/(tbnRange-50) + 1,0.0,1.0);
+		float attenuation = clamp(-dist / (tbnRange - 50) + 1, 0.0, 1.0);
 		
 		vec3 bitangent = normalize(cross(tangentFrag, normal));
 		mat3 TBN = mat3(bitangent,normal,tangentFrag);
 		
 		vec3 bumpNormal;
-		for (int i=0; i<2; i++){
-			
-			bumpNormal += (2*(texture(materials[i].normalmap, uvFrag * materials[i].tiling).rbg) - 1) * materialAlpha[i];
+		for (int i = 0; i < 3; i++)
+		{			
+			bumpNormal += (2*(texture(materials[i].normalmap, uvFrag * materials[i].tiling).rbg) - 1) * blendValuesArray[i];
 		}
 		
 		bumpNormal = normalize(bumpNormal);
@@ -69,12 +61,15 @@ void main()
 		normal = normalize(TBN * bumpNormal);
 	}
 	
-	vec3 fragColor = material0Color * materialAlpha[0] + 
-				     material1Color * materialAlpha[1];
+	vec3 fragColor = vec3(0);
+	for(int i = 0; i < 3; ++i)
+	{
+		fragColor += texture(materials[i].diffusemap, uvFrag * materials[i].tiling).rgb * blendValuesArray[i];
+	}
 	
 	float diffuse = diffuse(direction, normal, intensity);
 
 	fragColor *= diffuse;
 	
-	outputColor = vec4(fragColor,1.0);
+	outputColor = vec4(fragColor, 1.0);
 }

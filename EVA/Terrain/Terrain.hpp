@@ -23,23 +23,26 @@ namespace EVA
 
 		std::shared_ptr<Texture> m_Heightmap;
 		std::shared_ptr<Texture> m_Normalmap;
+		std::shared_ptr<Texture> m_Splatmap;
 
 		std::string m_TargetName;
 		Transform* m_Target;
 
 		std::vector<int> m_LodDistances = std::vector<int>(8);
 
-		std::vector<std::shared_ptr<StandardMaterial>> m_Materials = std::vector<std::shared_ptr<StandardMaterial>>(2);
+		std::vector<std::shared_ptr<StandardMaterial>> m_Materials = std::vector<std::shared_ptr<StandardMaterial>>(3);
 
 		float m_TessFactor = 500;
 		float m_TessSlope = 2.0f;
 		float m_TessShift = 0.1f;
 		int m_TbnRange = 200;
+		int m_NormalStrength = 10;
 
 	public:
 
 		const std::shared_ptr<Texture>& heightmap = m_Heightmap;
 		const std::shared_ptr<Texture>& normalmap = m_Normalmap;
+		const std::shared_ptr<Texture>& splatmap = m_Splatmap;
 		const std::vector<std::shared_ptr<StandardMaterial>>& materials = m_Materials;
 
 		const std::vector<int>& lodDistances = m_LodDistances;

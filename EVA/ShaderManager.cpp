@@ -13,6 +13,8 @@ namespace EVA
 
 	std::shared_ptr<Shader> ShaderManager::LoadShader(const FS::path& path)
 	{
+		std::cout << "ShaderManager::SaveShader - " << FileSystem::ToString(path).c_str() << std::endl;
+
 		if (m_Shaders.count(path))
 			return m_Shaders[path];
 
@@ -28,6 +30,8 @@ namespace EVA
 
 	void ShaderManager::SaveShader(Shader* shader, const FS::path& path)
 	{
+		std::cout << "ShaderManager::SaveShader - " << FileSystem::ToString(path).c_str() << std::endl;
+
 		Json::Document d;
 		d.SetObject();
 
@@ -58,6 +62,8 @@ namespace EVA
 
 	bool ShaderManager::ReadShaderSource(const FS::path& path, std::vector<char> &buffer)
 	{
+		std::cout << "ShaderManager::ReadShaderSource - " << FileSystem::ToString(path).c_str() << std::endl;
+
 		std::ifstream in;
 		in.open(FileSystem::ToString(path).c_str(), std::ios::binary);
 
@@ -116,11 +122,13 @@ namespace EVA
 		{
 			char infolog[1024];;
 			GLCall(glGetShaderInfoLog(shader, 1024, nullptr, infolog));
-			std::cout << "The program failed to compile with the error:" << std::endl << infolog << std::endl;
+			std::cout << "ShaderManager::LoadAndCompileShader - The program failed to compile with the error:" << std::endl << infolog << std::endl;
 
 			GLCall(glDeleteShader(shader));
 			return -1;
 		}
+
+		std::cout << "ShaderManager::LoadAndCompileShader - Successfully compiled shader" << std::endl;
 		return shader;
 	}
 }

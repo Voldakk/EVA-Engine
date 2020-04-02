@@ -3,6 +3,7 @@
 #include "EVA/ResourceManagers.hpp"
 #include "TerrainMaterial.hpp"
 #include "NormalMapRenderer.hpp"
+#include "SpatMapRenderer.hpp"
 #include "../ScopeTimer.hpp"
 
 #include "glm/glm.hpp"
@@ -91,23 +92,12 @@ namespace EVA
 
 	void Terrain::Serialize(DataObject& data)
 	{
-		auto path = m_Heightmap != nullptr ? m_Heightmap->path : "";
-		if (data.Serialize("Heightmap", path))
-		{
-			m_Heightmap = TextureManager::LoadTexture(path, TextureWrapping::ClampToEdge, TextureMinFilter::Linear, TextureMagFilter::Linear);
-
-			if(m_Heightmap != nullptr)
-			{
-				ScopeTimer timer("Terrain generate normalmap");
-				NormalMapRenderer nmr;
-				m_Normalmap = nmr.Render(m_Heightmap, m_Heightmap->width, 10);
-			}
-		}
-
 		data.Serialize("Tesselation factor", m_TessFactor);
 		data.Serialize("Tesselation slope", m_TessSlope);
 		data.Serialize("Tesselation shift", m_TessShift);
 		data.Serialize("TBN range", m_TbnRange);
+
+		bool recalculateNormals = data.Serialize("Normal strength", m_NormalStrength);
 
 		if (data.Serialize("Target", m_TargetName))
 		{
@@ -123,15 +113,40 @@ namespace EVA
 			}
 		}
 
-		data.Serialize("Lod distances", m_LodDistances);
+		auto path = m_Heightmap != nullptr ? m_Heightmap->path : "";
+		if (data.Serialize("Heightmap", path))
+		{
+			m_Heightmap = TextureManager::LoadTexture(path, TextureWrapping::ClampToEdge, TextureMinFilter::Linear, TextureMagFilter::Linear);
+			recalculateNormals = true;
+		}
 
 		auto materialPath = m_Materials[0] != nullptr ? m_Materials[0]->path : "";
-		if (data.Serialize("material", materialPath))
+		if (data.Serialize("material0", materialPath))
 			m_Materials[0] = std::dynamic_pointer_cast<StandardMaterial>(MaterialManager::LoadMaterial(materialPath));
 
 		materialPath = m_Materials[1] != nullptr ? m_Materials[1]->path : "";
-		if (data.Serialize("material", materialPath))
+		if (data.Serialize("material1", materialPath))
 			m_Materials[1] = std::dynamic_pointer_cast<StandardMaterial>(MaterialManager::LoadMaterial(materialPath));
+
+		materialPath = m_Materials[2] != nullptr ? m_Materials[2]->path : "";
+		if (data.Serialize("material2", materialPath))
+			m_Materials[2] = std::dynamic_pointer_cast<StandardMaterial>(MaterialManager::LoadMaterial(materialPath));
+
+		data.Serialize("Lod distances", m_LodDistances);
+
+		if (recalculateNormals && m_Heightmap != nullptr)
+		{
+			{
+				ScopeTimer timer("Terrain generate normalmap");
+				NormalMapRenderer nmr;
+				m_Normalmap = nmr.Render(m_Heightmap, m_Heightmap->width, m_NormalStrength);
+			}
+			{
+				ScopeTimer timer("Terrain generate splatmap");
+				SplatMapRenderer smr;
+				m_Splatmap = smr.Render(m_Normalmap, m_Normalmap->width);
+			}
+		}
 	}
 
 	std::vector<glm::vec2> Terrain::GeneratePatch()

@@ -20,11 +20,13 @@ out vec3 tangentFrag;
 
 uniform mat4 viewProjection;
 uniform sampler2D normalmap;
+uniform sampler2D splatmap;
 uniform vec3 cameraPosition;
-uniform Material materials[2];
+uniform Material materials[3];
 uniform int tbnRange;
 
 vec3 tangent;
+vec3 displacement[3];
 
 void calcTangent()
 {	
@@ -48,16 +50,14 @@ void calcTangent()
 	tangent = normalize((e1 * deltaUV2.y - e2 * deltaUV1.y)*r);
 }
 
-vec3 displacement[3];
-
-
 void main() {
 
-	for (int i = 0; i < 3; ++i){
-		displacement[i] = vec3(0,0,0);
+	for (int i = 0; i < 3; ++i)
+	{
+		displacement[i] = vec3(0);
 	}
 
-	float dist = (distance(gl_in[0].gl_Position.xyz, cameraPosition) + distance(gl_in[1].gl_Position.xyz, cameraPosition) + distance(gl_in[2].gl_Position.xyz, cameraPosition))/3;
+	float dist = (distance(gl_in[0].gl_Position.xyz, cameraPosition) + distance(gl_in[1].gl_Position.xyz, cameraPosition) + distance(gl_in[2].gl_Position.xyz, cameraPosition)) / 3;
 	
 	if (dist < tbnRange){
 	
@@ -71,24 +71,19 @@ void main() {
 			
 			vec3 normal = normalize(texture(normalmap, uvGeo[k]).rbg);
 			
-			float[2] materialAlpha = float[](0,0);
-	
-			if (normal.y > 0.5){
-				materialAlpha[1] = 1;
-			}
-			else{
-				materialAlpha[0] = 1;
-			}
+			vec4 blendValues = texture(splatmap, uvGeo[k]).rgba;
+			float[4] blendValuesArray = float[](blendValues.r, blendValues.g, blendValues.b, blendValues.a);
 			
 			float scale = 0;
-			for (int i=0; i<2; i++){
+			for (int i = 0; i < 3; i++)
+			{
 				scale += texture(materials[i].heightmap, uvGeo[k]
 							* materials[i].tiling).r 
 							* materials[i].heightScale 
-							* materialAlpha[i];
+							* blendValuesArray[i];
 			}
 						
-			float attenuation = clamp(- distance(gl_in[k].gl_Position.xyz, cameraPosition)/(tbnRange-50) + 1,0.0,1.0);
+			float attenuation = clamp(-distance(gl_in[k].gl_Position.xyz, cameraPosition) / (tbnRange - 50) + 1, 0.0, 1.0);
 			scale *= attenuation;
 
 			displacement[k] *= scale;
@@ -97,7 +92,7 @@ void main() {
 	
 	for (int i = 0; i < gl_in.length(); ++i)
 	{
-		vec4 worldPos = gl_in[i].gl_Position + vec4(displacement[i],0);
+		vec4 worldPos = gl_in[i].gl_Position + vec4(displacement[i], 0);
 		gl_Position = viewProjection * worldPos;
 		uvFrag = uvGeo[i];
 		posFrag = (worldPos).xyz;
