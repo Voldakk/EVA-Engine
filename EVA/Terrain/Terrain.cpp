@@ -20,8 +20,8 @@ namespace EVA
 		//m_materials = std::make_shared<DiffNormHeightMaterial>();
 		m_Material = std::make_shared<TerrainMaterial>();
 		m_Material->SetTerrain(this);
-		m_Material->shader = ShaderManager::LoadShader("./assets/standard assets/shaders/terrain.shader");
 		m_Material->SetUseInstancing(true);
+		m_Material->shader = ShaderManager::LoadShader(m_ShaderPath);
 
 		auto v = GeneratePatch();
 		m_Mesh = std::make_shared<TerrainMesh>(v);
@@ -111,6 +111,12 @@ namespace EVA
 				m_TargetName = "";
 				m_Target = nullptr;
 			}
+		}
+
+		if (data.Serialize("shader", m_ShaderPath))
+		{
+			if(m_Material != nullptr)
+				m_Material->shader = ShaderManager::LoadShader(m_ShaderPath);
 		}
 
 		auto path = m_Heightmap != nullptr ? m_Heightmap->path : "";

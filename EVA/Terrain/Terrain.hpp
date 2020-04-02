@@ -17,6 +17,7 @@ namespace EVA
 		std::unique_ptr<Quadtree> m_Quadtree;
 
 		std::shared_ptr<TerrainMaterial> m_Material = nullptr;
+		FS::path m_ShaderPath;
 		std::shared_ptr<TerrainMesh> m_Mesh = nullptr;
 
 		std::vector<TerrainMeshData> m_MeshData;
