@@ -7,7 +7,8 @@ namespace EVA
 {
 	enum class TextureType
 	{
-		Diffuse, Specular, Normal, Emission, Height
+		Diffuse, Specular, Normal, Emission, Height, 
+		Albedo, Metallic, Roughness, AO
 	};
 
 	enum class TextureTarget
