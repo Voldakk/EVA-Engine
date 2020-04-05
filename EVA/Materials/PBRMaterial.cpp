@@ -33,7 +33,7 @@ namespace EVA
 	{
 		Material::Serialize(data);
 
-		data.Serialize("tintDiffuse", tint);
+		data.Serialize("tint", tint);
 		data.Serialize("tiling", tiling);
 
 		auto path = albedoMap != nullptr ? albedoMap->path : "";

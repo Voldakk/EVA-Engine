@@ -1,25 +1,22 @@
 {
-  "id": "EVA::StandardMaterial",
-  "shader": "./assets/standard assets/shaders/standard.shader",
-  "useInstancing": false,
-  "cullFront": false,
-  "cullBack": true,
-  "tintDiffuse": [
-    1.0,
-    1.0,
-    1.0,
-    1.0
-  ],
-  "tiling": [
-    400.0,
-    400.0
-  ],
-  "heightScale": 0.8,
-  "shininess": 32.0,
-  "alphaCutoff": 0.0,
-  "textureDiffuse": "./assets/terrain/sand/Ground_11_DIF.jpg",
-  "textureSpecular": "",
-  "textureNormal": "./assets/terrain/sand/Ground_11_NRM.jpg",
-  "textureEmission": "",
-  "textureHeight": "./assets/terrain/sand/Ground_11_DISP.jpg"
+    "id": "EVA::PBRMaterial",
+    "shader": "./assets/standard assets/shaders/pbr.shader",
+    "useInstancing": false,
+    "cullFront": false,
+    "cullBack": true,
+    "tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+    ],
+    "tiling": [
+        200.0,
+        200.0
+    ],
+    "albedoMap": "./assets/terrain/sand/color.jpg",
+    "metallicMap": "",
+    "roughnessMap": "./assets/terrain/sand/roughness.jpg",
+    "aoMap": "./assets/terrain/sand/ao.jpg",
+    "normalMap": "./assets/terrain/sand/normal.jpg"
 }

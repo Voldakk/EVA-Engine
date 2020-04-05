@@ -1,10 +1,10 @@
 {
-    "id": "EVA::StandardMaterial",
-    "shader": "./assets/standard assets/shaders/standard.shader",
+    "id": "EVA::PBRMaterial",
+    "shader": "./assets/standard assets/shaders/pbr.shader",
     "useInstancing": false,
     "cullFront": false,
     "cullBack": true,
-    "tintDiffuse": [
+    "tint": [
         1.0,
         1.0,
         1.0,
@@ -14,12 +14,9 @@
         200.0,
         200.0
     ],
-    "heightScale": 1.0,
-    "shininess": 32.0,
-    "alphaCutoff": 0.0,
-    "textureDiffuse": "./assets/terrain/ground_forest/GroundForest003_COL_VAR1_1K.jpg",
-    "textureSpecular": "",
-    "textureNormal": "./assets/terrain/ground_forest/GroundForest003_NRM_1K.jpg",
-    "textureEmission": "",
-    "textureHeight": "./assets/terrain/ground_forest/GroundForest003_DISP_1K.jpg"
+    "albedoMap": "./assets/terrain/ground_forest/albedo.jpg",
+    "metallicMap": "",
+    "roughnessMap": "./assets/terrain/ground_forest/roughness.jpg",
+    "aoMap": "./assets/terrain/ground_forest/ao.jpg",
+    "normalMap": "./assets/terrain/ground_forest/normal.jpg"
 }
