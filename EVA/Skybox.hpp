@@ -32,6 +32,8 @@ namespace EVA
 		const std::string& folderPath = m_FolderPath;
 		const std::string& fileType = m_FileType;
 
+		Scene* scene;
+
 		Skybox(const std::string &folderPath, const std::string &fileType);
 		explicit Skybox(DataObject data);
 

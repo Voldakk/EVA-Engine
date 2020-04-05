@@ -12,7 +12,9 @@ namespace EVA
 		shader->SetUniformMatrix4Fv("view", Application::mainCamera->viewMatrix);
 		shader->SetUniformMatrix4Fv("projection", Application::GetPerspectiveMatrix());
 
-		shader->SetUniform4Fv("skyTint", skyTint);
+		shader->SetUniform3Fv("skyTint", skyTint);
+		shader->SetUniform3Fv("sunColor", sunColor);
+		shader->SetUniform1F("sunSize", sunSize);
 	}
 
 	void SkyBoxMaterial::SetTextures()

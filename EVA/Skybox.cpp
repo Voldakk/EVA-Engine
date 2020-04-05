@@ -33,7 +33,7 @@ namespace EVA
 			return;
 
 		m_Transform->SetPosition(Application::mainCamera->transform->position);
-		m_Material->Activate(nullptr, m_Transform.get());
+		m_Material->Activate(scene, m_Transform.get());
 
 		GLCall(glDepthMask(GL_FALSE));
 		m_Model->GetMesh(0)->Draw();
@@ -87,6 +87,10 @@ namespace EVA
 		}
 
 		if (m_Material != nullptr)
+		{
 			InspectorFields::ColorPicker("Tint", m_Material->skyTint);
+			InspectorFields::Float("Sun size", m_Material->sunSize);
+			InspectorFields::ColorPicker("Sun color", m_Material->sunColor);
+		}
 	}
 }

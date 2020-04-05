@@ -13,7 +13,9 @@ namespace EVA
 
 	public:
 
-		glm::vec4 skyTint = glm::vec4(1.0f);
+		glm::vec3 skyTint = glm::vec3(1.0f);
+		glm::vec3 sunColor = glm::vec3(1.0f);
+		float sunSize = 0.5f;
 
 		SkyBoxMaterial() = default;
 

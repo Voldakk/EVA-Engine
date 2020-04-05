@@ -38,6 +38,7 @@ namespace EVA
 		if (d.HasMember("skybox") && d["skybox"].IsObject())
 		{
 			scene->skybox = std::make_unique<Skybox>(DataObject(d["skybox"]));
+			scene->skybox->scene = scene;
 		}
 
 		// Game objects

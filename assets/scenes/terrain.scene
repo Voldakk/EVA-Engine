@@ -17,10 +17,10 @@
                 1.0
             ],
             "orientation": [
-                -0.38122719526290896,
-                0.08052140474319458,
-                -0.0333530567586422,
-                0.9203639030456543
+                -0.4829629361629486,
+                0.2241438627243042,
+                -0.1294095367193222,
+                0.836516261100769
             ],
             "components": [
                 {
@@ -104,20 +104,20 @@
                     "TBN range": 200,
                     "Normal strength": 20,
                     "Target": "",
-                    "shader": "./assets/standard assets/shaders/terrain_wireframe.shader",
-                    "Heightmap": "",
+                    "shader": "./assets/standard assets/shaders/terrain.shader",
+                    "Heightmap": "./assets/terrain/heightmaps/test.bmp",
                     "material0": "./assets/terrain/grass.mat",
                     "material1": "./assets/terrain/sand.mat",
                     "material2": "./assets/terrain/rock.mat",
                     "Lod distances": [
-                        1080,
-                        640,
-                        320,
-                        160,
-                        80,
-                        40,
-                        20,
-                        10
+                        2048,
+                        1025,
+                        512,
+                        256,
+                        128,
+                        64,
+                        30,
+                        16
                     ]
                 }
             ]
@@ -131,7 +131,7 @@
             ],
             "scale": [
                 1.0,
-                1000.0,
+                1.0,
                 1.0
             ],
             "orientation": [
@@ -145,6 +145,33 @@
                     "id": "EVA::MeshRenderer",
                     "material": "./assets/standard assets/materials/uv.mat",
                     "mesh": "./assets/standard assets/models/cube.obj",
+                    "meshIndex": 0
+                }
+            ]
+        },
+        {
+            "name": "Plane",
+            "position": [
+                0.0,
+                -1.0,
+                0.0
+            ],
+            "scale": [
+                5.0,
+                1.0,
+                5.0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/grid.mat",
+                    "mesh": "./assets/standard assets/models/plane.obj",
                     "meshIndex": 0
                 }
             ]
