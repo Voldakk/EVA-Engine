@@ -3,61 +3,56 @@
 #include "GL/glew.h"
 #include "GLCaller.hpp"
 
+#include <iostream>
+
+#define GLINTVAL(NAME) \
+private: \
+inline static int s_##NAME; \
+public: \
+inline static const int& NAME = s_##NAME;
+
+#define GETGLINTVAL(VAL, VAR) \
+GLCall(glGetIntegerv(VAL, &s_##VAR)); \
+std::cout << #VAL << " = " << s_##VAR << std::endl;
+
 class OpenGL
 {
-    inline static int s_MaxCombinedTextureImageUnits;
-    inline static int s_MaxTextureImageUnits;
+    GLINTVAL(MaxCombinedTextureImageUnits);
+    GLINTVAL(MaxTextureImageUnits);
 
-    inline static int s_MaxVertexUniformComponents;
-    inline static int s_MaxTessControlUniformComponents;
-    inline static int s_MaxTessEvaluationUniformComponents;
-    inline static int s_MaxGeometryUniformComponents;
-    inline static int s_MaxFragmentUniformComponents;
-    inline static int s_MaxComputeUniformComponents;
+    GLINTVAL(MaxVertexUniformComponents);
+    GLINTVAL(MaxTessControlUniformComponents);
+    GLINTVAL(MaxTessEvaluationUniformComponents);
+    GLINTVAL(MaxGeometryUniformComponents);
+    GLINTVAL(MaxFragmentUniformComponents);
+    GLINTVAL(MaxComputeUniformComponents);
 
-    inline static int s_MaxCombinedVertexUniformComponents;
-    inline static int s_MaxCombinedTessControlUniformComponents;
-    inline static int s_MaxCombinedTessEvaluationUniformComponents;
-    inline static int s_MaxCombinedGeometryUniformComponents;
-    inline static int s_MaxCombinedFragmentUniformComponents;
-    inline static int s_MaxCombinedComputeUniformComponents;
+    GLINTVAL(MaxCombinedVertexUniformComponents);
+    GLINTVAL(MaxCombinedTessControlUniformComponents);
+    GLINTVAL(MaxCombinedTessEvaluationUniformComponents);
+    GLINTVAL(MaxCombinedGeometryUniformComponents);
+    GLINTVAL(MaxCombinedFragmentUniformComponents);
+    GLINTVAL(MaxCombinedComputeUniformComponents);
 
 public:
 
-    inline static const int& MaxCombinedTextureImageUnits = s_MaxCombinedTextureImageUnits;
-    inline static const int& MaxTextureImageUnits = s_MaxTextureImageUnits;
-
-    inline static const int& MaxVertexUniformComponents = s_MaxVertexUniformComponents;
-    inline static const int& MaxTessControlUniformComponents = s_MaxTessControlUniformComponents;
-    inline static const int& MaxTessEvaluationUniformComponents = s_MaxTessEvaluationUniformComponents;
-    inline static const int& MaxGeometryUniformComponents = s_MaxGeometryUniformComponents;
-    inline static const int& MaxFragmentUniformComponents = s_MaxFragmentUniformComponents;
-    inline static const int& MaxComputeUniformComponents = s_MaxComputeUniformComponents;
-
-    inline static const int& MaxCombinedVertexUniformComponents = s_MaxCombinedVertexUniformComponents;
-    inline static const int& MaxCombinedTessControlUniformComponents = s_MaxCombinedTessControlUniformComponents;
-    inline static const int& MaxCombinedTessEvaluationUniformComponents = s_MaxCombinedTessEvaluationUniformComponents;
-    inline static const int& MaxCombinedGeometryUniformComponents = s_MaxCombinedGeometryUniformComponents;
-    inline static const int& MaxCombinedFragmentUniformComponents = s_MaxCombinedFragmentUniformComponents;
-    inline static const int& MaxCombinedComputeUniformComponents = s_MaxCombinedComputeUniformComponents;
-
     inline static void LoadParameters()
     {
-        GLCall(glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &s_MaxCombinedTextureImageUnits));
-        GLCall(glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &s_MaxTextureImageUnits));
+        GETGLINTVAL(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, MaxCombinedTextureImageUnits);
+        GETGLINTVAL(GL_MAX_TEXTURE_IMAGE_UNITS, MaxTextureImageUnits);
 
-        GLCall(glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS, &s_MaxVertexUniformComponents));
-        GLCall(glGetIntegerv(GL_MAX_TESS_CONTROL_UNIFORM_COMPONENTS, &s_MaxTessControlUniformComponents));
-        GLCall(glGetIntegerv(GL_MAX_TESS_EVALUATION_UNIFORM_COMPONENTS, &s_MaxTessEvaluationUniformComponents));
-        GLCall(glGetIntegerv(GL_MAX_GEOMETRY_UNIFORM_COMPONENTS, &s_MaxGeometryUniformComponents));
-        GLCall(glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_COMPONENTS, &s_MaxFragmentUniformComponents));
-        GLCall(glGetIntegerv(GL_MAX_COMPUTE_UNIFORM_COMPONENTS, &s_MaxComputeUniformComponents));
+        GETGLINTVAL(GL_MAX_VERTEX_UNIFORM_COMPONENTS, MaxVertexUniformComponents);
+        GETGLINTVAL(GL_MAX_TESS_CONTROL_UNIFORM_COMPONENTS, MaxTessControlUniformComponents);
+        GETGLINTVAL(GL_MAX_TESS_EVALUATION_UNIFORM_COMPONENTS, MaxTessEvaluationUniformComponents);
+        GETGLINTVAL(GL_MAX_GEOMETRY_UNIFORM_COMPONENTS, MaxGeometryUniformComponents);
+        GETGLINTVAL(GL_MAX_FRAGMENT_UNIFORM_COMPONENTS, MaxFragmentUniformComponents);
+        GETGLINTVAL(GL_MAX_COMPUTE_UNIFORM_COMPONENTS, MaxComputeUniformComponents);
 
-        GLCall(glGetIntegerv(GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS, &s_MaxCombinedVertexUniformComponents));
-        GLCall(glGetIntegerv(GL_MAX_COMBINED_TESS_CONTROL_UNIFORM_COMPONENTS, &s_MaxCombinedTessControlUniformComponents));
-        GLCall(glGetIntegerv(GL_MAX_COMBINED_TESS_EVALUATION_UNIFORM_COMPONENTS, &s_MaxCombinedTessEvaluationUniformComponents));
-        GLCall(glGetIntegerv(GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS, &s_MaxCombinedGeometryUniformComponents));
-        GLCall(glGetIntegerv(GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS, &s_MaxCombinedFragmentUniformComponents));
-        GLCall(glGetIntegerv(GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS, &s_MaxCombinedComputeUniformComponents));
+        GETGLINTVAL(GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS, MaxCombinedVertexUniformComponents);
+        GETGLINTVAL(GL_MAX_COMBINED_TESS_CONTROL_UNIFORM_COMPONENTS, MaxCombinedTessControlUniformComponents);
+        GETGLINTVAL(GL_MAX_COMBINED_TESS_EVALUATION_UNIFORM_COMPONENTS, MaxCombinedTessEvaluationUniformComponents);
+        GETGLINTVAL(GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS, MaxCombinedGeometryUniformComponents);
+        GETGLINTVAL(GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS, MaxCombinedFragmentUniformComponents);
+        GETGLINTVAL(GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS, MaxCombinedComputeUniformComponents);
     }
 };

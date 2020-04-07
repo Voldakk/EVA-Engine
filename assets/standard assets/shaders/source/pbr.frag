@@ -1,11 +1,16 @@
 #version 330 core
 in vec3 fragPos;
-in vec2 fragTexCoord;
 in vec3 fragNormal;
+in vec2 fragUV;
+in mat3 fragTBN;
 
 out vec4 FragColor;
 
 // material parameters
+uniform vec4 tint;
+uniform vec2 tiling;
+uniform float heightScale;
+
 uniform sampler2D albedoMap;
 uniform sampler2D normalMap;
 uniform sampler2D metallicMap;
@@ -31,27 +36,8 @@ uniform vec3 cameraPosition;
 
 const float PI = 3.14159265359;
 
-// ----------------------------------------------------------------------------
-// Easy trick to get tangent-normals to world-space to keep PBR code simplified.
-// Don't worry if you don't get what's going on; you generally want to do normal 
-// mapping the usual way for performance anways; I do plan make a note of this 
-// technique somewhere later in the normal mapping tutorial.
-vec3 getNormalFromMap()
-{
-    vec3 tangentNormal = texture(normalMap, fragTexCoord).xyz * 2.0 - 1.0;
+vec2 UV;
 
-    vec3 Q1  = dFdx(fragPos);
-    vec3 Q2  = dFdy(fragPos);
-    vec2 st1 = dFdx(fragTexCoord);
-    vec2 st2 = dFdy(fragTexCoord);
-
-    vec3 N   = normalize(fragNormal);
-    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
-    vec3 B  = -normalize(cross(N, T));
-    mat3 TBN = mat3(T, B, N);
-
-    return normalize(TBN * tangentNormal);
-}
 // ----------------------------------------------------------------------------
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
@@ -94,13 +80,18 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 }
 // ----------------------------------------------------------------------------
 void main()
-{		
-    vec3 albedo     = pow(texture(albedoMap, fragTexCoord).rgb, vec3(2.2));
-    float metallic  = texture(metallicMap, fragTexCoord).r;
-    float roughness = texture(roughnessMap, fragTexCoord).r;
-    float ao        = texture(aoMap, fragTexCoord).r;
+{	
+    UV = fragUV * tiling;
 
-    vec3 N = getNormalFromMap();
+    vec3 albedo     = pow(texture(albedoMap, UV).rgb, vec3(2.2)) * tint.rgb;
+    float metallic  = texture(metallicMap, UV).r;
+    float roughness = texture(roughnessMap, UV).r;
+    float ao        = texture(aoMap, UV).r;
+
+    vec3 N = texture(normalMap, UV).rgb;
+    N = normalize(N * 2.0 - 1.0);   
+	N = normalize(fragTBN * N);
+
     vec3 V = normalize(cameraPosition - fragPos);
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 

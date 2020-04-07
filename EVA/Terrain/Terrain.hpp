@@ -6,7 +6,7 @@
 #include "Quadtree.hpp"
 #include "TerrainMaterial.hpp"
 #include "TerrainMesh.hpp"
-#include "../Materials/StandardMaterial.hpp"
+#include "../Materials/PBRMaterial.hpp"
 
 namespace EVA
 {
@@ -31,7 +31,7 @@ namespace EVA
 
 		std::vector<int> m_LodDistances = std::vector<int>(8);
 
-		std::vector<std::shared_ptr<StandardMaterial>> m_Materials = std::vector<std::shared_ptr<StandardMaterial>>(3);
+		std::vector<std::shared_ptr<PBRMaterial>> m_Materials = std::vector<std::shared_ptr<PBRMaterial>>(3);
 
 		float m_TessFactor = 500;
 		float m_TessSlope = 2.0f;
@@ -44,7 +44,7 @@ namespace EVA
 		const std::shared_ptr<Texture>& heightmap = m_Heightmap;
 		const std::shared_ptr<Texture>& normalmap = m_Normalmap;
 		const std::shared_ptr<Texture>& splatmap = m_Splatmap;
-		const std::vector<std::shared_ptr<StandardMaterial>>& materials = m_Materials;
+		const std::vector<std::shared_ptr<PBRMaterial>>& materials = m_Materials;
 
 		const std::vector<int>& lodDistances = m_LodDistances;
 

@@ -128,15 +128,15 @@ namespace EVA
 
 		auto materialPath = m_Materials[0] != nullptr ? m_Materials[0]->path : "";
 		if (data.Serialize("material0", materialPath))
-			m_Materials[0] = std::dynamic_pointer_cast<StandardMaterial>(MaterialManager::LoadMaterial(materialPath));
+			m_Materials[0] = std::dynamic_pointer_cast<PBRMaterial>(MaterialManager::LoadMaterial(materialPath));
 
 		materialPath = m_Materials[1] != nullptr ? m_Materials[1]->path : "";
 		if (data.Serialize("material1", materialPath))
-			m_Materials[1] = std::dynamic_pointer_cast<StandardMaterial>(MaterialManager::LoadMaterial(materialPath));
+			m_Materials[1] = std::dynamic_pointer_cast<PBRMaterial>(MaterialManager::LoadMaterial(materialPath));
 
 		materialPath = m_Materials[2] != nullptr ? m_Materials[2]->path : "";
 		if (data.Serialize("material2", materialPath))
-			m_Materials[2] = std::dynamic_pointer_cast<StandardMaterial>(MaterialManager::LoadMaterial(materialPath));
+			m_Materials[2] = std::dynamic_pointer_cast<PBRMaterial>(MaterialManager::LoadMaterial(materialPath));
 
 		data.Serialize("Lod distances", m_LodDistances);
 

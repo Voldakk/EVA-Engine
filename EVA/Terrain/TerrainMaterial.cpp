@@ -26,12 +26,17 @@ namespace EVA
 					continue;
 
 				auto var = "materials[" + std::to_string(i) + "].";
-				shader->BindTexture(m_Terrain->materials[i]->textureDiffuse, var + "diffusemap");
-				shader->BindTexture(m_Terrain->materials[i]->textureNormal, var + "normalmap");
-				shader->BindTexture(m_Terrain->materials[i]->textureHeight, var + "heightmap");
 
-				shader->SetUniform1F(var + "heightScale", m_Terrain->materials[i]->heightScale);
+				shader->SetUniform4Fv(var + "tint", m_Terrain->materials[i]->tint);
 				shader->SetUniform2Fv(var + "tiling", m_Terrain->materials[i]->tiling);
+				shader->SetUniform1F(var + "heightScale", m_Terrain->materials[i]->heightScale);
+
+				shader->BindTexture(m_Terrain->materials[i]->GetAlbedoMap(), var + "albedoMap");
+				shader->BindTexture(m_Terrain->materials[i]->GetMetallicMap(), var + "metallicMap");
+				shader->BindTexture(m_Terrain->materials[i]->GetRoughnessMap(), var + "roughnessMap");
+				shader->BindTexture(m_Terrain->materials[i]->GetAOMap(), var + "aoMap");
+				shader->BindTexture(m_Terrain->materials[i]->GetNormalMap(), var + "normalMap");
+				shader->BindTexture(m_Terrain->materials[i]->GetHeightMap(), var + "heightmap");
 			}
 		}
 	}

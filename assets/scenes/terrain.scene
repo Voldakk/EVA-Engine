@@ -106,9 +106,9 @@
                     "Target": "",
                     "shader": "./assets/standard assets/shaders/terrain.shader",
                     "Heightmap": "./assets/terrain/heightmaps/test.bmp",
-                    "material0": "./assets/terrain/grass.mat",
+                    "material0": "./assets/terrain/ground_forest.mat",
                     "material1": "./assets/terrain/sand.mat",
-                    "material2": "./assets/terrain/rock.mat",
+                    "material2": "./assets/terrain/granite.mat",
                     "Lod distances": [
                         2048,
                         1025,
@@ -143,7 +143,7 @@
             "components": [
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/standard assets/materials/uv.mat",
+                    "material": "./assets/terrain/granite.mat",
                     "mesh": "./assets/standard assets/models/cube.obj",
                     "meshIndex": 0
                 }
@@ -170,9 +170,48 @@
             "components": [
                 {
                     "id": "EVA::MeshRenderer",
-                    "material": "./assets/standard assets/materials/grid.mat",
+                    "material": "./assets/terrain/sand.mat",
                     "mesh": "./assets/standard assets/models/plane.obj",
                     "meshIndex": 0
+                }
+            ]
+        },
+        {
+            "name": "New GameObject",
+            "position": [
+                0.0,
+                1.100000023841858,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::Light",
+                    "type": "point",
+                    "color": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "ambientCoefficient": 0.004999999888241291,
+                    "shadows": false,
+                    "shadowMapSize": 2048,
+                    "directionalShadowDistance": 20.0,
+                    "directionalNearPlane": 1.0,
+                    "directionalFarPlane": 100.0,
+                    "attenuation": 0.20000000298023225,
+                    "pointNearPlane": 0.10000000149011612,
+                    "pointFarPlane": 25.0
                 }
             ]
         }

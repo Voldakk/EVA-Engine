@@ -4,19 +4,21 @@
     "useInstancing": false,
     "cullFront": false,
     "cullBack": true,
+    "tiling": [
+        1.0,
+        1.0
+    ],
     "tint": [
         1.0,
         1.0,
         1.0,
         1.0
     ],
-    "tiling": [
-        200.0,
-        200.0
-    ],
+    "heightScale": 1.0,
     "albedoMap": "./assets/terrain/granite/basecolor.png",
     "metallicMap": "./assets/terrain/granite/metallic.png",
     "roughnessMap": "./assets/terrain/granite/roughness.png",
     "aoMap": "./assets/terrain/granite/ao.png",
-    "normalMap": "./assets/terrain/granite/normal.png"
+    "normalMap": "./assets/terrain/granite/normal.png",
+    "heightMap": "./assets/terrain/granite/height.png"
 }
