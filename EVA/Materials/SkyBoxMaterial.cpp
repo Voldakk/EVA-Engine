@@ -16,6 +16,6 @@ namespace EVA
 		shader->SetUniform3Fv("sunColor", sunColor);
 		shader->SetUniform1F("sunSize", sunSize);
 
-		shader->BindTexture(cubemap, "skytexture", TextureTarget::TextureCubeMap);
+		shader->BindTexture(cubemap, "skytexture");
 	}
 }

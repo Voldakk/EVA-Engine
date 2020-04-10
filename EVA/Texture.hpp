@@ -5,12 +5,6 @@
 
 namespace EVA
 {
-	enum class TextureType
-	{
-		Diffuse, Specular, Normal, Emission, Height, 
-		Albedo, Metallic, Roughness, AO
-	};
-
 	enum class TextureTarget
 	{
 		Texture1D = GL_TEXTURE_1D,
@@ -149,7 +143,7 @@ namespace EVA
 		unsigned int id{};
 		unsigned int width;
 		unsigned int height;
-		TextureType type;
+		TextureTarget target;
 		TextureWrapping wrapping;
 		TextureMinFilter minFilter;
 		TextureMagFilter magFilter;

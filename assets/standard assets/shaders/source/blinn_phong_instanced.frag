@@ -4,17 +4,15 @@
 uniform vec3 cameraPosition;
 
 // Material settings
-uniform struct Material
-{
-   sampler2D texture_diffuse;
-   sampler2D texture_specular;
-   sampler2D texture_emission;
-   sampler2D texture_normal;
+uniform vec2 tiling;
+uniform vec4 tintDiffuse;
+uniform float shininess;
 
-   vec4 tint_diffuse;
-   float shininess;
-
-} material;
+uniform sampler2D diffuseMap;
+uniform sampler2D specularMap;
+uniform sampler2D normalMap;
+uniform sampler2D emissionMap;
+uniform sampler2D heightMap;
 
 // Lights
 #define MAX_LIGHTS 10
@@ -142,7 +140,7 @@ vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera,
     vec3 diffuse = diff * diffuseMap.rgb * light.color;
 
     // Specular
-    float spec = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), material.shininess);
+    float spec = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), shininess);
     vec3 specular = spec * specularMap.rgb * light.color;
 
     return attenuation * ambient + (1.0 - shadow) * (attenuation * ( diffuse + specular));
@@ -150,17 +148,19 @@ vec3 ApplyLight(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceToCamera,
 
 void main()
 {
+    vec2 UV = fragTexCoord * tiling;
+
 	// Normal map
-    vec3 normal = texture(material.texture_normal, fragTexCoord).rgb;
+    vec3 normal = texture(normalMap, UV).rgb;
     normal = normalize(normal * 2.0 - 1.0);   
 	normal = normalize(fragTBN * normal); 
 
 	// Emission
-    vec3 linearColor = texture(material.texture_emission, fragTexCoord).rgb;
+    vec3 linearColor = texture(emissionMap, UV).rgb;
 
 	// Read diffuse and specular maps
-    vec4 diffuseMap = texture(material.texture_diffuse, fragTexCoord) * material.tint_diffuse;
-    vec3 specularMap = texture(material.texture_specular, fragTexCoord).rgb;
+    vec4 diffuseMap = texture(diffuseMap, UV) * tintDiffuse;
+    vec3 specularMap = texture(specularMap, UV).rgb;
 
 	// Lights
     vec3 surfaceToCamera = normalize(cameraPosition - fragVert);

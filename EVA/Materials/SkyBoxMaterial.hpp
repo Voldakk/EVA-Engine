@@ -1,7 +1,6 @@
 #pragma once
 
-#include "StandardMaterial.hpp"
-#include "../MaterialMap.hpp"
+#include "../Material.hpp"
 
 namespace EVA
 {

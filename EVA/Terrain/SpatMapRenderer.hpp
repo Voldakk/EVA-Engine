@@ -21,7 +21,6 @@ namespace EVA
 		std::shared_ptr<Texture> Render(std::shared_ptr<Texture> normalmap, int n)
 		{
 			auto splatmap = TextureManager::CreateTexture(n, n, TextureFormat::RGBA16F, TextureWrapping::ClampToEdge);
-			splatmap->type = TextureType::Normal;
 
 			m_shader->Bind();
 

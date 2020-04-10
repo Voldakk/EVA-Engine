@@ -182,17 +182,15 @@ namespace EVA
 		GLCall(glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, value_ptr(value)));
 	}
 
-	void Shader::BindTexture(std::shared_ptr<Texture> texture, const std::string& name, const TextureTarget target)
+	void Shader::BindTexture(std::shared_ptr<Texture> texture, const std::string& name)
 	{
-		BindTexture(texture, name, m_TextureUnit++, target);
+		BindTexture(texture, name, m_TextureUnit++);
 	}
 
-	void Shader::BindTexture(std::shared_ptr<Texture> texture, const std::string& name, const int unit, const TextureTarget target)
+	void Shader::BindTexture(std::shared_ptr<Texture> texture, const std::string& name, const int unit)
 	{
 		if (texture != nullptr)
-			BindTexture(texture->id, name, unit, target);
-		else
-			BindTexture(0, name, unit, target);
+			BindTexture(texture->id, name, unit, texture->target);
 	}
 
 	void Shader::BindTexture(unsigned int texture, const std::string& name, const TextureTarget target)

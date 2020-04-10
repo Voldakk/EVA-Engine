@@ -65,8 +65,8 @@ namespace EVA
 
 		void SetUniformMatrix4Fv(const std::string& name, glm::mat4 value);
 
-		void BindTexture(std::shared_ptr<Texture> texture, const std::string& name, const TextureTarget target = TextureTarget::Texture2D);
-		void BindTexture(std::shared_ptr<Texture> texture, const std::string& name, const int unit, const TextureTarget target = TextureTarget::Texture2D);
+		void BindTexture(std::shared_ptr<Texture> texture, const std::string& name);
+		void BindTexture(std::shared_ptr<Texture> texture, const std::string& name, const int unit);
 
 		void BindTexture(unsigned int texture, const std::string& name, const TextureTarget target = TextureTarget::Texture2D);
 		void BindTexture(unsigned int texture, const std::string& name, const int unit, const TextureTarget target = TextureTarget::Texture2D);

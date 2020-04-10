@@ -17,7 +17,8 @@ namespace EVA
 	 */
 	class Skybox
 	{
-		std::shared_ptr<Texture> m_Texture;
+		std::shared_ptr<Texture> m_EnvironmentMap;
+		std::shared_ptr<Texture> m_IrradianceMap;
 
 		std::shared_ptr<Model> m_Model;
 		std::unique_ptr<SkyBoxMaterial> m_Material;

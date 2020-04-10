@@ -37,10 +37,11 @@ namespace EVA
 		std::cout << "TextureManager::LoadTexture - Loading texture: " << FileSystem::ToString(path) << "\n";
 
 		auto texture = std::make_shared<Texture>();
+		texture->path = path;
 		texture->wrapping = wrapping;
 		texture->minFilter = minFilter;
 		texture->magFilter = magFilter;
-		texture->path = path;
+		texture->target = TextureTarget::Texture2D;
 
 		// Load the image
 		stbi_set_flip_vertically_on_load(true);
@@ -104,10 +105,11 @@ namespace EVA
 			return m_Textures[path];
 
 		auto texture = std::make_shared<Texture>();
+		texture->path = path;
 		texture->wrapping = wrapping;
 		texture->minFilter = minFilter;
 		texture->magFilter = magFilter;
-		texture->path = path;
+		texture->target = TextureTarget::TextureCubeMap;
 
 		// Create texture
 		GLCall(glActiveTexture(GL_TEXTURE0));
@@ -205,6 +207,7 @@ namespace EVA
 		texture->minFilter = minFilter;
 		texture->magFilter = magFilter;
 		texture->format = format;
+		texture->target = TextureTarget::Texture2D;
 
 		// Create texture
 		GLCall(glGenTextures(1, &texture->id));
@@ -230,6 +233,7 @@ namespace EVA
 		texture->minFilter = minFilter;
 		texture->magFilter = magFilter;
 		texture->format = format;
+		texture->target = TextureTarget::TextureCubeMap;
 
 		// Create texture
 		glGenTextures(1, &texture->id);

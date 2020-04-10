@@ -9,7 +9,7 @@
 #include "TextureManager.hpp"
 #include "ShaderManager.hpp"
 
-#include "Utilities/EquirectangularToCubemap.hpp"
+#include "Utilities/TextureUtilities.hpp"
 
 namespace EVA
 {
@@ -39,7 +39,7 @@ namespace EVA
 
 	void Skybox::Render() const
 	{
-		if (m_Texture == nullptr)
+		if (m_EnvironmentMap == nullptr)
 			return;
 
 		m_Transform->SetPosition(Application::mainCamera->transform->position);
@@ -59,32 +59,34 @@ namespace EVA
 		{
 			m_HdrPath = filePath;
 
-			m_Texture = EquirectangularToCubemap::Convert(512, hdrTexture);
-			m_Material->cubemap = m_Texture;
+			m_EnvironmentMap = TextureUtilities::EquirectangularToCubemap(hdrTexture);
+			m_IrradianceMap = TextureUtilities::ConvoluteCubemap(m_EnvironmentMap);
+
+			m_Material->cubemap = m_IrradianceMap;
 			m_Material->shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "skybox.shader");
 		}
 		else
 		{
-			m_Texture = nullptr;
+			m_EnvironmentMap = nullptr;
 			m_HdrPath = "";
 		}
 	}
 
 	void Skybox::Set(const std::string& folderPath, const std::string& fileType)
 	{
-		m_Texture = TextureManager::LoadTextureCubemap(folderPath, fileType);
+		m_EnvironmentMap = TextureManager::LoadTextureCubemap(folderPath, fileType);
 		
-		if (m_Texture != nullptr)
+		if (m_EnvironmentMap != nullptr)
 		{
 			m_FolderPath = folderPath;
 			m_FileType = fileType;
 
-			m_Material->cubemap = m_Texture;
+			m_Material->cubemap = m_EnvironmentMap;
 			m_Material->shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "skybox.shader");
 		}
 		else
 		{
-			m_Texture = nullptr;
+			m_EnvironmentMap = nullptr;
 			m_FolderPath = "";
 			m_FileType = "";
 		}

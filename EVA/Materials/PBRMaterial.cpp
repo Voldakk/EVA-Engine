@@ -24,7 +24,6 @@ namespace EVA
 		shader->SetUniform2Fv("tiling", tiling);
 		shader->SetUniform1F("heightScale", heightScale);
 
-
 		shader->BindTexture(GetAlbedoMap(), "albedoMap");
 		shader->BindTexture(GetMetallicMap(), "metallicMap");
 		shader->BindTexture(GetRoughnessMap(), "roughnessMap");
