@@ -35,6 +35,9 @@ namespace EVA
 
 	public:
 
+		const std::shared_ptr<Texture>& environmentMap = m_EnvironmentMap;
+		const std::shared_ptr<Texture>& irradianceMap = m_IrradianceMap;
+
 		const std::string& folderPath = m_FolderPath;
 		const std::string& fileType = m_FileType;
 

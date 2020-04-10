@@ -62,7 +62,7 @@ namespace EVA
 			m_EnvironmentMap = TextureUtilities::EquirectangularToCubemap(hdrTexture);
 			m_IrradianceMap = TextureUtilities::ConvoluteCubemap(m_EnvironmentMap);
 
-			m_Material->cubemap = m_IrradianceMap;
+			m_Material->cubemap = m_EnvironmentMap;
 			m_Material->shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "skybox.shader");
 		}
 		else

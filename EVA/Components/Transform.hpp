@@ -62,6 +62,8 @@ namespace EVA
 		 */
 		Transform();
 
+		void Awake() override;
+
 		/**
 		* \brief Translates the transform by the given offset
 		* \param offset The amount the transform should be translated

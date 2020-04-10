@@ -1,5 +1,7 @@
 #include "PBRMaterial.hpp"
 
+#include "../Scene.hpp"
+
 namespace EVA
 {
 	PBRMaterial::PBRMaterial()
@@ -30,6 +32,11 @@ namespace EVA
 		shader->BindTexture(GetAOMap(), "aoMap");
 		shader->BindTexture(GetNormalMap(), "normalMap");
 		shader->BindTexture(GetHeightMap(), "heightMap");
+
+		if (scene != nullptr && scene->skybox != nullptr)
+		{
+			shader->BindTexture(scene->skybox->irradianceMap, "irradianceMap");
+		}
 	}
 
 	void PBRMaterial::Serialize(DataObject& data)

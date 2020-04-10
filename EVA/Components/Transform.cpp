@@ -14,6 +14,13 @@ namespace EVA
 		UpdateModelMatrix();
 	}
 
+	void Transform::Awake()
+	{
+		SetPosition(m_LocalPosition);
+		SetOrientation(m_LocalOrientation);
+		SetScale(m_LocalScale);
+	}
+
 	void Transform::Translate(const glm::vec3 offset)
 	{
 		m_LocalPosition += offset;

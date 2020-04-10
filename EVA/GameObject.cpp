@@ -13,6 +13,7 @@ namespace EVA
 
 	void GameObject::Awake()
 	{
+		m_Transform->Awake();
 		for (auto &component : m_Components)
 		{
 			component->Awake();
@@ -21,6 +22,7 @@ namespace EVA
 
 	void GameObject::Start()
 	{
+		m_Transform->Start();
 		for (auto &component : m_Components)
 		{
 			component->Start();

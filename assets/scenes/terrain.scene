@@ -118,16 +118,16 @@
                         256,
                         128,
                         64,
-                        30,
+                        32,
                         16
                     ]
                 }
             ]
         },
         {
-            "name": "Cube 7,0",
+            "name": "Cube 0,0",
             "position": [
-                7.0,
+                0.0,
                 0.0,
                 0.0
             ],
@@ -154,8 +154,8 @@
         {
             "name": "Plane",
             "position": [
-                7.0,
-                -1.0,
+                0.0,
+                0.0,
                 0.0
             ],
             "scale": [
@@ -179,9 +179,9 @@
             ]
         },
         {
-            "name": "New GameObject",
+            "name": "Point light",
             "position": [
-                7.0,
+                0.0,
                 1.100000023841858,
                 0.0
             ],
@@ -214,33 +214,6 @@
                     "attenuation": 0.20000000298023225,
                     "pointNearPlane": 0.10000000149011612,
                     "pointFarPlane": 25.0
-                }
-            ]
-        },
-        {
-            "name": "New GameObject1",
-            "position": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "orientation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "id": "EVA::MeshRenderer",
-                    "material": "./assets/standard assets/materials/equirectangular_cube.mat",
-                    "mesh": "./assets/standard assets/models/cube.obj",
-                    "meshIndex": 0
                 }
             ]
         }
