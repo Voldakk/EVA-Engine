@@ -7,22 +7,23 @@ namespace EVA
 {
 	class FrameBufferRenderBuffer
 	{
-		int m_Size;
+		int m_Width, m_Height;
 		unsigned int m_FrameBufferId{};
 		unsigned int m_RenderBufferId{};
 
 	public:
-		FrameBufferRenderBuffer(int size) : m_Size(size)
+		FrameBufferRenderBuffer(int width, int height) : m_Width(width), m_Height(height)
 		{
 			glGenFramebuffers(1, &m_FrameBufferId);
 			glGenRenderbuffers(1, &m_RenderBufferId);
 
 			glBindFramebuffer(GL_FRAMEBUFFER, m_FrameBufferId);
 			glBindRenderbuffer(GL_RENDERBUFFER, m_RenderBufferId);
-			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, m_Size, m_Size);
+			glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, m_Width, m_Height);
 			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RenderBufferId);
 		}
 
+		FrameBufferRenderBuffer(int size) : FrameBufferRenderBuffer(size, size) {}
 
 		virtual ~FrameBufferRenderBuffer()
 		{
@@ -32,7 +33,7 @@ namespace EVA
 
 		void Bind()
 		{
-			glViewport(0, 0, m_Size, m_Size);
+			glViewport(0, 0, m_Width, m_Height);
 			glBindFramebuffer(GL_FRAMEBUFFER, m_FrameBufferId);
 		}
 
