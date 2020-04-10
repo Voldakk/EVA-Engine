@@ -206,7 +206,7 @@ namespace EVA
 				{
 					if (ImGui::MenuItem("Skybox"))
 					{
-						m_Editor->skybox = std::make_unique<EVA::Skybox>("", "");
+						m_Editor->skybox = std::make_unique<EVA::Skybox>();
 					}
 				}
 

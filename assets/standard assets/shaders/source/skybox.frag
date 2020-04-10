@@ -30,6 +30,9 @@ uniform struct Light
 void main()
 {
 	vec3 color = texture(skytexture, fragTexCoord).xyz * skyTint; 
+    color = color / (color + vec3(1.0));
+    color = pow(color, vec3(1.0/2.2)); 
+
     if (numLights > 0 && allLights[0].position.w != 1.0)
     {
         float deg = acos(dot(normalize(allLights[0].position.xyz), normalize(fragPos.xyz)));

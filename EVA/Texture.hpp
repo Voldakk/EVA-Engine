@@ -50,7 +50,7 @@ namespace EVA
 		Linear = GL_LINEAR
 	};
 
-	enum class TextureFormat : GLenum
+	enum class TextureFormat
 	{
 		R8 = GL_R8,
 		R8_SNORM = GL_R8_SNORM,
@@ -119,6 +119,30 @@ namespace EVA
 		RGBA = GL_RGBA,
 	};
 
+	enum class TextureDataType
+	{
+		UnsignedByte = GL_UNSIGNED_BYTE,
+		Byte = GL_BYTE,
+		UnsignedShort = GL_UNSIGNED_SHORT,
+		Short = GL_SHORT,
+		UnsignedInt = GL_UNSIGNED_INT,
+		Int = GL_INT,
+		HalfFloat = GL_HALF_FLOAT,
+		Float = GL_FLOAT,
+		UnsignedByte332 = GL_UNSIGNED_BYTE_3_3_2,
+		UnsignedByte233Rev = GL_UNSIGNED_BYTE_2_3_3_REV,
+		UnsignedShort565 = GL_UNSIGNED_SHORT_5_6_5,
+		UnsignedShort565Rev = GL_UNSIGNED_SHORT_5_6_5_REV,
+		UnsignedShort4444 = GL_UNSIGNED_SHORT_4_4_4_4,
+		UnsignedShort4444Rev = GL_UNSIGNED_SHORT_4_4_4_4_REV,
+		UnsignedShort5551 = GL_UNSIGNED_SHORT_5_5_5_1,
+		UnsignedShort1555Rev = GL_UNSIGNED_SHORT_1_5_5_5_REV,
+		UnsignedInt8888 = GL_UNSIGNED_INT_8_8_8_8,
+		UnsignedInt8888Rev = GL_UNSIGNED_INT_8_8_8_8_REV,
+		UnsignedInt1010102 = GL_UNSIGNED_INT_10_10_10_2,
+		UnsignedInt2101010Rev = GL_UNSIGNED_INT_2_10_10_10_REV
+	};
+
 	// Struct for holding texture info
 	struct Texture
 	{
@@ -153,4 +177,183 @@ namespace EVA
 			stbi_image_free(data);
 		}
 	};
+
+	inline TextureFormat GetTextureFormat(TextureFormat format)
+	{
+		switch (format)
+		{
+		case TextureFormat::RED:
+		case TextureFormat::R8:
+		case TextureFormat::R8_SNORM:
+		case TextureFormat::R16:
+		case TextureFormat::R16_SNORM:
+		case TextureFormat::R16F:
+		case TextureFormat::R32F:
+		case TextureFormat::R8I:
+		case TextureFormat::R8UI:
+		case TextureFormat::R16I:
+		case TextureFormat::R16UI:
+		case TextureFormat::R32I:
+		case TextureFormat::R32UI:
+			return TextureFormat::RED;
+
+		case TextureFormat::RG:
+		case TextureFormat::RG8:
+		case TextureFormat::RG8_SNORM:
+		case TextureFormat::RG16:
+		case TextureFormat::RG16_SNORM:
+		case TextureFormat::RG16F:
+		case TextureFormat::RG32F:
+		case TextureFormat::RG8I:
+		case TextureFormat::RG8UI:
+		case TextureFormat::RG16I:
+		case TextureFormat::RG16UI:
+		case TextureFormat::RG32I:
+		case TextureFormat::RG32UI:
+			return TextureFormat::RG;
+
+		case TextureFormat::RGB:
+		case TextureFormat::R3_G3_B2:
+		case TextureFormat::RGB4:
+		case TextureFormat::RGB5:
+		case TextureFormat::RGB8:
+		case TextureFormat::RGB8_SNORM:
+		case TextureFormat::RGB10:
+		case TextureFormat::RGB12:
+		case TextureFormat::RGB16_SNORM:
+		case TextureFormat::RGBA2:
+		case TextureFormat::RGBA4:
+		case TextureFormat::SRGB8:
+		case TextureFormat::RGB16F:
+		case TextureFormat::RGB32F:
+		case TextureFormat::R11F_G11F_B10F:
+		case TextureFormat::RGB9_E5:
+		case TextureFormat::RGB8I:
+		case TextureFormat::RGB8UI:
+		case TextureFormat::RGB16I:
+		case TextureFormat::RGB16UI:
+		case TextureFormat::RGB32I:
+		case TextureFormat::RGB32UI:
+			return TextureFormat::RGB;
+
+		case TextureFormat::RGBA:
+		case TextureFormat::RGB5_A1:
+		case TextureFormat::RGBA8:
+		case TextureFormat::RGBA8_SNORM:
+		case TextureFormat::RGB10_A2:
+		case TextureFormat::RGB10_A2UI:
+		case TextureFormat::RGBA12:
+		case TextureFormat::RGBA16:
+		case TextureFormat::SRGB8_ALPHA8:
+		case TextureFormat::RGBA16F:
+		case TextureFormat::RGBA32F:
+		case TextureFormat::RGBA8I:
+		case TextureFormat::RGBA8UI:
+		case TextureFormat::RGBA16I:
+		case TextureFormat::RGBA16UI:
+		case TextureFormat::RGBA32I:
+		case TextureFormat::RGBA32UI:
+			return TextureFormat::RGBA;
+
+		default:
+			throw;
+		}
+	}
+
+	inline TextureDataType GetTextureDataType(TextureFormat format)
+	{
+		switch (format)
+		{
+		case TextureFormat::RED:
+		case TextureFormat::RG:
+		case TextureFormat::RGB:
+		case TextureFormat::RGBA:
+		case TextureFormat::R8:
+		case TextureFormat::RG8:
+		case TextureFormat::RGB8:
+		case TextureFormat::RGBA8:
+		case TextureFormat::R8UI:
+		case TextureFormat::RG8UI:
+		case TextureFormat::RGB8UI:
+		case TextureFormat::RGBA8UI:
+		case TextureFormat::SRGB8:
+		case TextureFormat::SRGB8_ALPHA8:
+			return TextureDataType::UnsignedByte;
+
+		case TextureFormat::R8I:
+		case TextureFormat::RG8I:
+		case TextureFormat::RGB8I:
+		case TextureFormat::RGBA8I:
+		case TextureFormat::R8_SNORM:
+		case TextureFormat::RG8_SNORM:
+		case TextureFormat::RGB8_SNORM:
+		case TextureFormat::RGBA8_SNORM:
+			return TextureDataType::Byte;
+
+		case TextureFormat::R16:
+		case TextureFormat::RG16:
+		case TextureFormat::RGB16_SNORM:
+		case TextureFormat::RGBA16:
+		case TextureFormat::R16UI:
+		case TextureFormat::RG16UI:
+		case TextureFormat::RGB16UI:
+		case TextureFormat::RGBA16UI:
+			return TextureDataType::UnsignedShort;
+
+		case TextureFormat::R16I:
+		case TextureFormat::RG16I:
+		case TextureFormat::RGB16I:
+		case TextureFormat::RGBA16I:
+		case TextureFormat::R16_SNORM:
+		case TextureFormat::RG16_SNORM:
+			return TextureDataType::Short;
+
+		case TextureFormat::R32I:
+		case TextureFormat::RG32I:
+		case TextureFormat::RGB32I:
+		case TextureFormat::RGBA32I:
+			return TextureDataType::Int;
+
+		case TextureFormat::R32UI:
+		case TextureFormat::RG32UI:
+		case TextureFormat::RGB32UI:
+		case TextureFormat::RGBA32UI:
+			return TextureDataType::UnsignedInt;
+
+		case TextureFormat::R16F:
+		case TextureFormat::RG16F:
+		case TextureFormat::RGB16F:
+		case TextureFormat::RGBA16F:
+			//return TextureDataType::HalfFloat;
+
+		case TextureFormat::R32F:
+		case TextureFormat::RG32F:
+		case TextureFormat::RGB32F:
+		case TextureFormat::RGBA32F:
+			return TextureDataType::Float;
+
+		case TextureFormat::R3_G3_B2:
+			return TextureDataType::UnsignedByte332;
+
+		case TextureFormat::RGB5_A1:
+			return TextureDataType::UnsignedShort5551;
+
+		case TextureFormat::RGB10_A2:
+		case TextureFormat::RGB10_A2UI:
+			return TextureDataType::UnsignedInt1010102;
+
+		case TextureFormat::RGB4:
+		case TextureFormat::RGB5:
+		case TextureFormat::RGB10:
+		case TextureFormat::RGB12:
+		case TextureFormat::RGBA2:
+		case TextureFormat::RGBA4:
+		case TextureFormat::R11F_G11F_B10F:
+		case TextureFormat::RGB9_E5:
+		case TextureFormat::RGBA12:
+
+		default:
+			throw;
+		}
+	}
 }

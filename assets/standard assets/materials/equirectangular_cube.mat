@@ -1,0 +1,19 @@
+{
+  "id": "EVA::PBRMaterial",
+  "shader": "./assets/standard assets/shaders/equirectangular_cube.shader",
+  "useInstancing": false,
+  "cullFront": false,
+  "cullBack": true,
+  "tiling": [
+    1.0,
+    1.0
+  ],
+  "tint": [
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "heightScale": 1.0,
+  "albedoMap": "./assets/standard assets/skybox/GCanyon_C_YumaPoint_3k.hdr"
+}

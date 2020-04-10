@@ -9,22 +9,32 @@
 #include "TextureManager.hpp"
 #include "ShaderManager.hpp"
 
+#include "Utilities/EquirectangularToCubemap.hpp"
+
 namespace EVA
 {
-	Skybox::Skybox(const std::string &folderPath, const std::string &fileType)
+	Skybox::Skybox()
 	{
-		Set(folderPath, fileType);
+		m_Hdr = true;
 
-		// Mesh
 		m_Model = ModelManager::Primitive(ModelManager::CubeInverted);
-
-		// Transform
 		m_Transform = std::make_unique<Transform>();
+		m_Material = std::make_unique<SkyBoxMaterial>();
 	}
 
-	Skybox::Skybox(DataObject data) : Skybox(data.Get("folderPath", std::string("")), data.Get("fileExtension", std::string("")))
+	Skybox::Skybox(DataObject data) : Skybox()
 	{
+		m_Hdr = data.Get("folderPath", true);
 
+		m_HdrPath = data.Get("hdrPath", std::string(""));
+
+		m_FolderPath = data.Get("folderPath", std::string(""));
+		m_FileType = data.Get("fileExtension", std::string(""));
+
+		if (m_Hdr)
+			Set(m_HdrPath);
+		else
+			Set(folderPath, fileType);
 	}
 
 	void Skybox::Render() const
@@ -35,26 +45,49 @@ namespace EVA
 		m_Transform->SetPosition(Application::mainCamera->transform->position);
 		m_Material->Activate(scene, m_Transform.get());
 
+		GLCall(glDepthFunc(GL_LEQUAL));
 		GLCall(glDepthMask(GL_FALSE));
 		m_Model->GetMesh(0)->Draw();
 		GLCall(glDepthMask(GL_TRUE));
 	}
 
+	void Skybox::Set(const FS::path& filePath)
+	{
+		auto hdrTexture = TextureManager::LoadTexture(filePath, TextureWrapping::ClampToEdge, TextureMinFilter::Linear, TextureMagFilter::Linear);
+
+		if (hdrTexture != nullptr)
+		{
+			m_HdrPath = filePath;
+
+			m_Texture = EquirectangularToCubemap::Convert(512, hdrTexture);
+			m_Material->cubemap = m_Texture;
+			m_Material->shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "skybox.shader");
+		}
+		else
+		{
+			m_Texture = nullptr;
+			m_HdrPath = "";
+		}
+	}
+
 	void Skybox::Set(const std::string& folderPath, const std::string& fileType)
 	{
-		m_FolderPath = folderPath;
-		m_FileType = fileType;
-
-		m_Material = std::make_unique<SkyBoxMaterial>();
-
-		// Texture
 		m_Texture = TextureManager::LoadTextureCubemap(folderPath, fileType);
+		
 		if (m_Texture != nullptr)
 		{
-			m_Texture->type = TextureType::Diffuse;
-			m_Material->SetTexture(m_Texture);
+			m_FolderPath = folderPath;
+			m_FileType = fileType;
+
+			m_Material->cubemap = m_Texture;
+			m_Material->shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "skybox.shader");
 		}
-		m_Material->shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "skybox.shader");
+		else
+		{
+			m_Texture = nullptr;
+			m_FolderPath = "";
+			m_FileType = "";
+		}
 	}
 
 	void Skybox::SetTint(const glm::vec4 tint) const
@@ -71,19 +104,36 @@ namespace EVA
 
 	void Skybox::Save(DataObject& data) const
 	{
-		if (!m_FolderPath.empty())
-			data.Set("folderPath", m_FolderPath);
+		data.Set("hdr", m_Hdr);
 
-		if (!m_FolderPath.empty())
+		if (!m_HdrPath.empty())
+			data.Set("hdrPath", m_HdrPath);
+
+		if (!m_FolderPath.empty()) 
+		{
+			data.Set("folderPath", m_FolderPath);
 			data.Set("fileExtension", m_FileType);
+		}
 	}
 
 	void Skybox::DrawInspector()
 	{
-		if (InspectorFields::DragDropTargetString("Folder path", m_FolderPath, "folder") ||
-			InspectorFields::EnterString("File type", m_FileType))
+		InspectorFields::Default("HDR", m_Hdr);
+
+		if (m_Hdr)
 		{
-			Set(m_FolderPath, m_FileType);
+			if (InspectorFields::Default("HDR", m_HdrPath))
+			{
+				Set(m_HdrPath);
+			}
+		}
+		else
+		{
+			if (InspectorFields::DragDropTargetString("Folder path", m_FolderPath, "folder") ||
+				InspectorFields::EnterString("File type", m_FileType))
+			{
+				Set(m_FolderPath, m_FileType);
+			}
 		}
 
 		if (m_Material != nullptr)

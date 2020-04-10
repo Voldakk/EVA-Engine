@@ -1,5 +1,7 @@
 {
     "skybox": {
+        "hdr": true,
+        "hdrPath": "./assets/standard assets/skybox/GCanyon_C_YumaPoint_3k.hdr",
         "folderPath": "./assets/standard assets/skybox",
         "fileExtension": ".png"
     },
@@ -17,10 +19,10 @@
                 1.0
             ],
             "orientation": [
-                -0.4829629361629486,
-                0.2241438627243042,
-                -0.1294095367193222,
-                0.836516261100769
+                -0.21130913496017457,
+                -0.21130913496017457,
+                0.04684611037373543,
+                0.9531539082527161
             ],
             "components": [
                 {
@@ -123,9 +125,9 @@
             ]
         },
         {
-            "name": "Cube 0,0",
+            "name": "Cube 7,0",
             "position": [
-                0.0,
+                7.0,
                 0.0,
                 0.0
             ],
@@ -152,7 +154,7 @@
         {
             "name": "Plane",
             "position": [
-                0.0,
+                7.0,
                 -1.0,
                 0.0
             ],
@@ -179,7 +181,7 @@
         {
             "name": "New GameObject",
             "position": [
-                0.0,
+                7.0,
                 1.100000023841858,
                 0.0
             ],
@@ -212,6 +214,33 @@
                     "attenuation": 0.20000000298023225,
                     "pointNearPlane": 0.10000000149011612,
                     "pointFarPlane": 25.0
+                }
+            ]
+        },
+        {
+            "name": "New GameObject1",
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard assets/materials/equirectangular_cube.mat",
+                    "mesh": "./assets/standard assets/models/cube.obj",
+                    "meshIndex": 0
                 }
             ]
         }

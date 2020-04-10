@@ -8,6 +8,26 @@ namespace EVA
 {
 	std::map<FS::path, std::shared_ptr<Texture>> TextureManager::m_Textures;
 
+	TextureFormat GetFormat(int channels, bool isHDR)
+	{
+		if (isHDR)
+			return TextureFormat::RGB16F;
+
+		switch (channels)
+		{
+		case 1:
+			return TextureFormat::RED;
+		case 2:
+			return TextureFormat::RG;
+		case 3:
+			return TextureFormat::RGB;
+		case 4:
+			return TextureFormat::RGBA;
+		}
+
+		throw;
+	}
+
 	std::shared_ptr<Texture> TextureManager::LoadTexture(const FS::path& path, const TextureWrapping wrapping, const TextureMinFilter minFilter, const TextureMagFilter magFilter)
 	{
 		// Return the id if the texture's already loaded
@@ -25,33 +45,22 @@ namespace EVA
 		// Load the image
 		stbi_set_flip_vertically_on_load(true);
 
+		const auto pathStr = FileSystem::ToString(path);
 		int width, height, channels;
-		const auto data = stbi_load(FileSystem::ToString(path).c_str(), &width, &height, &channels, 0);
+		void* data;
+		bool isHDR = stbi_is_hdr(pathStr.c_str());
 
+		if (isHDR)
+			data = stbi_loadf(pathStr.c_str(), &width, &height, &channels, 0);
+		else
+			data = stbi_load(pathStr.c_str(), &width, &height, &channels, 0);
 
 		// If the image was loaded
 		if (data)
 		{
 			texture->width = width;
 			texture->height = height;
-
-			TextureFormat format;
-			switch (channels)
-			{
-			case 1:
-				format = TextureFormat::RED;
-				break;
-			case 2:
-				format = TextureFormat::RG;
-				break;
-			case 3:
-				format = TextureFormat::RGB;
-				break;
-			default:
-				format = TextureFormat::RGBA;
-				break;
-			}
-			texture->format = format;
+			texture->format = GetFormat(channels, isHDR);
 
 			// Create texture
 			GLCall(glGenTextures(1, &texture->id));
@@ -64,7 +73,7 @@ namespace EVA
 			GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint)magFilter));
 			
 			// Save the texture
-			GLCall(glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)texture->format, width, height, 0, (GLenum)texture->format, GL_UNSIGNED_BYTE, data));
+			GLCall(glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)texture->format, width, height, 0, (GLenum)GetTextureFormat(texture->format), (GLenum)GetTextureDataType(texture->format), data));
 			GLCall(glGenerateMipmap(GL_TEXTURE_2D));
 
 			// Save the id
@@ -124,18 +133,24 @@ namespace EVA
 
 		for (unsigned int i = 0; i < 6; i++)
 		{
-			const auto fullPath = FileSystem::ToString(folderPath / sideNames[i]) + fileType;
+			const auto fullPath = (FileSystem::ToString(folderPath / sideNames[i]) + fileType);
 
 			int width, height, channels;
+			void* data;
+			bool isHDR = stbi_is_hdr(fullPath.c_str());
 
-			const auto data = stbi_load(fullPath.c_str(), &width, &height, &channels, 0);
+			if (isHDR)
+				data = stbi_loadf(fullPath.c_str(), &width, &height, &channels, 0);
+			else
+				data = stbi_load(fullPath.c_str(), &width, &height, &channels, 0);
 
 			if (data)
 			{
 				texture->width = width;
 				texture->height = height;
-				texture->format = channels == 3 ? TextureFormat::RGB : TextureFormat::RGBA;
-				GLCall(glTexImage2D(sideIds[i], 0, (GLenum)texture->format, width, height, 0, (GLenum)texture->format, GL_UNSIGNED_BYTE, data));
+				texture->format = GetFormat(channels, isHDR);
+
+				GLCall(glTexImage2D(sideIds[i], 0, (GLenum)texture->format, width, height, 0, (GLenum)GetTextureFormat(texture->format), (GLenum)GetTextureDataType(texture->format), data));
 				stbi_image_free(data);
 
 				std::cout << "TextureManager::LoadTextureCubemap - Loaded texture: " << fullPath << "\n";
@@ -202,6 +217,35 @@ namespace EVA
 		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint)magFilter));
 
 		GLCall(glTexStorage2D(GL_TEXTURE_2D, glm::log(width) / glm::log(2), (GLenum)format, width, height));
+
+		return texture;
+	}
+
+	std::shared_ptr<Texture> TextureManager::CreateCubeMap(const int width, const int height, const TextureFormat format, const TextureWrapping wrapping, const TextureMinFilter minFilter, const TextureMagFilter magFilter)
+	{
+		auto texture = std::make_shared<Texture>();
+		texture->width = width;
+		texture->height = height;
+		texture->wrapping = wrapping;
+		texture->minFilter = minFilter;
+		texture->magFilter = magFilter;
+		texture->format = format;
+
+		// Create texture
+		glGenTextures(1, &texture->id);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, texture->id);
+
+		for (unsigned int i = 0; i < 6; ++i)
+		{
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, (GLint)format, width, height, 0, (GLenum)GetTextureFormat(format), (GLenum)GetTextureDataType(format), nullptr);
+		}
+
+		// Texture parameters
+		GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, (GLint)wrapping));
+		GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, (GLint)wrapping));
+		GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, (GLint)wrapping));
+		GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, (GLint)minFilter));
+		GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, (GLint)magFilter));
 
 		return texture;
 	}

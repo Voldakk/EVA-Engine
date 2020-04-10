@@ -41,11 +41,18 @@ namespace EVA
 			const TextureMinFilter minFilter = TextureMinFilter::Linear,
 			const TextureMagFilter magFilter = TextureMagFilter::Linear);
 
-		static std::shared_ptr<RawTexture> LoadRaw(const FS::path& path);
+		static std::shared_ptr<RawTexture> LoadRaw(const FS::path& path); 
 
-		static std::shared_ptr<Texture> CreateTexture(const int width, const int height, 
+
+		static std::shared_ptr<Texture> CreateTexture(const int width, const int height,
 			const TextureFormat format,
 			const TextureWrapping wrapping = TextureWrapping::Repeat,
+			const TextureMinFilter minFilter = TextureMinFilter::Linear,
+			const TextureMagFilter magFilter = TextureMagFilter::Linear);
+
+		static std::shared_ptr<Texture> CreateCubeMap(const int width, const int height,
+			const TextureFormat format,
+			const TextureWrapping wrapping = TextureWrapping::ClampToEdge,
 			const TextureMinFilter minFilter = TextureMinFilter::Linear,
 			const TextureMagFilter magFilter = TextureMagFilter::Linear);
 	};

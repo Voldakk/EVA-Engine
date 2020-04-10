@@ -17,13 +17,18 @@ namespace EVA
 	 */
 	class Skybox
 	{
-
 		std::shared_ptr<Texture> m_Texture;
 
 		std::shared_ptr<Model> m_Model;
 		std::unique_ptr<SkyBoxMaterial> m_Material;
 		std::unique_ptr<Transform> m_Transform;
 
+		bool m_Hdr;
+
+		// HDR
+		FS::path m_HdrPath;
+
+		// Not HDR
 		std::string m_FolderPath;
 		std::string m_FileType;
 
@@ -34,12 +39,14 @@ namespace EVA
 
 		Scene* scene;
 
-		Skybox(const std::string &folderPath, const std::string &fileType);
+		Skybox();
 		explicit Skybox(DataObject data);
 
 		void Render() const;
 
-		void Set(const std::string &folderPath, const std::string &fileType);
+		void Set(const FS::path& filePath);
+
+		void Set(const std::string& folderPath, const std::string& fileType);
 
 		void SetTint(glm::vec4 tint) const;
 

@@ -7,11 +7,11 @@ namespace EVA
 {
 	class Scene;
 
-	class SkyBoxMaterial : public StandardMaterial
+	class SkyBoxMaterial : public Material
 	{
-		REGISTER_MATERIAL(SkyBoxMaterial, "EVA::SkyBoxMaterial")
-
 	public:
+
+		std::shared_ptr<Texture> cubemap;
 
 		glm::vec3 skyTint = glm::vec3(1.0f);
 		glm::vec3 sunColor = glm::vec3(1.0f);
@@ -20,6 +20,5 @@ namespace EVA
 		SkyBoxMaterial() = default;
 
 		void SetMaterialUniforms(Scene* scene) override;
-		void SetTextures() override;
 	};
 }
