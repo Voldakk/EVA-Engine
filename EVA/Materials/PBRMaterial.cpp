@@ -36,6 +36,8 @@ namespace EVA
 		if (scene != nullptr && scene->skybox != nullptr)
 		{
 			shader->BindTexture(scene->skybox->irradianceMap, "irradianceMap");
+			shader->BindTexture(scene->skybox->preFilterMap, "prefilterMap");
+			shader->BindTexture(scene->skybox->preComputedBRDF, "brdfLUT");
 		}
 	}
 

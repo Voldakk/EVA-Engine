@@ -219,7 +219,7 @@ namespace EVA
 		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLint)minFilter));
 		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint)magFilter));
 
-		GLCall(glTexStorage2D(GL_TEXTURE_2D, glm::log(width) / glm::log(2), (GLenum)format, width, height));
+		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, (GLenum)texture->format, width, height, 0, (GLenum)GetTextureFormat(texture->format), (GLenum)GetTextureDataType(texture->format), 0));
 
 		return texture;
 	}
@@ -250,6 +250,32 @@ namespace EVA
 		GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, (GLint)wrapping));
 		GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, (GLint)minFilter));
 		GLCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, (GLint)magFilter));
+
+		return texture;
+	}
+
+	std::shared_ptr<Texture> TextureManager::CreateTexStorage(const int width, const int height, const TextureFormat format, const TextureWrapping wrapping, const TextureMinFilter minFilter, const TextureMagFilter magFilter)
+	{
+		auto texture = std::make_shared<Texture>();
+		texture->width = width;
+		texture->height = height;
+		texture->wrapping = wrapping;
+		texture->minFilter = minFilter;
+		texture->magFilter = magFilter;
+		texture->format = format;
+		texture->target = TextureTarget::Texture2D;
+
+		// Create texture
+		GLCall(glGenTextures(1, &texture->id));
+		GLCall(glBindTexture(GL_TEXTURE_2D, texture->id));
+
+		// Texture parameters
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLint)wrapping));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLint)wrapping));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLint)minFilter));
+		GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint)magFilter));
+
+		GLCall(glTexStorage2D(GL_TEXTURE_2D, glm::log(width) / glm::log(2), (GLenum)format, width, height));
 
 		return texture;
 	}

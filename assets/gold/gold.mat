@@ -1,0 +1,24 @@
+{
+    "id": "EVA::PBRMaterial",
+    "shader": "./assets/standard assets/shaders/pbr.shader",
+    "useInstancing": false,
+    "cullFront": false,
+    "cullBack": true,
+    "tiling": [
+        1.0,
+        1.0
+    ],
+    "tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+    ],
+    "heightScale": 1.0,
+    "albedoMap": "./assets/gold/albedo.png",
+    "metallicMap": "./assets/gold/metallic.png",
+    "roughnessMap": "./assets/gold/roughness.png",
+    "aoMap": "",
+    "normalMap": "./assets/gold/normal.png",
+    "heightMap": ""
+}

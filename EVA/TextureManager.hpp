@@ -55,6 +55,12 @@ namespace EVA
 			const TextureWrapping wrapping = TextureWrapping::ClampToEdge,
 			const TextureMinFilter minFilter = TextureMinFilter::Linear,
 			const TextureMagFilter magFilter = TextureMagFilter::Linear);
+
+		static std::shared_ptr<Texture> CreateTexStorage(const int width, const int height,
+			const TextureFormat format,
+			const TextureWrapping wrapping = TextureWrapping::Repeat,
+			const TextureMinFilter minFilter = TextureMinFilter::Linear,
+			const TextureMagFilter magFilter = TextureMagFilter::Linear);
 	};
 
 }

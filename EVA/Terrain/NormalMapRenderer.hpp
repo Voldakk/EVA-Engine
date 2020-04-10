@@ -20,7 +20,7 @@ namespace EVA
 
 		std::shared_ptr<Texture> Render(std::shared_ptr<Texture> heightmap, int n, float strength)
 		{
-			auto normalmap = TextureManager::CreateTexture(n, n, TextureFormat::RGBA32F, TextureWrapping::ClampToEdge);
+			auto normalmap = TextureManager::CreateTexStorage(n, n, TextureFormat::RGBA32F, TextureWrapping::ClampToEdge);
 
 			m_shader->Bind();
 

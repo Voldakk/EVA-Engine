@@ -20,6 +20,7 @@ namespace EVA
 		std::shared_ptr<Texture> m_EnvironmentMap;
 		std::shared_ptr<Texture> m_IrradianceMap;
 		std::shared_ptr<Texture> m_PreFilterMap;
+		std::shared_ptr<Texture> m_PreComputedBRDF;
 
 		std::shared_ptr<Model> m_Model;
 		std::unique_ptr<SkyBoxMaterial> m_Material;
@@ -38,6 +39,8 @@ namespace EVA
 
 		const std::shared_ptr<Texture>& environmentMap = m_EnvironmentMap;
 		const std::shared_ptr<Texture>& irradianceMap = m_IrradianceMap;
+		const std::shared_ptr<Texture>& preFilterMap = m_PreFilterMap;
+		const std::shared_ptr<Texture>& preComputedBRDF = m_PreComputedBRDF;
 
 		const std::string& folderPath = m_FolderPath;
 		const std::string& fileType = m_FileType;

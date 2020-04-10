@@ -36,9 +36,9 @@ namespace EVA
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
 
-		void AttachTexture(std::shared_ptr<Texture> texture, GLenum target)
+		void AttachTexture(std::shared_ptr<Texture> texture, int mip = 0)
 		{
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, target, texture->id, 0);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, (GLenum)texture->target, texture->id, mip);
 		}
 
 		void AttachCubemap(std::shared_ptr<Texture> cubemap, int index, int mip = 0)

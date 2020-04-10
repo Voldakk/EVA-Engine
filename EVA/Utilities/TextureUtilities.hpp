@@ -11,6 +11,35 @@ namespace EVA
 {
 	class TextureUtilities
 	{
+		inline static unsigned int quadVAO = 0;
+		inline static unsigned int quadVBO;
+		inline static void renderQuad()
+		{
+			if (quadVAO == 0)
+			{
+				float quadVertices[] = {
+					// positions        // texture Coords
+					-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+					-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+					 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+					 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+				};
+				// setup plane VAO
+				glGenVertexArrays(1, &quadVAO);
+				glGenBuffers(1, &quadVBO);
+				glBindVertexArray(quadVAO);
+				glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+				glEnableVertexAttribArray(0);
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+				glEnableVertexAttribArray(1);
+				glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+			}
+			glBindVertexArray(quadVAO);
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+			glBindVertexArray(0);
+		}
+
 		inline static void Convert(std::shared_ptr<Texture> in, std::string inName, std::shared_ptr<Texture> out, std::shared_ptr<Shader> shader)
 		{
 			FrameBuffer frameBuffer(out->width, out->height);
@@ -126,6 +155,31 @@ namespace EVA
 					cube->GetMesh(0)->Draw();
 				}
 			}
+
+			frameBuffer.Unbind();
+
+			return out;
+		}
+
+		inline static std::shared_ptr<Texture> PreComputeBRDF(int size = 512)
+		{
+			auto shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "pre_compute_brdf.shader");
+			auto out = TextureManager::CreateTexture(size, size, TextureFormat::RG16F, TextureWrapping::ClampToEdge);
+
+			auto plane = ModelManager::Primitive(ModelManager::PrimitiveType::Plane);
+
+
+			FrameBuffer frameBuffer(out->width, out->height);
+			RenderBuffer renderBuffer(out->width, out->height);
+
+			frameBuffer.Bind();
+			frameBuffer.AttachTexture(out);
+			renderBuffer.SetViewport();
+
+			shader->Bind();
+
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			renderQuad();
 
 			frameBuffer.Unbind();
 
