@@ -19,6 +19,7 @@ namespace EVA
 	{
 		std::shared_ptr<Texture> m_EnvironmentMap;
 		std::shared_ptr<Texture> m_IrradianceMap;
+		std::shared_ptr<Texture> m_PreFilterMap;
 
 		std::shared_ptr<Model> m_Model;
 		std::unique_ptr<SkyBoxMaterial> m_Material;
