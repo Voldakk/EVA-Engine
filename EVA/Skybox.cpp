@@ -64,7 +64,7 @@ namespace EVA
 			m_PreFilterMap = TextureUtilities::PreFilterEnviromentMap(m_EnvironmentMap);
 			m_PreComputedBRDF = TextureUtilities::PreComputeBRDF();
 
-			m_Material->cubemap = m_PreFilterMap;
+			m_Material->cubemap = m_EnvironmentMap;
 			m_Material->shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "skybox.shader");
 		}
 		else

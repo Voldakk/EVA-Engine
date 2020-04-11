@@ -147,6 +147,9 @@ namespace EVA
 
 			shader->SetUniform3Fv(lightNum + "color", lights[i]->color);
 			shader->SetUniform1F(lightNum + "ambientCoefficient", lights[i]->ambientCoefficient);
+			shader->SetUniformB(lightNum + "hasShadows", lights[i]->Shadows());
+			shader->BindTexture(0, lightNum + "shadowMap", TextureTarget::Texture2D);
+			shader->BindTexture(0, lightNum + "shadowCubeMap", TextureTarget::TextureCubeMap);
 
 			if(lights[i]->GetType() == Light::Type::Directional)
 			{
@@ -165,7 +168,7 @@ namespace EVA
 
 				if (lights[i]->Shadows())
 				{
-					shader->BindTexture(lights[i]->GetDepthMap(),  "shadowCubeMap", TextureTarget::TextureCubeMap);
+					shader->BindTexture(lights[i]->GetDepthMap(), lightNum + "shadowCubeMap", TextureTarget::TextureCubeMap);
 					shader->SetUniform1F(lightNum + "farPlane", lights[i]->pointFarPlane);
 				}
 				else

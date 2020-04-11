@@ -53,6 +53,8 @@ namespace EVA
 
 		static void Unbind();
 
+		void SetUniformB(const std::string& name, bool value);
+
 		void SetUniform1I(const std::string& name, int value);
 
 		void SetUniform1F(const std::string& name, float value);

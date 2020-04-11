@@ -1,6 +1,5 @@
 #version 330 core
 in vec3 fragPos;
-in vec3 fragNormal;
 in vec2 fragUV;
 in mat3 fragTBN;
 
@@ -29,20 +28,80 @@ uniform struct Light
 {
    vec4 position;
    vec3 color;
-   float attenuation;
-   float ambientCoefficient;
-   sampler2D shadowMap;
-   mat4 lightSpaceMatrix;
    float farPlane;
-
+   int hasShadows;
+   mat4 lightSpaceMatrix;
+   sampler2D shadowMap;
+   samplerCube shadowCubeMap;
 } allLights[MAX_LIGHTS];
+
+in vec4 allFragPosLightSpace [MAX_LIGHTS];
 
 uniform vec3 cameraPosition;
 
 const float PI = 3.14159265359;
 
-vec2 UV;
+// ----------------------------------------------------------------------------
+float ShadowCalculation(vec3 normal, vec3 lightDir, sampler2D shadowMap, vec4 fragPosLightSpace)
+{
+	// Perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
 
+    // Transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+
+    // Get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(shadowMap, projCoords.xy).r; 
+
+    // Get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+
+    // Check whether current frag pos is in shadow
+    float bias = max(0.01 * (1.0 - dot(normal, lightDir)), 0.005);
+	
+	float shadow = 0.0;
+	vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
+	for(int x = -1; x <= 1; ++x)
+	{
+		for(int y = -1; y <= 1; ++y)
+		{
+			float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
+		}    
+	}
+	shadow /= 9.0;
+
+	if(projCoords.z > 1.0)
+        shadow = 0.0;
+
+    return shadow;
+}
+// ----------------------------------------------------------------------------
+vec3 gridSamplingDisk[20] = vec3[]
+(
+   vec3(1, 1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1, 1,  1), 
+   vec3(1, 1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1, 1, -1),
+   vec3(1, 1,  0), vec3( 1, -1,  0), vec3(-1, -1,  0), vec3(-1, 1,  0),
+   vec3(1, 0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1, 0, -1),
+   vec3(0, 1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0, 1, -1)
+);
+
+float ShadowCubeCalculation(vec3 fragPos, int lightIndex)
+{
+    // get vector between fragment position and light position
+    vec3 fragToLight = fragPos - allLights[lightIndex].position.xyz;
+    // use the light to fragment vector to sample from the depth map    
+    float closestDepth = texture(allLights[lightIndex].shadowCubeMap, fragToLight).r;
+    // it is currently in linear range between [0,1]. Re-transform back to original value
+    closestDepth *= allLights[lightIndex].farPlane;
+    // now get current linear depth as the length between the fragment and light position
+    float currentDepth = length(fragToLight);
+    // now test for shadows
+    float bias = 0.05; 
+    float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+
+    return shadow;
+} 
 // ----------------------------------------------------------------------------
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
@@ -91,7 +150,7 @@ vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 // ----------------------------------------------------------------------------
 void main()
 {	
-    UV = fragUV * tiling;
+    vec2 UV = fragUV * tiling;
 
     vec3 albedo     = pow(texture(albedoMap, UV).rgb, vec3(2.2)) * tint.rgb;
     float metallic  = texture(metallicMap, UV).r;
@@ -116,6 +175,7 @@ void main()
     {
         vec3 L;
         vec3 radiance;
+        float shadow = 0;
 
         // Point light
         if(allLights[i].position.w == 1.0)
@@ -124,12 +184,18 @@ void main()
             float distance = length(allLights[i].position.xyz - fragPos);
             float attenuation = 1.0 / (distance * distance);
             radiance = allLights[i].color * attenuation;
+            if(allLights[i].hasShadows == 1)
+                shadow = ShadowCubeCalculation(fragPos, i);
         }
         else
         {
             L =  normalize(allLights[i].position.xyz);
             radiance = allLights[i].color;
+            if(allLights[i].hasShadows == 1)
+                shadow = ShadowCalculation(N, L, allLights[i].shadowMap, allFragPosLightSpace[i]);
         }
+
+        radiance *= 1 - shadow;
 
         vec3 H = normalize(V + L);
 

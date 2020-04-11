@@ -152,6 +152,11 @@ namespace EVA
 		return location;
 	}
 
+	void Shader::SetUniformB(const std::string& name, bool value)
+	{
+		GLCall(glUniform1i(GetUniformLocation(name), value));
+	}
+
 	void Shader::SetUniform1I(const std::string& name, const int value)
 	{
 		GLCall(glUniform1i(GetUniformLocation(name), value));
