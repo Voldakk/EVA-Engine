@@ -9,3 +9,4 @@
 #include "../Components/Transform.hpp"
 #include "../Components/Camera.hpp"
 #include "../ConstPointer.hpp"
+#include "../Range.hpp"

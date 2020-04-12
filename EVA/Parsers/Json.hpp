@@ -33,7 +33,7 @@ namespace EVA
 		typedef rapidjson::GenericStringRef<char> StringRef;
 
 		/**
-		 * \brief Opens a JSON documnet form the current path
+		 * \brief Opens a JSON documnet from the current path
 		 * \param path The path to the document
 		 * \return A pointer to the parsed documnet, or nullptr if no document is found
 		 */
@@ -105,62 +105,71 @@ namespace EVA
 		{}
 
 		template <typename T>
-		bool Serialize(const Json::StringRef& key, T& value);
+		bool Serialize(const std::string& key, T& value);
+
+		void AddMember(const std::string& key, Json::Value& value) const;
 
 		template <typename T>
-		T Get(const char* key, const T defaultValue) const;
+		T Get(const std::string& key, const T defaultValue) const;
 
 		template <typename T>
-		void Set(const Json::StringRef& key, const T value) const;
+		void Set(const std::string& key, const T value) const;
 
 
 		template <>
-		glm::vec2 Get(const char* key, const glm::vec2 defaultValue) const;
+		glm::vec2 Get(const std::string& key, const glm::vec2 defaultValue) const;
 
 		template <>
-		void Set(const Json::StringRef& key, const glm::vec2 value) const;
-
-
-		template <>
-		glm::vec3 Get(const char* key, const glm::vec3 defaultValue) const;
-
-		template <>
-		void Set(const Json::StringRef& key, const glm::vec3 value) const;
+		void Set(const std::string& key, const glm::vec2 value) const;
 
 
 		template <>
-		glm::vec4 Get(const char* key, const glm::vec4 defaultValue) const;
+		glm::vec3 Get(const std::string& key, const glm::vec3 defaultValue) const;
 
 		template <>
-		void Set(const Json::StringRef& key, const glm::vec4 value) const;
-
-
-		template <>
-		glm::quat Get(const char* key, const glm::quat defaultValue) const;
-
-		template <>
-		void Set(const Json::StringRef& key, const glm::quat value) const;
+		void Set(const std::string& key, const glm::vec3 value) const;
 
 
 		template <>
-		FS::path Get(const char* key, const FS::path defaultValue) const;
+		glm::vec4 Get(const std::string& key, const glm::vec4 defaultValue) const;
 
 		template <>
-		void Set(const Json::StringRef& key, const FS::path value) const;
+		void Set(const std::string& key, const glm::vec4 value) const;
+
+
+		template <>
+		glm::quat Get(const std::string& key, const glm::quat defaultValue) const;
+
+		template <>
+		void Set(const std::string& key, const glm::quat value) const;
+
+
+		template <>
+		FS::path Get(const std::string& key, const FS::path defaultValue) const;
+
+		template <>
+		void Set(const std::string& key, const FS::path value) const;
 
 
 		template <typename T, typename Alloc>
-		std::vector<T, Alloc> Get(const char* key, const std::vector<T, Alloc> defaultValue) const;
+		std::vector<T, Alloc> Get(const std::string& key, const std::vector<T, Alloc> defaultValue) const;
 
 		template <typename T, typename Alloc>
-		void Set(const Json::StringRef& key, const std::vector<T, Alloc> value) const;
+		void Set(const std::string& key, const std::vector<T, Alloc> value) const;
+
+
+		template <typename T, typename Alloc>
+		std::vector<std::shared_ptr<T>, Alloc> Get(const std::string& key, const std::vector<std::shared_ptr<T>, Alloc> defaultValue) const;
+
+		template <typename T, typename Alloc>
+		void Set(const std::string& key, const std::vector<std::shared_ptr<T>, Alloc> value) const;
 
 
 		template <typename T = typename ISerializeable>
-		std::shared_ptr<T> DataObject::Get(const char* key, const std::shared_ptr<T> defaultValue) const;
+		std::shared_ptr<T> DataObject::Get(const std::string& key, const std::shared_ptr<T> defaultValue) const;
 
 		template <typename T = typename ISerializeable>
-		void Set(const Json::StringRef& key, const std::shared_ptr<T> value) const;
+		void Set(const std::string& key, const std::shared_ptr<T> value) const;
 
 
 		/*template <typename T = typename Asset>
@@ -171,7 +180,7 @@ namespace EVA
 	};
 
 	template<typename T>
-	inline bool DataObject::Serialize(const Json::StringRef& key, T& value)
+	inline bool DataObject::Serialize(const std::string& key, T& value)
 	{
 		switch (mode)
 		{
@@ -185,7 +194,7 @@ namespace EVA
 			return true;
 
 		case DataMode::Inspector:
-			bool c = InspectorFields::Default(key, value);
+			bool c = InspectorFields::Default(key.c_str(), value);
 			if (c) changed = true;
 			return c;
 		}
@@ -193,8 +202,14 @@ namespace EVA
 		return false;
 	}
 
+	inline void DataObject::AddMember(const std::string& key, Json::Value& value) const
+	{
+		auto name = Json::Value(key.c_str(), *m_Allocator);
+		m_Json.AddMember(name, value, *m_Allocator);
+	}
+
 	template<typename T>
-	inline T DataObject::Get(const char* key, const T defaultValue) const
+	inline T DataObject::Get(const std::string& key, const T defaultValue) const
 	{
 		if (m_Json.HasMember(key) && m_Json[key].Is<T>())
 			return m_Json[key].Get<T>();
@@ -203,13 +218,16 @@ namespace EVA
 	}
 
 	template<typename T>
-	inline void DataObject::Set(const Json::StringRef& key, const T value) const
+	inline void DataObject::Set(const std::string& key, const T value) const
 	{
-		m_Json.AddMember(key, value, *m_Allocator);
+		Json::Value v;
+		v.Set<T>(value, *m_Allocator);
+		auto name = Json::Value(key.c_str(), *m_Allocator);
+		m_Json.AddMember(name, v, *m_Allocator);
 	}
 
 	template<>
-	inline glm::vec2 DataObject::Get(const char* key, const glm::vec2 defaultValue) const
+	inline glm::vec2 DataObject::Get(const std::string& key, const glm::vec2 defaultValue) const
 	{
 		if (m_Json.HasMember(key) && m_Json[key].IsArray())
 		{
@@ -222,18 +240,18 @@ namespace EVA
 	}
 
 	template<>
-	inline void DataObject::Set(const Json::StringRef& key, const glm::vec2 value) const
+	inline void DataObject::Set(const std::string& key, const glm::vec2 value) const
 	{
 		Json::Value v;
 		v.SetArray();
 		v.PushBack(value.x, *m_Allocator);
 		v.PushBack(value.y, *m_Allocator);
 
-		m_Json.AddMember(key, v, *m_Allocator);
+		AddMember(key, v);
 	}
 
 	template<>
-	inline glm::vec3 DataObject::Get(const char* key, const glm::vec3 defaultValue) const
+	inline glm::vec3 DataObject::Get(const std::string& key, const glm::vec3 defaultValue) const
 	{
 		if (m_Json.HasMember(key) && m_Json[key].IsArray())
 		{
@@ -246,7 +264,7 @@ namespace EVA
 	}
 
 	template<>
-	inline void DataObject::Set(const Json::StringRef& key, const glm::vec3 value) const
+	inline void DataObject::Set(const std::string& key, const glm::vec3 value) const
 	{
 		Json::Value v;
 		v.SetArray();
@@ -254,11 +272,11 @@ namespace EVA
 		v.PushBack(value.y, *m_Allocator);
 		v.PushBack(value.z, *m_Allocator);
 
-		m_Json.AddMember(key, v, *m_Allocator);
+		AddMember(key, v);
 	}
 
 	template<>
-	inline glm::vec4 DataObject::Get(const char* key, const glm::vec4 defaultValue) const
+	inline glm::vec4 DataObject::Get(const std::string& key, const glm::vec4 defaultValue) const
 	{
 		if (m_Json.HasMember(key) && m_Json[key].IsArray())
 		{
@@ -271,7 +289,7 @@ namespace EVA
 	}
 
 	template<>
-	inline void DataObject::Set(const Json::StringRef& key, const glm::vec4 value) const
+	inline void DataObject::Set(const std::string& key, const glm::vec4 value) const
 	{
 		Json::Value v;
 		v.SetArray();
@@ -280,24 +298,24 @@ namespace EVA
 		v.PushBack(value.z, *m_Allocator);
 		v.PushBack(value.w, *m_Allocator);
 
-		m_Json.AddMember(key, v, *m_Allocator);
+		AddMember(key, v);
 	}
 
 	template<>
-	inline glm::quat DataObject::Get(const char* key, const glm::quat defaultValue) const
+	inline glm::quat DataObject::Get(const std::string& key, const glm::quat defaultValue) const
 	{
 		auto vec4 = Get<glm::vec4>(key, glm::vec4(defaultValue.x, defaultValue.y, defaultValue.z, defaultValue.w));
 		return glm::quat(vec4.w, vec4.x, vec4.y, vec4.z);
 	}
 
 	template<>
-	inline void DataObject::Set(const Json::StringRef& key, const glm::quat value) const
+	inline void DataObject::Set(const std::string& key, const glm::quat value) const
 	{
 		Set<glm::vec4>(key, glm::vec4(value.x, value.y, value.z, value.w));
 	}
 
 	template<>
-	inline FS::path DataObject::Get(const char* key, const FS::path defaultValue) const
+	inline FS::path DataObject::Get(const std::string& key, const FS::path defaultValue) const
 	{
 		if (m_Json.HasMember(key) && m_Json[key].IsString())
 			return FS::path(m_Json[key].GetString());
@@ -306,13 +324,15 @@ namespace EVA
 	}
 
 	template<>
-	inline void DataObject::Set(const Json::StringRef& key, const FS::path value) const
+	inline void DataObject::Set(const std::string& key, const FS::path value) const
 	{
-		m_Json.AddMember(key, FileSystem::ToString(value), *m_Allocator);
+		Json::Value path;
+		path.SetString(FileSystem::ToString(value), *m_Allocator);
+		AddMember(key, path);
 	}
 
 	template<typename T, typename Alloc>
-	inline std::vector<T, Alloc> DataObject::Get(const char* key, const std::vector<T, Alloc> defaultValue) const
+	inline std::vector<T, Alloc> DataObject::Get(const std::string& key, const std::vector<T, Alloc> defaultValue) const
 	{
 		if (m_Json.HasMember(key) && m_Json[key].IsArray())
 		{
@@ -329,7 +349,7 @@ namespace EVA
 	}
 
 	template<typename T, typename Alloc>
-	inline void DataObject::Set(const Json::StringRef& key, const std::vector<T, Alloc> value) const
+	inline void DataObject::Set(const std::string& key, const std::vector<T, Alloc> value) const
 	{
 		Json::Value v;
 		v.SetArray();
@@ -337,11 +357,11 @@ namespace EVA
 		{
 			v.PushBack(value[i], *m_Allocator);
 		}
-		m_Json.AddMember(key, v, *m_Allocator);
+		AddMember(key, v);
 	}
 
 	template<class T>
-	inline std::shared_ptr<T> DataObject::Get(const char* key, const std::shared_ptr<T> defaultValue) const
+	inline std::shared_ptr<T> DataObject::Get(const std::string& key, const std::shared_ptr<T> defaultValue) const
 	{
 		if (m_Json.HasMember(key) && m_Json[key].IsObject())
 		{
@@ -356,7 +376,7 @@ namespace EVA
 	}
 
 	template<class T>
-	inline void DataObject::Set(const Json::StringRef& key, const std::shared_ptr<T> value) const
+	inline void DataObject::Set(const std::string& key, const std::shared_ptr<T> value) const
 	{
 		if (value == nullptr)
 			return;
@@ -369,6 +389,6 @@ namespace EVA
 
 		value->Serialize(data);
 
-		m_Json.AddMember(key, v, *m_Allocator);
+		AddMember(key, v);
 	}
 }

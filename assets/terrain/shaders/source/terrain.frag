@@ -1,6 +1,6 @@
 #version 150 core
 #define MAX_LIGHTS 10
-#define MAX_MATERIALS 3
+#define MAX_MATERIALS 8
 const float PI = 3.14159265359;
 
 in vec2 uvFrag;
@@ -165,8 +165,9 @@ void main()
 
 	vec3 normal = normalize(texture(normalmap, uvFrag).rbg);
 	
-	vec4 blendValues = texture(splatmap, uvFrag).rgba;
-	float[4] blendValuesArray = float[](blendValues.r, blendValues.g, blendValues.b, blendValues.a);
+	vec4 blendValues0 = texture(splatmap, uvFrag).rgba;
+    vec4 blendValues1 = vec4(0);//texture(splatmap, uvFrag).rgba;
+	float[MAX_MATERIALS] blendValuesArray = float[](blendValues0.r, blendValues0.g, blendValues0.b, blendValues0.a, blendValues1.r, blendValues1.g, blendValues1.b, blendValues1.a);
 	
     vec2[MAX_MATERIALS] UVs;
     for(int i = 0; i < numMaterials; ++i)

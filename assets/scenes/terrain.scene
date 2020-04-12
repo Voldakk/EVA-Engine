@@ -108,9 +108,94 @@
                     "Target": "",
                     "shader": "./assets/terrain/shaders/terrain.shader",
                     "Heightmap": "./assets/terrain/heightmaps/trondheim_normalized_blur.png",
-                    "material0": "./assets/terrain/materials/rocky_shoreline.mat",
-                    "material1": "./assets/terrain/materials/sand.mat",
-                    "material2": "./assets/terrain/materials/snow.mat",
+                    "layer0": {
+                        "material": "./assets/terrain/materials/sand.mat",
+                        "height": {
+                            "min": 0.0,
+                            "max": 0.10999999940395355
+                        },
+                        "angle": {
+                            "min": 0.0,
+                            "max": 60.0
+                        }
+                    },
+                    "layer1": {
+                        "material": "./assets/terrain/materials/rocky_shoreline.mat",
+                        "height": {
+                            "min": 0.10000000149011612,
+                            "max": 0.15000000596046449
+                        },
+                        "angle": {
+                            "min": 0.0,
+                            "max": 60.0
+                        }
+                    },
+                    "layer2": {
+                        "material": "./assets/terrain/materials/ground_forest.mat",
+                        "height": {
+                            "min": 0.14000000059604646,
+                            "max": 0.7099999785423279
+                        },
+                        "angle": {
+                            "min": 0.0,
+                            "max": 60.0
+                        }
+                    },
+                    "layer3": {
+                        "material": "./assets/terrain/materials/granite.mat",
+                        "height": {
+                            "min": 0.15000000596046449,
+                            "max": 1.0
+                        },
+                        "angle": {
+                            "min": 55.0,
+                            "max": 90.0
+                        }
+                    },
+                    "layer4": {
+                        "material": "./assets/terrain/materials/snow.mat",
+                        "height": {
+                            "min": 0.699999988079071,
+                            "max": 1.0
+                        },
+                        "angle": {
+                            "min": 0.0,
+                            "max": 60.0
+                        }
+                    },
+                    "layer5": {
+                        "material": "",
+                        "height": {
+                            "min": 0.0,
+                            "max": 0.0
+                        },
+                        "angle": {
+                            "min": 0.0,
+                            "max": 0.0
+                        }
+                    },
+                    "layer6": {
+                        "material": "",
+                        "height": {
+                            "min": 0.0,
+                            "max": 0.0
+                        },
+                        "angle": {
+                            "min": 0.0,
+                            "max": 0.0
+                        }
+                    },
+                    "layer7": {
+                        "material": "",
+                        "height": {
+                            "min": 0.0,
+                            "max": 0.0
+                        },
+                        "angle": {
+                            "min": 0.0,
+                            "max": 0.0
+                        }
+                    },
                     "Lod distances": [
                         3200,
                         1600,

@@ -11,7 +11,7 @@ namespace EVA
 	{
 		REGISTER_MATERIAL(PBRMaterial, "EVA::PBRMaterial")
 
-			inline static const FS::path DEFAULT_TEXTURES_PATH = "./assets/standard_assets/textures/";
+		inline static const FS::path DEFAULT_TEXTURES_PATH = "./assets/standard_assets/textures/";
 
 	public:
 

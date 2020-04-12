@@ -7,8 +7,8 @@
 #include "../ScopeTimer.hpp"
 
 #include "glm/glm.hpp"
-#include <glm\gtc\matrix_transform.hpp>
-#include <glm\gtx\quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include "../Parsers/Json.hpp"
 
@@ -125,17 +125,11 @@ namespace EVA
 			recalculateNormals = true;
 		}
 
-		auto materialPath = m_Materials[0] != nullptr ? m_Materials[0]->path : "";
-		if (data.Serialize("material0", materialPath))
-			m_Materials[0] = std::dynamic_pointer_cast<PBRMaterial>(MaterialManager::LoadMaterial(materialPath));
 
-		materialPath = m_Materials[1] != nullptr ? m_Materials[1]->path : "";
-		if (data.Serialize("material1", materialPath))
-			m_Materials[1] = std::dynamic_pointer_cast<PBRMaterial>(MaterialManager::LoadMaterial(materialPath));
-
-		materialPath = m_Materials[2] != nullptr ? m_Materials[2]->path : "";
-		if (data.Serialize("material2", materialPath))
-			m_Materials[2] = std::dynamic_pointer_cast<PBRMaterial>(MaterialManager::LoadMaterial(materialPath));
+		for (size_t i = 0; i < layers.size(); i++)
+		{
+			data.Serialize("layer" + std::to_string(i), m_Layers[i]);
+		}
 
 		data.Serialize("Lod distances", m_LodDistances);
 
