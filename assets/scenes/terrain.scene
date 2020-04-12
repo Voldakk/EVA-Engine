@@ -101,7 +101,7 @@
                 {
                     "id": "EVA::Terrain",
                     "Tesselation factor": 500.0,
-                    "Tesselation slope": 2.0,
+                    "Tesselation slope": 1.5,
                     "Tesselation shift": 0.20000000298023225,
                     "TBN range": 200,
                     "Normal strength": 20,
@@ -112,14 +112,14 @@
                     "material1": "./assets/terrain/sand.mat",
                     "material2": "./assets/terrain/granite.mat",
                     "Lod distances": [
-                        2048,
-                        1025,
-                        512,
-                        256,
-                        128,
-                        64,
-                        32,
-                        16
+                        3200,
+                        1600,
+                        800,
+                        600,
+                        400,
+                        200,
+                        100,
+                        50
                     ]
                 }
             ]

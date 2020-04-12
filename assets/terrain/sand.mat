@@ -5,8 +5,8 @@
     "cullFront": false,
     "cullBack": true,
     "tiling": [
-        5.0,
-        5.0
+        200.0,
+        200.0
     ],
     "tint": [
         1.0,

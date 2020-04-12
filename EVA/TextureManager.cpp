@@ -79,7 +79,8 @@ namespace EVA
 
 			// Save the id
 			m_Textures[path] = texture;
-			
+
+			glObjectLabel(GL_TEXTURE, texture->id, -1, pathStr.c_str());
 			
 			std::cout << "TextureManager::LoadTexture - Texture id:   " << texture->id << "\n";
 

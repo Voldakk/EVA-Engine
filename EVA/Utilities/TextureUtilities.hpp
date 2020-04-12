@@ -163,7 +163,7 @@ namespace EVA
 
 		inline static std::shared_ptr<Texture> PreComputeBRDF(int size = 512)
 		{
-			auto shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "pre_compute_brdf.shader");
+			/*auto shader = ShaderManager::LoadShader(ShaderManager::STANDARD_SHADERS_PATH / "pre_compute_brdf.shader");
 			auto out = TextureManager::CreateTexture(size, size, TextureFormat::RG16F, TextureWrapping::ClampToEdge);
 
 			auto plane = ModelManager::Primitive(ModelManager::PrimitiveType::Plane);
@@ -182,8 +182,10 @@ namespace EVA
 			renderQuad();
 
 			frameBuffer.Unbind();
+			
+			return out;*/
 
-			return out;
+			return TextureManager::LoadTexture("./assets/standard assets/textures/ibl_brdf_lut.png", TextureWrapping::ClampToEdge);
 		}
 	};
 }

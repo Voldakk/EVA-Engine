@@ -130,6 +130,8 @@ namespace EVA
 		}
 
 		GLCall(glUseProgram(m_ShaderId));
+
+		glObjectLabel(GL_PROGRAM, m_ShaderId, -1, FileSystem::ToString(m_Paths->shader).c_str());
 	}
 
 	void Shader::Bind() const

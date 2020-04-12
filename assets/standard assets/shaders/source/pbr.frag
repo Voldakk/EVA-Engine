@@ -1,11 +1,15 @@
 #version 330 core
+#define MAX_LIGHTS 10
+const float PI = 3.14159265359;
+
 in vec3 fragPos;
 in vec2 fragUV;
 in mat3 fragTBN;
+in vec4 allFragPosLightSpace [MAX_LIGHTS];
 
-out vec4 FragColor;
+out vec4 fragColor;
 
-// material parameters
+// Material
 uniform vec4 tint;
 uniform vec2 tiling;
 uniform float heightScale;
@@ -22,7 +26,6 @@ uniform samplerCube prefilterMap;
 uniform sampler2D brdfLUT;
 
 // Lights
-#define MAX_LIGHTS 10
 uniform int numLights;
 uniform struct Light
 {
@@ -35,11 +38,7 @@ uniform struct Light
    samplerCube shadowCubeMap;
 } allLights[MAX_LIGHTS];
 
-in vec4 allFragPosLightSpace [MAX_LIGHTS];
-
 uniform vec3 cameraPosition;
-
-const float PI = 3.14159265359;
 
 // ----------------------------------------------------------------------------
 float ShadowCalculation(vec3 normal, vec3 lightDir, sampler2D shadowMap, vec4 fragPosLightSpace)
@@ -88,17 +87,22 @@ vec3 gridSamplingDisk[20] = vec3[]
 
 float ShadowCubeCalculation(vec3 fragPos, int lightIndex)
 {
-    // get vector between fragment position and light position
     vec3 fragToLight = fragPos - allLights[lightIndex].position.xyz;
-    // use the light to fragment vector to sample from the depth map    
-    float closestDepth = texture(allLights[lightIndex].shadowCubeMap, fragToLight).r;
-    // it is currently in linear range between [0,1]. Re-transform back to original value
-    closestDepth *= allLights[lightIndex].farPlane;
-    // now get current linear depth as the length between the fragment and light position
     float currentDepth = length(fragToLight);
-    // now test for shadows
-    float bias = 0.05; 
-    float shadow = currentDepth -  bias > closestDepth ? 1.0 : 0.0;
+
+    float shadow = 0.0;
+    float bias = 0.15;
+    int samples = 20;
+    float viewDistance = length(cameraPosition - fragPos);
+    float diskRadius = (1.0 + (viewDistance / allLights[lightIndex].farPlane)) / 25.0;
+    for(int i = 0; i < samples; ++i)
+    {
+        float closestDepth = texture(allLights[lightIndex].shadowCubeMap, fragToLight + gridSamplingDisk[i] * diskRadius).r;
+        closestDepth *= allLights[lightIndex].farPlane;
+        if(currentDepth - bias > closestDepth)
+            shadow += 1.0;
+    }
+    shadow /= float(samples);
 
     return shadow;
 } 
@@ -171,7 +175,7 @@ void main()
 
     // reflectance equation
     vec3 Lo = vec3(0.0);
-    for(int i = 0; i < 4; ++i) 
+    for(int i = 0; i < numLights; ++i) 
     {
         vec3 L;
         vec3 radiance;
@@ -251,6 +255,5 @@ void main()
     // gamma correct
     color = pow(color, vec3(1.0/2.2)); 
 
-    FragColor = vec4(color , 1.0);
+    fragColor = vec4(color , 1.0);
 }
-

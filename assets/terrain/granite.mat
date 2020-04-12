@@ -5,8 +5,8 @@
     "cullFront": false,
     "cullBack": true,
     "tiling": [
-        1.0,
-        1.0
+        100.0,
+        100.0
     ],
     "tint": [
         1.0,
@@ -14,7 +14,7 @@
         1.0,
         1.0
     ],
-    "heightScale": 1.0,
+    "heightScale": 2.0,
     "albedoMap": "./assets/terrain/granite/basecolor.png",
     "metallicMap": "./assets/terrain/granite/metallic.png",
     "roughnessMap": "./assets/terrain/granite/roughness.png",

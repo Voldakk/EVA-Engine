@@ -1,16 +1,24 @@
 #version 330
+#define MAX_MATERIALS 3
 
 layout (triangles) in;
 layout (triangle_strip, max_vertices=3) out;
 
-struct Material
+// Materials
+uniform int numMaterials;
+uniform struct Material
 {
-    sampler2D diffusemap;
-    sampler2D normalmap;
-    sampler2D heightmap;
-    float heightScale;
-    vec2 tiling;
-};
+	vec4 tint;
+	vec2 tiling;
+	float heightScale;
+
+    sampler2D albedoMap;
+    sampler2D normalMap;
+    sampler2D metallicMap;
+    sampler2D roughnessMap;
+    sampler2D aoMap;
+	sampler2D heightMap;
+} materials[MAX_MATERIALS];
 
 in vec2 uvGeo[];
 
@@ -22,7 +30,6 @@ uniform mat4 viewProjection;
 uniform sampler2D normalmap;
 uniform sampler2D splatmap;
 uniform vec3 cameraPosition;
-uniform Material materials[3];
 uniform int tbnRange;
 
 vec3 tangent;
@@ -69,15 +76,13 @@ void main() {
 			
 			float height = gl_in[k].gl_Position.y;
 			
-			vec3 normal = normalize(texture(normalmap, uvGeo[k]).rbg);
-			
 			vec4 blendValues = texture(splatmap, uvGeo[k]).rgba;
 			float[4] blendValuesArray = float[](blendValues.r, blendValues.g, blendValues.b, blendValues.a);
 			
 			float scale = 0;
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < numMaterials; i++)
 			{
-				scale += texture(materials[i].heightmap, uvGeo[k]
+				scale += texture(materials[i].heightMap, uvGeo[k]
 							* materials[i].tiling).r 
 							* materials[i].heightScale 
 							* blendValuesArray[i];

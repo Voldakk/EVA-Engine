@@ -4,9 +4,9 @@
 
 namespace EVA
 {
-	inline void TerrainMaterial::SetObjectUniforms(Transform* transform)
+	inline void TerrainMaterial::SetMaterialUniforms(Scene* scene)
 	{
-		Material::SetObjectUniforms(transform);
+		Material::SetMaterialUniforms(scene);
 
 		if (m_Terrain != nullptr)
 		{
@@ -15,6 +15,9 @@ namespace EVA
 			shader->SetUniform1F("tessShift", m_Terrain->tessShift);
 			shader->SetUniform1F("scaleY", m_Terrain->transform->scale.y);
 			shader->SetUniform1I("tbnRange", m_Terrain->tbnRange);
+
+			shader->SetUniform1I("numMaterials", m_Terrain->materials.size());
+
 
 			shader->BindTexture(m_Terrain->heightmap, "heightmap");
 			shader->BindTexture(m_Terrain->normalmap, "normalmap");
@@ -36,10 +39,18 @@ namespace EVA
 				shader->BindTexture(m_Terrain->materials[i]->GetRoughnessMap(), var + "roughnessMap");
 				shader->BindTexture(m_Terrain->materials[i]->GetAOMap(), var + "aoMap");
 				shader->BindTexture(m_Terrain->materials[i]->GetNormalMap(), var + "normalMap");
-				shader->BindTexture(m_Terrain->materials[i]->GetHeightMap(), var + "heightmap");
+				shader->BindTexture(m_Terrain->materials[i]->GetHeightMap(), var + "heightMap");
+			}
+
+			if (scene != nullptr && scene->skybox != nullptr)
+			{
+				shader->BindTexture(scene->skybox->irradianceMap, "irradianceMap");
+				shader->BindTexture(scene->skybox->preFilterMap, "prefilterMap");
+				shader->BindTexture(scene->skybox->preComputedBRDF, "brdfLUT");
 			}
 		}
 	}
+
 	void TerrainMaterial::SetTerrain(Terrain* terrain)
 	{
 		m_Terrain = terrain;
