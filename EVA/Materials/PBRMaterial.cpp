@@ -10,11 +10,8 @@ namespace EVA
 		{
 			init = false;
 			defaultAlbedoMap = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_albedo.png");
-			defaultMetallicMap = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_metallic.png");
-			defaultRoughnessMap = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_roughness.png");
-			defaultAOMap = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_ao.png");
-			defaultNormalMap = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_normal.png");
-			defaultHeightMap = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_height.png");
+			defaultMetRouAoMap = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_met_rou_ao.png");
+			defaultNormalHeightMap = TextureManager::LoadTexture(DEFAULT_TEXTURES_PATH / "default_normal_height.tga");
 		}
 	}
 
@@ -27,11 +24,8 @@ namespace EVA
 		shader->SetUniform1F("heightScale", heightScale);
 
 		shader->BindTexture(GetAlbedoMap(), "albedoMap");
-		shader->BindTexture(GetMetallicMap(), "metallicMap");
-		shader->BindTexture(GetRoughnessMap(), "roughnessMap");
-		shader->BindTexture(GetAOMap(), "aoMap");
-		shader->BindTexture(GetNormalMap(), "normalMap");
-		shader->BindTexture(GetHeightMap(), "heightMap");
+		shader->BindTexture(GetMetRouAoMap(), "metRouAoMap");
+		shader->BindTexture(GetNormalHeightMap(), "normalHeightMap");
 
 		if (scene != nullptr && scene->skybox != nullptr)
 		{
@@ -53,49 +47,25 @@ namespace EVA
 		if (data.Serialize("albedoMap", path) && !path.empty())
 			albedoMap = TextureManager::LoadTexture(path);
 
-		path = metallicMap != nullptr ? metallicMap->path : "";
-		if (data.Serialize("metallicMap", path) && !path.empty())
-			metallicMap = TextureManager::LoadTexture(path);
+		path = metRouAoMap != nullptr ? metRouAoMap->path : "";
+		if (data.Serialize("metRouAoMap", path) && !path.empty())
+			metRouAoMap = TextureManager::LoadTexture(path);
 
-		path = roughnessMap != nullptr ? roughnessMap->path : "";
-		if (data.Serialize("roughnessMap", path) && !path.empty())
-			roughnessMap = TextureManager::LoadTexture(path);
-
-		path = aoMap != nullptr ? aoMap->path : "";
-		if (data.Serialize("aoMap", path) && !path.empty())
-			aoMap = TextureManager::LoadTexture(path);
-
-		path = normalMap != nullptr ? normalMap->path : "";
-		if (data.Serialize("normalMap", path) && !path.empty())
-			normalMap = TextureManager::LoadTexture(path);
-
-		path = heightMap != nullptr ? heightMap->path : "";
-		if (data.Serialize("heightMap", path) && !path.empty())
-			heightMap = TextureManager::LoadTexture(path);
+		path = normalHeightMap != nullptr ? normalHeightMap->path : "";
+		if (data.Serialize("normalHeightMap", path) && !path.empty())
+			normalHeightMap = TextureManager::LoadTexture(path);
 	}
 
 	std::shared_ptr<Texture> PBRMaterial::GetAlbedoMap()
 	{
 		return albedoMap != nullptr ? albedoMap : defaultAlbedoMap;
 	}
-	std::shared_ptr<Texture> PBRMaterial::GetMetallicMap()
+	std::shared_ptr<Texture> PBRMaterial::GetMetRouAoMap()
 	{
-		return metallicMap != nullptr ? metallicMap : defaultMetallicMap;
+		return metRouAoMap != nullptr ? metRouAoMap : defaultMetRouAoMap;
 	}
-	std::shared_ptr<Texture> PBRMaterial::GetRoughnessMap()
+	std::shared_ptr<Texture> PBRMaterial::GetNormalHeightMap()
 	{
-		return roughnessMap != nullptr ? roughnessMap : defaultRoughnessMap;
-	}
-	std::shared_ptr<Texture> PBRMaterial::GetAOMap()
-	{
-		return aoMap != nullptr ? aoMap : defaultAOMap;
-	}
-	std::shared_ptr<Texture> PBRMaterial::GetNormalMap()
-	{
-		return normalMap != nullptr ? normalMap : defaultNormalMap;
-	}
-	std::shared_ptr<Texture> PBRMaterial::GetHeightMap()
-	{
-		return heightMap != nullptr ? heightMap : defaultHeightMap;
+		return normalHeightMap != nullptr ? normalHeightMap : defaultNormalHeightMap;
 	}
 }

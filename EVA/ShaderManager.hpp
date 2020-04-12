@@ -20,7 +20,7 @@ namespace EVA
 
 	public:
 		
-		static const inline FS::path STANDARD_SHADERS_PATH = "./assets/standard assets/shaders/";
+		static const inline FS::path STANDARD_SHADERS_PATH = "./assets/standard_assets/shaders/";
 
 		/**
 		 * \brief Creates a shader program from the provided shader file

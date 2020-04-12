@@ -1,0 +1,5 @@
+{
+  "id": "EVA::BlinnPhongMaterial",
+  "shader": "./assets/standard_assets/shaders/blinn_phong.shader",
+  "diffuseMap": "./assets/standard_assets/textures/uv.png"
+}

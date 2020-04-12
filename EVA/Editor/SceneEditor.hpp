@@ -21,7 +21,7 @@ namespace EVA
 
 		std::unique_ptr<EditorWindows> m_Ew;
 
-		const char* m_TemplateScenePath = "./assets/standard assets/scenes/template.scene";
+		const char* m_TemplateScenePath = "./assets/standard_assets/scenes/template.scene";
 
 	public:
 

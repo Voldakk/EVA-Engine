@@ -1,0 +1,21 @@
+{
+    "id": "EVA::PBRMaterial",
+    "shader": "./assets/standard_assets/shaders/pbr.shader",
+    "useInstancing": false,
+    "cullFront": false,
+    "cullBack": true,
+    "tiling": [
+        200.0,
+        200.0
+    ],
+    "tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+    ],
+    "heightScale": 1.0,
+    "albedoMap": "./assets/terrain/textures/sand/albedo.jpg",
+    "metRouAoMap": "./assets/terrain/textures/sand/met_rou_ao.png",
+    "normalHeightMap": "./assets/terrain/textures/sand/normal_height.tga"
+}

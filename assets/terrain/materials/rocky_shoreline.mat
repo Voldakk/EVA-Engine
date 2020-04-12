@@ -1,0 +1,21 @@
+{
+    "id": "EVA::PBRMaterial",
+    "shader": "./assets/standard_assets/shaders/pbr.shader",
+    "useInstancing": false,
+    "cullFront": false,
+    "cullBack": true,
+    "tiling": [
+        100.0,
+        100.0
+    ],
+    "tint": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+    ],
+    "heightScale": 2.0,
+    "albedoMap": "./assets/terrain/textures/rocky_shoreline/albedo.png",
+    "metRouAoMap": "./assets/terrain/textures/rocky_shoreline/met_rou_ao.png",
+    "normalHeightMap": "./assets/terrain/textures/rocky_shoreline/normal_height.tga"
+}

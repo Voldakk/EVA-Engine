@@ -11,24 +11,18 @@ namespace EVA
 	{
 		REGISTER_MATERIAL(PBRMaterial, "EVA::PBRMaterial")
 
-			inline static const FS::path DEFAULT_TEXTURES_PATH = "./assets/standard assets/textures/";
+			inline static const FS::path DEFAULT_TEXTURES_PATH = "./assets/standard_assets/textures/";
 
 	public:
 
 		inline static bool init = true;
 		inline static std::shared_ptr<Texture> defaultAlbedoMap;
-		inline static std::shared_ptr<Texture> defaultMetallicMap;
-		inline static std::shared_ptr<Texture> defaultRoughnessMap;
-		inline static std::shared_ptr<Texture> defaultAOMap;
-		inline static std::shared_ptr<Texture> defaultNormalMap;
-		inline static std::shared_ptr<Texture> defaultHeightMap;
+		inline static std::shared_ptr<Texture> defaultMetRouAoMap;
+		inline static std::shared_ptr<Texture> defaultNormalHeightMap;
 
 		std::shared_ptr<Texture> albedoMap;
-		std::shared_ptr<Texture> metallicMap;
-		std::shared_ptr<Texture> roughnessMap;
-		std::shared_ptr<Texture> aoMap;
-		std::shared_ptr<Texture> normalMap;
-		std::shared_ptr<Texture> heightMap;
+		std::shared_ptr<Texture> metRouAoMap;
+		std::shared_ptr<Texture> normalHeightMap;
 
 		glm::vec2 tiling = glm::vec2(1.0f);
 		glm::vec4 tint = glm::vec4(1.0f);
@@ -41,10 +35,7 @@ namespace EVA
 		virtual void Serialize(DataObject& data) override;
 
 		std::shared_ptr<Texture> GetAlbedoMap();
-		std::shared_ptr<Texture> GetMetallicMap();
-		std::shared_ptr<Texture> GetRoughnessMap();
-		std::shared_ptr<Texture> GetAOMap();
-		std::shared_ptr<Texture> GetNormalMap();
-		std::shared_ptr<Texture> GetHeightMap();
+		std::shared_ptr<Texture> GetMetRouAoMap();
+		std::shared_ptr<Texture> GetNormalHeightMap();
 	};
 }

@@ -185,7 +185,7 @@ namespace EVA
 			
 			return out;*/
 
-			return TextureManager::LoadTexture("./assets/standard assets/textures/ibl_brdf_lut.png", TextureWrapping::ClampToEdge);
+			return TextureManager::LoadTexture("./assets/standard_assets/textures/ibl_brdf_lut.png", TextureWrapping::ClampToEdge);
 		}
 	};
 }

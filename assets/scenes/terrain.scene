@@ -1,8 +1,8 @@
 {
     "skybox": {
         "hdr": true,
-        "hdrPath": "./assets/standard assets/skybox/GCanyon_C_YumaPoint_3k.hdr",
-        "folderPath": "./assets/standard assets/skybox",
+        "hdrPath": "./assets/standard_assets/skybox/GCanyon_C_YumaPoint_3k.hdr",
+        "folderPath": "./assets/standard_assets/skybox",
         "fileExtension": ".png"
     },
     "gameObjects": [
@@ -106,11 +106,11 @@
                     "TBN range": 200,
                     "Normal strength": 20,
                     "Target": "",
-                    "shader": "./assets/standard assets/shaders/terrain.shader",
-                    "Heightmap": "./assets/terrain/heightmaps/test.bmp",
-                    "material0": "./assets/terrain/ground_forest.mat",
-                    "material1": "./assets/terrain/sand.mat",
-                    "material2": "./assets/terrain/granite.mat",
+                    "shader": "./assets/terrain/shaders/terrain.shader",
+                    "Heightmap": "./assets/terrain/heightmaps/trondheim_normalized_blur.png",
+                    "material0": "./assets/terrain/materials/rocky_shoreline.mat",
+                    "material1": "./assets/terrain/materials/sand.mat",
+                    "material2": "./assets/terrain/materials/snow.mat",
                     "Lod distances": [
                         3200,
                         1600,
@@ -121,126 +121,6 @@
                         100,
                         50
                     ]
-                }
-            ]
-        },
-        {
-            "name": "Cube 0,0",
-            "position": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "orientation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "id": "EVA::MeshRenderer",
-                    "material": "./assets/terrain/granite.mat",
-                    "mesh": "./assets/standard assets/models/cube.obj",
-                    "meshIndex": 0
-                }
-            ]
-        },
-        {
-            "name": "Plane",
-            "position": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                5.0,
-                1.0,
-                5.0
-            ],
-            "orientation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "id": "EVA::MeshRenderer",
-                    "material": "./assets/terrain/sand.mat",
-                    "mesh": "./assets/standard assets/models/plane.obj",
-                    "meshIndex": 0
-                }
-            ]
-        },
-        {
-            "name": "Point light",
-            "position": [
-                0.0,
-                1.100000023841858,
-                0.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "orientation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "id": "EVA::Light",
-                    "type": "point",
-                    "color": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "ambientCoefficient": 0.004999999888241291,
-                    "shadows": false,
-                    "shadowMapSize": 2048,
-                    "directionalShadowDistance": 20.0,
-                    "directionalNearPlane": 1.0,
-                    "directionalFarPlane": 100.0,
-                    "attenuation": 0.20000000298023225,
-                    "pointNearPlane": 0.10000000149011612,
-                    "pointFarPlane": 25.0
-                }
-            ]
-        },
-        {
-            "name": "GoldSphere",
-            "position": [
-                0.0,
-                5.0,
-                0.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "orientation": [
-                0.0,
-                0.0,
-                0.0,
-                1.0
-            ],
-            "components": [
-                {
-                    "id": "EVA::MeshRenderer",
-                    "material": "./assets/gold/gold.mat",
-                    "mesh": "./assets/standard assets/models/sphere.obj",
-                    "meshIndex": 0
                 }
             ]
         }

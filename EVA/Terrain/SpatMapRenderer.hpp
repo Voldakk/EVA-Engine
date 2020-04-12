@@ -14,7 +14,7 @@ namespace EVA
 		SplatMapRenderer()
 		{
 			auto paths = std::make_shared<ShaderPaths>();
-			paths->compute = "./assets/standard assets/shaders/source/splat_map.comp";
+			paths->compute = "./assets/standard_assets/shaders/source/splat_map.comp";
 			m_shader = std::make_shared<Shader>(paths);
 		}
 

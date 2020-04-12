@@ -35,11 +35,8 @@ namespace EVA
 				shader->SetUniform1F(var + "heightScale", m_Terrain->materials[i]->heightScale);
 
 				shader->BindTexture(m_Terrain->materials[i]->GetAlbedoMap(), var + "albedoMap");
-				shader->BindTexture(m_Terrain->materials[i]->GetMetallicMap(), var + "metallicMap");
-				shader->BindTexture(m_Terrain->materials[i]->GetRoughnessMap(), var + "roughnessMap");
-				shader->BindTexture(m_Terrain->materials[i]->GetAOMap(), var + "aoMap");
-				shader->BindTexture(m_Terrain->materials[i]->GetNormalMap(), var + "normalMap");
-				shader->BindTexture(m_Terrain->materials[i]->GetHeightMap(), var + "heightMap");
+				shader->BindTexture(m_Terrain->materials[i]->GetMetRouAoMap(), var + "metRouAoMap");
+				shader->BindTexture(m_Terrain->materials[i]->GetNormalHeightMap(), var + "normalHeightMap");
 			}
 
 			if (scene != nullptr && scene->skybox != nullptr)

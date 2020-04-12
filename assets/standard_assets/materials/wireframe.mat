@@ -1,0 +1,7 @@
+{
+  "id": "EVA::BlinnPhongMaterial",
+  "shader": "./assets/standard_assets/shaders/wireframe.shader",
+  "useInstancing": false,
+  "cullFront": false,
+  "cullBack": true
+}

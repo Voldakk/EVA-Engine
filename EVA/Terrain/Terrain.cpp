@@ -17,7 +17,6 @@ namespace EVA
 {
 	void Terrain::Start()
 	{
-		//m_materials = std::make_shared<DiffNormHeightMaterial>();
 		m_Material = std::make_shared<TerrainMaterial>();
 		m_Material->SetTerrain(this);
 		m_Material->SetUseInstancing(true);
