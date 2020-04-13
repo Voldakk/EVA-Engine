@@ -21,7 +21,8 @@ namespace EVA
 
 			shader->BindTexture(m_Terrain->heightmap, "heightmap");
 			shader->BindTexture(m_Terrain->normalmap, "normalmap");
-			shader->BindTexture(m_Terrain->splatmap, "splatmap");
+			shader->BindTexture(m_Terrain->splatmaps[0], "splatmap0");
+			shader->BindTexture(m_Terrain->splatmaps[1], "splatmap1");
 
 			for (size_t i = 0; i < m_Terrain->layers.size(); i++)
 			{

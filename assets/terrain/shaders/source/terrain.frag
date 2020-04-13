@@ -13,7 +13,8 @@ out vec4 fragColor;
 // Terrain
 uniform int tbnRange;
 uniform sampler2D normalmap;
-uniform sampler2D splatmap;
+uniform sampler2D splatmap0;
+uniform sampler2D splatmap1;
 
 // Materials
 uniform int numMaterials;
@@ -42,6 +43,8 @@ uniform struct Light
    float farPlane;
    int hasShadows;
    mat4 lightSpaceMatrix;
+   sampler2D shadowMap;
+   samplerCube shadowCubeMap;
 } allLights[MAX_LIGHTS];
 
 uniform vec3 cameraPosition;
@@ -103,7 +106,7 @@ float ShadowCubeCalculation(vec3 fragPos, int lightIndex)
     float diskRadius = (1.0 + (viewDistance / allLights[lightIndex].farPlane)) / 25.0;
     for(int i = 0; i < samples; ++i)
     {
-        float closestDepth = 0;//texture(allLights[lightIndex].shadowCubeMap, fragToLight + gridSamplingDisk[i] * diskRadius).r;
+        float closestDepth = texture(allLights[lightIndex].shadowCubeMap, fragToLight + gridSamplingDisk[i] * diskRadius).r;
         closestDepth *= allLights[lightIndex].farPlane;
         if(currentDepth - bias > closestDepth)
             shadow += 1.0;
@@ -165,8 +168,8 @@ void main()
 
 	vec3 normal = normalize(texture(normalmap, uvFrag).rbg);
 	
-	vec4 blendValues0 = texture(splatmap, uvFrag).rgba;
-    vec4 blendValues1 = vec4(0);//texture(splatmap, uvFrag).rgba;
+	vec4 blendValues0 = texture(splatmap0, uvFrag).rgba;
+    vec4 blendValues1 = texture(splatmap1, uvFrag).rgba;
 	float[MAX_MATERIALS] blendValuesArray = float[](blendValues0.r, blendValues0.g, blendValues0.b, blendValues0.a, blendValues1.r, blendValues1.g, blendValues1.b, blendValues1.a);
 	
     vec2[MAX_MATERIALS] UVs;
@@ -227,15 +230,15 @@ void main()
             float distance = length(allLights[i].position.xyz - posFrag);
             float attenuation = 1.0 / (distance * distance);
             radiance = allLights[i].color * attenuation;
-            //if(allLights[i].hasShadows == 1)
-            //    shadow = ShadowCubeCalculation(posFrag, i);
+            if(allLights[i].hasShadows == 1)
+                shadow = ShadowCubeCalculation(posFrag, i);
         }
         else // Directional light
         {
             L =  normalize(allLights[i].position.xyz);
             radiance = allLights[i].color;
-            //if(allLights[i].hasShadows == 1)
-            //    shadow = ShadowCalculation(N, L, allLights[i].shadowMap, allFragPosLightSpace[i]);
+            if(allLights[i].hasShadows == 1)
+                shadow = ShadowCalculation(N, L, allLights[i].shadowMap, allFragPosLightSpace[i]);
         }
 
         //radiance *= 1 - shadow;

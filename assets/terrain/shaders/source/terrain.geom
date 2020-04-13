@@ -25,7 +25,8 @@ uniform struct Material
 
 uniform mat4 viewProjection;
 uniform sampler2D normalmap;
-uniform sampler2D splatmap;
+uniform sampler2D splatmap0;
+uniform sampler2D splatmap1;
 uniform vec3 cameraPosition;
 uniform int tbnRange;
 
@@ -73,8 +74,8 @@ void main() {
 			
 			float height = gl_in[k].gl_Position.y;
 			
-			vec4 blendValues0 = texture(splatmap, uvGeo[k]).rgba;
-			vec4 blendValues1 = vec4(0);//texture(splatmap1, uvGeo[k]).rgba;
+			vec4 blendValues0 = texture(splatmap0, uvGeo[k]).rgba;
+			vec4 blendValues1 = texture(splatmap1, uvGeo[k]).rgba;
 			float[MAX_MATERIALS] blendValuesArray = float[](blendValues0.r, blendValues0.g, blendValues0.b, blendValues0.a, blendValues1.r, blendValues1.g, blendValues1.b, blendValues1.a);
 			
 			float scale = 0;

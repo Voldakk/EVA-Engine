@@ -24,7 +24,7 @@ namespace EVA
 
 		std::shared_ptr<Texture> m_Heightmap;
 		std::shared_ptr<Texture> m_Normalmap;
-		std::shared_ptr<Texture> m_Splatmap;
+		std::vector<std::shared_ptr<Texture>> m_Splatmaps;
 
 		std::string m_TargetName;
 		Transform* m_Target;
@@ -43,7 +43,7 @@ namespace EVA
 
 		const std::shared_ptr<Texture>& heightmap = m_Heightmap;
 		const std::shared_ptr<Texture>& normalmap = m_Normalmap;
-		const std::shared_ptr<Texture>& splatmap = m_Splatmap;
+		const std::vector<std::shared_ptr<Texture>>& splatmaps = m_Splatmaps;
 		const std::vector<std::shared_ptr<TerrainLayer>>& layers = m_Layers;
 
 		const std::vector<int>& lodDistances = m_LodDistances;

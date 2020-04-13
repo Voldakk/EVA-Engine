@@ -14,7 +14,7 @@ namespace EVA
 		NormalMapRenderer()
 		{
 			auto paths = std::make_shared<ShaderPaths>();
-			paths->compute = "./assets/standard_assets/shaders/source/normal_map.comp";
+			paths->compute = "./assets/terrain/shaders/source/normal_map.comp";
 			m_shader = std::make_shared<Shader>(paths);
 		}
 

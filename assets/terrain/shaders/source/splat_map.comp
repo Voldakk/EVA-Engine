@@ -1,0 +1,43 @@
+#version 430 core
+#define MAX_LAYERS 8
+
+layout (local_size_x = 16, local_size_y = 16) in;
+
+layout (binding = 0, rgba16f) uniform writeonly image2D splatmap0;
+layout (binding = 1, rgba16f) uniform writeonly image2D splatmap1;
+
+uniform int numLayers;
+
+uniform sampler2D normalMap;
+uniform sampler2D heightMap;
+uniform int N;
+
+uniform struct Layer
+{
+	float minHeight;
+	float maxHeight;
+	float minAngle;
+	float maxAngle;
+} layers[MAX_LAYERS];
+
+void main(void)
+{
+	ivec2 x = ivec2(gl_GlobalInvocationID.xy);
+	vec2 x_inv = gl_GlobalInvocationID.xy / float(N);
+
+	vec3 normal = normalize(texture(normalMap, x_inv).xzy);
+	float height = texture(heightMap, x_inv).r;
+	float angle = abs(degrees(acos(dot(normal, vec3(0, 1, 0)))));
+
+	float blendValues[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+
+	for (int i = 0; i < numLayers; ++i)
+	{
+		if(layers[i].minHeight <= height && height <= layers[i].maxHeight 
+		&& layers[i].minAngle <= angle && angle <= layers[i].maxAngle)
+			blendValues[i] = 1;
+	}
+
+	imageStore(splatmap0, x, vec4(blendValues[0], blendValues[1], blendValues[2], blendValues[3]));
+	imageStore(splatmap1, x, vec4(blendValues[4], blendValues[5], blendValues[6], blendValues[7]));
+}

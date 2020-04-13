@@ -133,7 +133,7 @@ namespace EVA
 
 		data.Serialize("Lod distances", m_LodDistances);
 
-		if (recalculateNormals && m_Heightmap != nullptr)
+		if ((recalculateNormals && m_Heightmap != nullptr) || (data.mode == DataObject::DataMode::Inspector && InspectorFields::Button("Recalculate")))
 		{
 			{
 				ScopeTimer timer("Terrain generate normalmap");
@@ -143,7 +143,7 @@ namespace EVA
 			{
 				ScopeTimer timer("Terrain generate splatmap");
 				SplatMapRenderer smr;
-				m_Splatmap = smr.Render(m_Normalmap, m_Normalmap->width);
+				m_Splatmaps = smr.Render(m_Normalmap->width, m_Normalmap, m_Heightmap, m_Layers);
 			}
 		}
 	}
