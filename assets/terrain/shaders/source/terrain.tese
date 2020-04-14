@@ -1,6 +1,6 @@
 #version 430
 
-layout(quads, fractional_odd_spacing, cw) in;
+layout(quads, fractional_even_spacing, cw) in;
 
 in vec2 uvTese[];
 
@@ -16,16 +16,16 @@ void main()
 	
 	// world position
 	vec4 position =
-	((1 - u) * (1 - v) * gl_in[12].gl_Position +
-	    u    * (1 - v) * gl_in[ 0].gl_Position +
-	    u    *    v    * gl_in[ 3].gl_Position +
-	 (1 - u) *    v    * gl_in[15].gl_Position);
+	((1 - u) * (1 - v) * gl_in[2].gl_Position +
+	    u    * (1 - v) * gl_in[0].gl_Position +
+	    u    *    v    * gl_in[1].gl_Position +
+	 (1 - u) *    v    * gl_in[3].gl_Position);
 
 	uvGeo =
-	((1 - u) * (1 - v) * uvTese[12] +
-	    u    * (1 - v) * uvTese[ 0] +
-	    u    *    v    * uvTese[ 3] +
-	 (1 - u) *    v    * uvTese[15]);
+	((1 - u) * (1 - v) * uvTese[2] +
+	    u    * (1 - v) * uvTese[0] +
+	    u    *    v    * uvTese[1] +
+	 (1 - u) *    v    * uvTese[3]);
 	
 	float height = texture(heightmap, uvGeo).r;
 

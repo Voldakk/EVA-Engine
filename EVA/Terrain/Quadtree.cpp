@@ -27,15 +27,15 @@ namespace EVA
 
 		m_Leaf = false;
 
-		for (size_t i = 0; i < 2; i++)
+		for (size_t y = 0; y < 2; y++)
 		{
-			for (size_t j = 0; j < 2; j++)
+			for (size_t x = 0; x < 2; x++)
 			{
 				m_Children.push_back(std::make_unique<Quadtree>(
 					m_Terrain,
-					glm::vec2(i, j),
+					glm::vec2(x, y),
 					Bounds2::MinSize(
-						m_Data.bounds.GetMin() + glm::vec2(m_Data.bounds.GetExtents().x * i, m_Data.bounds.GetExtents().y * j),
+						m_Data.bounds.GetMin() + glm::vec2(m_Data.bounds.GetExtents().x * x, m_Data.bounds.GetExtents().y * y),
 						m_Data.bounds.GetExtents()),
 					m_Data.lod + 1
 					));
@@ -89,6 +89,73 @@ namespace EVA
 			{
 				m_Children[i]->Update(cameraPosition);
 			}
+		}
+	}
+
+	Quadtree* Quadtree::Find(float x, float y)
+	{
+		auto center = m_Data.bounds.GetCenter();
+
+		if (center.x == x && center.y == y)
+			return this;
+
+		if (m_Leaf)
+			return this;
+
+		if (y < center.y && x < center.x)
+			return m_Children[0]->Find(x, y);
+
+		else if (y < center.y && x > center.x)
+			return m_Children[1]->Find(x, y);
+
+		else if (y > center.y && x < center.x)
+			return m_Children[2]->Find(x, y);
+
+		else if (y > center.y && x > center.x)
+			return m_Children[3]->Find(x, y);
+
+		return this;
+	}
+
+	void Quadtree::CalcTessScale(Quadtree* root)
+	{
+		if (root == nullptr)
+			root = this;
+
+		auto center = m_Data.bounds.GetCenter();
+		auto size = m_Data.bounds.GetSize();
+		auto width = size.x;
+		float margin = 0.000001f;
+		Quadtree* t;
+
+		auto GetScale = [this](Quadtree* other)
+		{
+			if (other->data.lod < m_Data.lod)
+				return (float)glm::pow(2, m_Data.lod - other->data.lod);
+			else
+				return 1.0f;
+		};
+
+		// Positive Y (north)
+		t = root->Find(center.x, center.y + margin + width / 2.0);
+		m_Data.tScalePosY = GetScale(t);
+
+		// Negative Y (south)
+		t = root->Find(center.x, center.y - margin - width / 2.0);
+		m_Data.tScaleNegY = GetScale(t);
+
+		// Negative X (east)
+		t = root->Find(center.x - margin - width / 2.0, center.y);
+		m_Data.tScalePosX = GetScale(t);
+
+		// Positive X (west)
+		t = root->Find(center.x + margin + width / 2.0, center.y);
+		m_Data.tScaleNegX = GetScale(t);
+
+
+		for (const auto& c : m_Children)
+		{
+			c->CalcTessScale(root);
 		}
 	}
 }

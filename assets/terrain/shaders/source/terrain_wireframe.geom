@@ -1,5 +1,5 @@
 #version 330
-#define MAX_MATERIALS 3
+#define MAX_MATERIALS 8
 
 layout (triangles) in;
 layout (line_strip, max_vertices=4) out;
@@ -21,7 +21,8 @@ uniform struct Material
 
 uniform mat4 viewProjection;
 uniform sampler2D normalmap;
-uniform sampler2D splatmap;
+uniform sampler2D splatmap0;
+uniform sampler2D splatmap1;
 uniform vec3 cameraPosition;
 uniform int tbnRange;
 
@@ -71,11 +72,12 @@ void main() {
 			
 			vec3 normal = normalize(texture(normalmap, uvGeo[k]).rbg);
 			
-			vec4 blendValues = texture(splatmap, uvGeo[k]).rgba;
-			float[4] blendValuesArray = float[](blendValues.r, blendValues.g, blendValues.b, blendValues.a);
+			vec4 blendValues0 = texture(splatmap0, uvGeo[k]).rgba;
+			vec4 blendValues1 = texture(splatmap1, uvGeo[k]).rgba;
+			float[MAX_MATERIALS] blendValuesArray = float[](blendValues0.r, blendValues0.g, blendValues0.b, blendValues0.a, blendValues1.r, blendValues1.g, blendValues1.b, blendValues1.a);
 			
 			float scale = 0;
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < numMaterials; i++)
 			{
 				scale += texture(materials[i].normalHeightMap, uvGeo[k]
 							* materials[i].tiling).a 

@@ -106,7 +106,7 @@
                     "TBN range": 200,
                     "Normal strength": 20,
                     "Target": "",
-                    "shader": "./assets/terrain/shaders/terrain.shader",
+                    "shader": "./assets/terrain/shaders/terrain_wireframe.shader",
                     "Heightmap": "./assets/terrain/heightmaps/trondheim_normalized_blur.png",
                     "layer0": {
                         "material": "./assets/terrain/materials/sand.mat",
@@ -173,6 +173,33 @@
                         100,
                         50
                     ]
+                }
+            ]
+        },
+        {
+            "name": "0, 0",
+            "position": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "scale": [
+                1.0,
+                1000.0,
+                1.0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::MeshRenderer",
+                    "material": "./assets/standard_assets/materials/grid.mat",
+                    "mesh": "./assets/standard_assets/models/cube.obj",
+                    "meshIndex": 0
                 }
             ]
         }

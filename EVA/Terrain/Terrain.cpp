@@ -58,6 +58,12 @@ namespace EVA
 		std::vector<NodeData> leafData;
 
 		{
+			SCOPE_TIMER("Quadtree CalcTessScale"); // 1.3 ms
+
+			m_Quadtree->CalcTessScale();
+		}
+
+		{
 			SCOPE_TIMER("Quadtree GetLeafData"); // 1.3 ms
 
 			m_Quadtree->GetLeafData(leafData);
@@ -72,7 +78,7 @@ namespace EVA
 			{
 				auto localMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(data.bounds.GetMin().x, 0.0f, data.bounds.GetMin().y));
 				localMatrix = glm::scale(localMatrix, glm::vec3(data.bounds.GetSize().x, 0.0f, data.bounds.GetSize().y));
-				m_MeshData.push_back({ transform->modelMatrix, localMatrix });
+				m_MeshData.push_back({ transform->modelMatrix, localMatrix, data.tScaleNegX, data.tScalePosX, data.tScaleNegY, data.tScalePosY });
 			}
 		}
 	}
@@ -150,28 +156,13 @@ namespace EVA
 
 	std::vector<glm::vec2> Terrain::GeneratePatch()
 	{
-		std::vector<glm::vec2> vertices(16);
+		std::vector<glm::vec2> vertices(4);
 
 		int index = 0;
 
 		vertices[index++] = glm::vec2(0, 0);
-		vertices[index++] = glm::vec2(0.333f, 0);
-		vertices[index++] = glm::vec2(0.666f, 0);
 		vertices[index++] = glm::vec2(1, 0);
-
-		vertices[index++] = glm::vec2(0, 0.333f);
-		vertices[index++] = glm::vec2(0.333f, 0.333f);
-		vertices[index++] = glm::vec2(0.666f, 0.333f);
-		vertices[index++] = glm::vec2(1, 0.333f);
-
-		vertices[index++] = glm::vec2(0, 0.666f);
-		vertices[index++] = glm::vec2(0.333f, 0.666f);
-		vertices[index++] = glm::vec2(0.666f, 0.666f);
-		vertices[index++] = glm::vec2(1, 0.666f);
-
 		vertices[index++] = glm::vec2(0, 1);
-		vertices[index++] = glm::vec2(0.333f, 1);
-		vertices[index++] = glm::vec2(0.666f, 1);
 		vertices[index++] = glm::vec2(1, 1);
 
 		return vertices;
