@@ -14,6 +14,17 @@ namespace EVA
 
 	void FreeLook::Update(const float deltaTime)
 	{
+		if (Input::GetKeyDown(keyBindings[Action::ToggleCursor]))
+		{
+			if (Input::GetCursorMode() == Input::CursorMode::Disabled)
+				Input::SetCursorMode(Input::CursorMode::Normal);
+			else
+				Input::SetCursorMode(Input::CursorMode::Disabled);
+		}
+
+		if (Input::GetCursorMode() != Input::CursorMode::Disabled)
+			return;
+
 		if (Input::GetKey(keyBindings[Action::Forward]))
 			currentMovementSpeed *= 1.0f + deltaTime;
 		if (Input::GetKeyUp(keyBindings[Action::Forward]))

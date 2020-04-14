@@ -16,7 +16,7 @@ namespace EVA
 
 	public:
 
-		enum class Action { Forward, Back, Right, Left, Up, Down };
+		enum class Action { Forward, Back, Right, Left, Up, Down, ToggleCursor };
 		std::map<Action, Input::Key> keyBindings =
 		{ 
 			{ Action::Forward, Input::Key::W },
@@ -24,7 +24,9 @@ namespace EVA
 			{ Action::Right,   Input::Key::D },
 			{ Action::Left,    Input::Key::A },
 			{ Action::Up,      Input::Key::Space },
-			{ Action::Down,    Input::Key::LeftShift }
+			{ Action::Down,    Input::Key::LeftShift },
+			{ Action::ToggleCursor,    Input::Key::Escape }
+
 		};
 
 		float mouseSensitivity = 50.0f;

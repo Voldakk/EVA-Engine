@@ -100,7 +100,21 @@ namespace EVA
 			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 			return;
 		}
-		
+        throw;
+	}
+
+    Input::CursorMode Input::GetCursorMode()
+	{
+        switch (glfwGetInputMode(m_Window, GLFW_CURSOR))
+        {
+        case GLFW_CURSOR_NORMAL:
+            return CursorMode::Normal;
+        case GLFW_CURSOR_HIDDEN:
+            return CursorMode::Hidden;
+        case GLFW_CURSOR_DISABLED:
+            return CursorMode::Disabled;
+        }
+        throw;
 	}
 
 	// ========== MOUSE POSITION ==========

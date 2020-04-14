@@ -75,6 +75,7 @@ namespace EVA
 		enum class CursorMode { Normal, Hidden, Disabled };
 
 		static void SetCursorMode(CursorMode mode);
+		static CursorMode GetCursorMode();
 
 
 		// ========== MOUSE POSITION ==========

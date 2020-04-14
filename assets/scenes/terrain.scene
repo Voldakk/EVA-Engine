@@ -68,7 +68,7 @@
                     "id": "EVA::Camera",
                     "fov": 90.0,
                     "near": 0.10000000149011612,
-                    "far": 100.0
+                    "far": 10000.0
                 },
                 {
                     "id": "EVA::FreeLook",
@@ -106,7 +106,7 @@
                     "TBN range": 200,
                     "Normal strength": 20,
                     "Target": "",
-                    "shader": "./assets/terrain/shaders/terrain_wireframe.shader",
+                    "shader": "./assets/terrain/shaders/terrain.shader",
                     "Heightmap": "./assets/terrain/heightmaps/trondheim_normalized_blur.png",
                     "layer0": {
                         "material": "./assets/terrain/materials/sand.mat",
