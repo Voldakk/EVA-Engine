@@ -100,9 +100,6 @@
             "components": [
                 {
                     "id": "EVA::Terrain",
-                    "Tesselation factor": 500.0,
-                    "Tesselation slope": 1.5,
-                    "Tesselation shift": 0.20000000298023225,
                     "TBN range": 200,
                     "Normal strength": 20,
                     "Target": "",

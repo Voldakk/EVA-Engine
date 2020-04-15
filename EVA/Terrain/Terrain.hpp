@@ -3,7 +3,7 @@
 #include "EVA.hpp"
 #include "EVA/Components.hpp"
 
-#include "Quadtree.hpp"
+#include "../Quadtree/Quadtree.hpp"
 #include "TerrainMaterial.hpp"
 #include "TerrainMesh.hpp"
 #include "TerrainLayer.hpp"
@@ -29,28 +29,20 @@ namespace EVA
 		std::string m_TargetName;
 		Transform* m_Target;
 
-		std::vector<int> m_LodDistances = std::vector<int>(8);
-
 		std::vector<std::shared_ptr<TerrainLayer>> m_Layers = std::vector<std::shared_ptr<TerrainLayer>>(5);
 
-		float m_TessFactor = 500;
-		float m_TessSlope = 2.0f;
-		float m_TessShift = 0.1f;
 		int m_TbnRange = 200;
 		int m_NormalStrength = 10;
 
 	public:
+
+		const std::unique_ptr<Quadtree>& quadtree = m_Quadtree;
 
 		const std::shared_ptr<Texture>& heightmap = m_Heightmap;
 		const std::shared_ptr<Texture>& normalmap = m_Normalmap;
 		const std::vector<std::shared_ptr<Texture>>& splatmaps = m_Splatmaps;
 		const std::vector<std::shared_ptr<TerrainLayer>>& layers = m_Layers;
 
-		const std::vector<int>& lodDistances = m_LodDistances;
-
-		const float& tessFactor = m_TessFactor;
-		const float& tessSlope = m_TessSlope;
-		const float& tessShift = m_TessShift;
 		const int& tbnRange = m_TbnRange;
 
 		void Start() override;

@@ -10,20 +10,15 @@ namespace EVA
 
 		if (m_Terrain != nullptr)
 		{
-			shader->SetUniform1F("tessFactor", m_Terrain->tessFactor);
-			shader->SetUniform1F("tessSlope", m_Terrain->tessSlope);
-			shader->SetUniform1F("tessShift", m_Terrain->tessShift);
 			shader->SetUniform1F("scaleY", m_Terrain->transform->scale.y);
 			shader->SetUniform1I("tbnRange", m_Terrain->tbnRange);
-
-			shader->SetUniform1I("numMaterials", m_Terrain->layers.size());
-
 
 			shader->BindTexture(m_Terrain->heightmap, "heightmap");
 			shader->BindTexture(m_Terrain->normalmap, "normalmap");
 			shader->BindTexture(m_Terrain->splatmaps[0], "splatmap0");
 			shader->BindTexture(m_Terrain->splatmaps[1], "splatmap1");
 
+			shader->SetUniform1I("numMaterials", m_Terrain->layers.size());
 			for (size_t i = 0; i < m_Terrain->layers.size(); i++)
 			{
 				if (m_Terrain->layers[i] == nullptr || m_Terrain->layers[i]->material == nullptr)

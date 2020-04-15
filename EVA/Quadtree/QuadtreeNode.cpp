@@ -1,26 +1,22 @@
-#include "Quadtree.hpp"
+#include "QuadtreeNode.hpp"
 
-#include "Terrain.hpp"
+#include "Quadtree.hpp"
 
 namespace EVA
 {
-	Quadtree::Quadtree(Terrain* terrain, glm::vec2 index, Bounds2 bounds)
+	QuadtreeNode::QuadtreeNode(Quadtree* quadTree, glm::vec2 index, Bounds2 bounds) : QuadtreeNode(quadTree, index, bounds, 0)
 	{
-		m_Terrain = terrain;
-		m_Data.lod = 0;
-		m_Data.index = index;
-		m_Data.bounds = bounds;
 	}
 
-	Quadtree::Quadtree(Terrain* terrain, glm::vec2 index, Bounds2 bounds, int lod)
+	QuadtreeNode::QuadtreeNode(Quadtree* quadTree, glm::vec2 index, Bounds2 bounds, int lod)
 	{
-		m_Terrain = terrain;
+		m_Quadtree = quadTree;
 		m_Data.lod = lod;
 		m_Data.index = index;
 		m_Data.bounds = bounds;
 	}
 
-	void Quadtree::Subdivide()
+	void QuadtreeNode::Subdivide()
 	{
 		if (!m_Leaf)
 			return;
@@ -31,8 +27,8 @@ namespace EVA
 		{
 			for (size_t x = 0; x < 2; x++)
 			{
-				m_Children.push_back(std::make_unique<Quadtree>(
-					m_Terrain,
+				m_Children.push_back(std::make_unique<QuadtreeNode>(
+					m_Quadtree,
 					glm::vec2(x, y),
 					Bounds2::MinSize(
 						m_Data.bounds.GetMin() + glm::vec2(m_Data.bounds.GetExtents().x * x, m_Data.bounds.GetExtents().y * y),
@@ -43,7 +39,7 @@ namespace EVA
 		}
 	}
 
-	void Quadtree::Merge()
+	void QuadtreeNode::Merge()
 	{
 		if (m_Leaf)
 			return;
@@ -53,7 +49,7 @@ namespace EVA
 		children.clear();
 	}
 
-	void Quadtree::GetLeafData(std::vector<NodeData>& leafData) const
+	void QuadtreeNode::GetLeafData(std::vector<NodeData>& leafData) const
 	{
 		if (m_Leaf)
 		{
@@ -68,19 +64,18 @@ namespace EVA
 		}
 	}
 
-	void Quadtree::Update(const glm::vec3 cameraPosition)
+	void QuadtreeNode::Update(const glm::vec2 cameraPosition)
 	{
-		if (m_Data.lod >= m_Terrain->lodDistances.size())
+		if (m_Data.lod >= m_Quadtree->lodDistances.size())
 			return;
 
-		Bounds2 b = m_Data.bounds;
-		b.ScaleXZ(m_Terrain->transform->scale);
+		auto b = m_Data.bounds;
+		b.Scale(m_Quadtree->scale);
+		const auto dist = b.Distance(cameraPosition);
 
-		const auto dist = b.DistanceXZ(cameraPosition);
-
-		if (dist < m_Terrain->lodDistances[m_Data.lod])
+		if (dist < m_Quadtree->lodDistances[m_Data.lod])
 			Subdivide();
-		else if (dist >= m_Terrain->lodDistances[m_Data.lod])
+		else if (dist >= m_Quadtree->lodDistances[m_Data.lod])
 			Merge();
 
 		if (!leaf)
@@ -92,7 +87,7 @@ namespace EVA
 		}
 	}
 
-	Quadtree* Quadtree::Find(float x, float y)
+	QuadtreeNode* QuadtreeNode::Find(float x, float y)
 	{
 		auto center = m_Data.bounds.GetCenter();
 
@@ -117,18 +112,15 @@ namespace EVA
 		return this;
 	}
 
-	void Quadtree::CalcTessScale(Quadtree* root)
+	void QuadtreeNode::CalcTessScale()
 	{
-		if (root == nullptr)
-			root = this;
-
 		auto center = m_Data.bounds.GetCenter();
 		auto size = m_Data.bounds.GetSize();
 		auto width = size.x;
 		float margin = 0.000001f;
-		Quadtree* t;
+		QuadtreeNode* t;
 
-		auto GetScale = [this](Quadtree* other)
+		auto GetScale = [this](QuadtreeNode* other)
 		{
 			if (other->data.lod < m_Data.lod)
 				return (float)glm::pow(2, m_Data.lod - other->data.lod);
@@ -137,25 +129,25 @@ namespace EVA
 		};
 
 		// Positive Y (north)
-		t = root->Find(center.x, center.y + margin + width / 2.0);
+		t = m_Quadtree->Find(center.x, center.y + margin + width / 2.0);
 		m_Data.tScalePosY = GetScale(t);
 
 		// Negative Y (south)
-		t = root->Find(center.x, center.y - margin - width / 2.0);
+		t = m_Quadtree->Find(center.x, center.y - margin - width / 2.0);
 		m_Data.tScaleNegY = GetScale(t);
 
 		// Negative X (east)
-		t = root->Find(center.x - margin - width / 2.0, center.y);
+		t = m_Quadtree->Find(center.x - margin - width / 2.0, center.y);
 		m_Data.tScalePosX = GetScale(t);
 
 		// Positive X (west)
-		t = root->Find(center.x + margin + width / 2.0, center.y);
+		t = m_Quadtree->Find(center.x + margin + width / 2.0, center.y);
 		m_Data.tScaleNegX = GetScale(t);
 
 
 		for (const auto& c : m_Children)
 		{
-			c->CalcTessScale(root);
+			c->CalcTessScale();
 		}
 	}
 }

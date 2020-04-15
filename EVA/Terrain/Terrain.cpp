@@ -25,8 +25,6 @@ namespace EVA
 		auto v = GeneratePatch();
 		m_Mesh = std::make_shared<TerrainMesh>(v);
 
-		m_Quadtree = std::make_unique<Quadtree>(this, glm::vec2(0, 0), Bounds2::MinMax(glm::vec2(0.0f), glm::vec2(1.0f)));
-
 		const auto go = scene->FindGameObjectByName(m_TargetName);
 		if (go != nullptr)
 			m_Target = go->transform.get();
@@ -39,38 +37,23 @@ namespace EVA
 		if (m_Material == nullptr)
 			return;
 
+		glm::vec3 targetPos = Application::mainCamera->transform->position;
+		if (m_Target != nullptr)
 		{
-			SCOPE_TIMER("Quadtree Update"); // 1.1 ms
-
-			glm::vec3 targetPos = Application::mainCamera->transform->position;
-			if (m_Target != nullptr)
-			{
-				glm::vec3 targetScale = glm::vec3(1.0f);
-				if (m_Target->parent.Get() != nullptr)
-					targetScale = m_Target->parent->scale;
-				targetPos = m_Target->position / targetScale;
-			}
-			targetPos -= transform->position;
-
-			m_Quadtree->Update(targetPos);
+			glm::vec3 targetScale = glm::vec3(1.0f);
+			if (m_Target->parent.Get() != nullptr)
+				targetScale = m_Target->parent->scale;
+			targetPos = m_Target->position / targetScale;
 		}
+		targetPos -= transform->position;
+		m_Quadtree->scale = glm::vec2(transform->scale.x, transform->scale.z);
+		m_Quadtree->Update(glm::vec2(targetPos.x, targetPos.z));
 
 		std::vector<NodeData> leafData;
+		m_Quadtree->GetLeafData(leafData);
 
 		{
-			SCOPE_TIMER("Quadtree CalcTessScale"); // 1.3 ms
-
-			m_Quadtree->CalcTessScale();
-		}
-
-		{
-			SCOPE_TIMER("Quadtree GetLeafData"); // 1.3 ms
-
-			m_Quadtree->GetLeafData(leafData);
-		}
-
-		{
-			SCOPE_TIMER("Terrain update mesh data"); // 3.5 ms
+			SCOPE_TIMER("Terrain::LateUpdate - Mesh data"); // 3.5 ms
 
 			m_MeshData.clear();
 			m_MeshData.reserve(leafData.size());
@@ -97,9 +80,6 @@ namespace EVA
 
 	void Terrain::Serialize(DataObject& data)
 	{
-		data.Serialize("Tesselation factor", m_TessFactor);
-		data.Serialize("Tesselation slope", m_TessSlope);
-		data.Serialize("Tesselation shift", m_TessShift);
 		data.Serialize("TBN range", m_TbnRange);
 
 		bool recalculateNormals = data.Serialize("Normal strength", m_NormalStrength);
@@ -137,7 +117,10 @@ namespace EVA
 			data.Serialize("layer" + std::to_string(i), m_Layers[i]);
 		}
 
-		data.Serialize("Lod distances", m_LodDistances);
+		if(m_Quadtree == nullptr)
+			m_Quadtree = std::make_unique<Quadtree>();
+
+		data.Serialize("Lod distances", m_Quadtree->lodDistances);
 
 		if ((recalculateNormals && m_Heightmap != nullptr) || (data.mode == DataObject::DataMode::Inspector && InspectorFields::Button("Recalculate")))
 		{
