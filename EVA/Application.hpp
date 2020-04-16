@@ -40,7 +40,11 @@ namespace EVA
 
 		static glm::vec2 m_OrthographicBounds;
 
+        inline static float m_Time;
+
     public:
+
+        inline const static float& time = m_Time;
 
         static Camera* mainCamera;
 

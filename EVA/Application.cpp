@@ -138,8 +138,8 @@ namespace EVA
 
     void Application::Run()
     {
-        auto currentFrameTime = glfwGetTime();
-        auto lastFrameTime = currentFrameTime;
+        m_Time = glfwGetTime();
+        auto lastFrameTime = m_Time;
 
 	    auto frameCounter = 0;
         auto lastFpsTime = lastFrameTime;
@@ -147,19 +147,19 @@ namespace EVA
         while (glfwWindowShouldClose(m_Window) == 0)
         {
             // Measure delta time
-            currentFrameTime = glfwGetTime();
-            const auto deltaTime = (float) (currentFrameTime - lastFrameTime);
-            lastFrameTime = currentFrameTime;
+            m_Time = glfwGetTime();
+            const auto deltaTime = (float) (m_Time - lastFrameTime);
+            lastFrameTime = m_Time;
 
             frameCounter++;
-            if (LOG_FPS && currentFrameTime > lastFpsTime + LOG_FPS_INTERVAL)
+            if (LOG_FPS && m_Time > lastFpsTime + LOG_FPS_INTERVAL)
             {
                 std::cout << std::fixed;
                 std::cout.precision(1);
 
                 std::cout << "FPS:" << std::setw(5) << frameCounter / LOG_FPS_INTERVAL << "\n";
 
-                lastFpsTime = currentFrameTime;
+                lastFpsTime = m_Time;
                 frameCounter = 0;
             }
 

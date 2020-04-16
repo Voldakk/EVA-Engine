@@ -3,14 +3,14 @@
 #include "EVA.hpp"
 #include "EVA/Components.hpp"
 
-#include "../Quadtree/Quadtree.hpp"
 #include "TerrainMaterial.hpp"
-#include "TerrainMesh.hpp"
 #include "TerrainLayer.hpp"
+#include "../Quadtree/QuadtreeMesh.hpp"
+#include "../Quadtree/Quadtree.hpp"
 
 namespace EVA
 {
-	class Terrain : public Component, public ILateUpdateComponent, public IRenderComponent
+	class Terrain : public Component, public IUpdateComponent, public IRenderComponent
 	{
 		REGISTER_COMPONENT(Terrain, "EVA::Terrain");
 
@@ -18,9 +18,9 @@ namespace EVA
 
 		std::shared_ptr<TerrainMaterial> m_Material = nullptr;
 		FS::path m_ShaderPath;
-		std::shared_ptr<TerrainMesh> m_Mesh = nullptr;
+		std::shared_ptr<QuadtreeMesh> m_Mesh = nullptr;
 
-		std::vector<TerrainMeshData> m_MeshData;
+		std::vector<QuadtreeMeshData> m_MeshData;
 
 		std::shared_ptr<Texture> m_Heightmap;
 		std::shared_ptr<Texture> m_Normalmap;
@@ -36,8 +36,6 @@ namespace EVA
 
 	public:
 
-		const std::unique_ptr<Quadtree>& quadtree = m_Quadtree;
-
 		const std::shared_ptr<Texture>& heightmap = m_Heightmap;
 		const std::shared_ptr<Texture>& normalmap = m_Normalmap;
 		const std::vector<std::shared_ptr<Texture>>& splatmaps = m_Splatmaps;
@@ -46,7 +44,7 @@ namespace EVA
 		const int& tbnRange = m_TbnRange;
 
 		void Start() override;
-		void LateUpdate() override;
+		void Update(float deltaTime) override;
 
 		void Render() override;
 

@@ -10,6 +10,7 @@
 #include "../Components/SceneCamera.hpp"
 #include "../Physics.hpp"
 #include "../Terrain/Terrain.hpp"
+#include "../Water/Water.hpp"
 
 namespace EVA
 {
@@ -97,10 +98,17 @@ namespace EVA
 			m_Ew->MenuBar();
 			m_Ew->AssetBrowser();
 
-			//ImGui::ShowDemoWindow();
-
 			// Usually done in Scene::Update
 			ProcessDestroyQueue();
+
+
+			auto t = FindComponentOfType<Terrain>();
+			if (t)
+				t->Update(deltaTime);
+
+			auto w = FindComponentOfType<Water>();
+			if (w)
+				w->Update(deltaTime);
 		}
 
 		void LateUpdate() override
@@ -108,10 +116,6 @@ namespace EVA
 			// Move camera
 			if(m_SceneCameraGameObject != nullptr)
 				m_SceneCameraGameObject->LateUpdate();
-
-			auto t = FindComponentOfType<Terrain>();
-			if (t)
-				t->LateUpdate();
 		}
 	};
 

@@ -200,10 +200,7 @@ namespace EVA
 	inline bool InspectorFields::Default(const char* name, std::shared_ptr<T>& value)
 	{
 		if (value == nullptr)
-		{
-			value = std::make_shared<T>();
-			return true;
-		}
+			return false;
 
 		return Serializeable(name, std::dynamic_pointer_cast<ISerializeable>(value));
 	}

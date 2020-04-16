@@ -13,7 +13,7 @@ namespace EVA
 
 	public:
 
-		std::vector<int> lodDistances;
+		std::vector<int> lodDistances = std::vector<int>(8);
 		glm::vec2 scale;
 
 		Quadtree();

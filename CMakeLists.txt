@@ -141,6 +141,7 @@ if(APPLE)
 endif(APPLE)
 
 # Copy assets
+file(REMOVE_RECURSE ${PROJECT_BINARY_DIR}/bin/assets)
 file(COPY  ${PROJECT_SOURCE_DIR}/assets DESTINATION ${PROJECT_BINARY_DIR}/bin)
 
 find_package(Doxygen)

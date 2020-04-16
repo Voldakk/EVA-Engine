@@ -1,18 +1,16 @@
 #pragma once
 
-#include "../Mesh.hpp"
-#include "../Material.hpp"
-
 #include <vector>
 #include <memory>
 
-#include "EVA/OpenGL.hpp"
-
 #include "glm/glm.hpp"
+
+#include "EVA/OpenGL.hpp"
+#include "../Mesh.hpp"
 
 namespace EVA
 {
-	struct TerrainMeshData
+	struct QuadtreeMeshData
 	{
 		glm::mat4 world;
 		glm::mat4 local;
@@ -22,18 +20,18 @@ namespace EVA
 		float tScalePosY;
 	};
 
-	class TerrainMesh : public EVA::Mesh
+	class QuadtreeMesh : public EVA::Mesh
 	{
 		std::unique_ptr<VertexBuffer> m_Data;
 
 	public:
 
-		explicit TerrainMesh(const std::vector<glm::vec2>& vertices);
+		explicit QuadtreeMesh(const std::vector<glm::vec2>& vertices);
 
-		void DrawTerrain(const std::vector<TerrainMeshData>& data);
+		void Draw(const std::vector<QuadtreeMeshData>& data);
 	};
 
-	inline TerrainMesh::TerrainMesh(const std::vector<glm::vec2>& vertices)
+	inline QuadtreeMesh::QuadtreeMesh(const std::vector<glm::vec2>& vertices)
 	{
 		m_VertexCount = vertices.size();
 		m_HasFaceIndices = false;
@@ -61,7 +59,7 @@ namespace EVA
 			layout.Push<float>(4, 1); // World matrix
 
 			layout.Push<float>(4, 1); // Local matrix
-			layout.Push<float>(4, 1); // Local matrixca
+			layout.Push<float>(4, 1); // Local matrix
 			layout.Push<float>(4, 1); // Local matrix
 			layout.Push<float>(4, 1); // Local matrix
 
@@ -79,11 +77,11 @@ namespace EVA
 		m_Va->Unbind();
 	}
 
-	inline void TerrainMesh::DrawTerrain(const std::vector<TerrainMeshData>& data)
+	inline void QuadtreeMesh::Draw(const std::vector<QuadtreeMeshData>& data)
 	{
 		m_Va->Bind();
 		
-		m_Data->BufferData(&data[0], data.size() * sizeof(TerrainMeshData));
+		m_Data->BufferData(&data[0], data.size() * sizeof(QuadtreeMeshData));
 
 		GLCall(glDrawArraysInstanced(GL_PATCHES, 0, m_VertexCount, data.size()));
 		m_Va->Unbind();

@@ -199,6 +199,52 @@
                     "meshIndex": 0
                 }
             ]
+        },
+        {
+            "name": "Water",
+            "position": [
+                0.0,
+                140.0,
+                0.0
+            ],
+            "scale": [
+                6000.0,
+                0.4000000059604645,
+                6000.0
+            ],
+            "orientation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "id": "EVA::Water",
+                    "Wave speed": [
+                        0.0,
+                        2.0
+                    ],
+                    "Target": "",
+                    "shader": "./assets/water/water.shader",
+                    "Lod distances": [
+                        3200,
+                        1600,
+                        800,
+                        600,
+                        400,
+                        200,
+                        100,
+                        50
+                    ],
+                    "Noise": {
+                        "scale": 100.0,
+                        "persistance": 0.6000000238418579,
+                        "lacunarity": 2.0,
+                        "octaves": 6
+                    }
+                }
+            ]
         }
     ]
 }

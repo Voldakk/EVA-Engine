@@ -1,41 +1,29 @@
-#include "Terrain.hpp"
+#include "Water.hpp"
 
 #include "EVA/ResourceManagers.hpp"
-#include "TerrainMaterial.hpp"
-#include "NormalMapRenderer.hpp"
-#include "SpatMapRenderer.hpp"
 #include "../ScopeTimer.hpp"
 
-#include "glm/glm.hpp"
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/quaternion.hpp>
-
-#include "../Parsers/Json.hpp"
-
 
 namespace EVA
 {
-	void Terrain::Start()
+	void Water::Start()
 	{
 		if (m_Quadtree == nullptr)
 			m_Quadtree = std::make_unique<Quadtree>();
 
-		m_Material = std::make_shared<TerrainMaterial>();
-		m_Material->SetTerrain(this);
+		m_Material = std::make_shared<WaterMaterial>();
+		m_Material->SetWater(this);
 		m_Material->SetUseInstancing(true);
 		m_Material->shader = ShaderManager::LoadShader(m_ShaderPath);
 
 		auto v = GeneratePatch();
 		m_Mesh = std::make_shared<QuadtreeMesh>(v);
 
-		const auto go = scene->FindGameObjectByName(m_TargetName);
-		if (go != nullptr)
-			m_Target = go->transform.get();
-
 		Update(0);
 	}
 
-	void Terrain::Update(float deltaTime)
+	void Water::Update(float deltaTime)
 	{
 		glm::vec3 targetPos = Application::mainCamera->transform->position;
 		if (m_Target != nullptr)
@@ -53,7 +41,7 @@ namespace EVA
 		m_Quadtree->GetLeafData(leafData);
 
 		{
-			SCOPE_TIMER("Terrain::Update - Mesh data");
+			SCOPE_TIMER("Water::Update - Mesh data");
 
 			m_MeshData.clear();
 			m_MeshData.reserve(leafData.size());
@@ -66,28 +54,24 @@ namespace EVA
 		}
 	}
 
-	void Terrain::Render()
+	void Water::Render()
 	{
 		if (m_Material == nullptr || m_Material->shader == nullptr || m_Mesh == nullptr)
 			return;
 
-		SCOPE_TIMER("Terrain Render");
+		SCOPE_TIMER("Water::Render");
 		m_Material->Activate(scene.Get(), transform.Get());
 		m_Mesh->Draw(m_MeshData);
 	}
 
-	void Terrain::Serialize(DataObject& data)
+	void Water::Serialize(DataObject& data)
 	{
-		std::cout << "Terrain::Serialize" << std::endl;
-
-		data.Serialize("TBN range", m_TbnRange);
-
-		bool recalculateNormals = data.Serialize("Normal strength", m_NormalStrength);
+		data.Serialize("Wave speed", m_WaveSpeed);
 
 		if (data.Serialize("Target", m_TargetName))
 		{
 			const auto go = scene->FindGameObjectByName(m_TargetName);
-			if (go != nullptr) 
+			if (go != nullptr)
 			{
 				m_Target = go->transform.get();
 			}
@@ -100,44 +84,21 @@ namespace EVA
 
 		if (data.Serialize("shader", m_ShaderPath))
 		{
-			if(m_Material != nullptr)
+			if (m_Material != nullptr)
 				m_Material->shader = ShaderManager::LoadShader(m_ShaderPath);
 		}
 
-		auto path = m_Heightmap != nullptr ? m_Heightmap->path : "";
-		if (data.Serialize("Heightmap", path))
-		{
-			m_Heightmap = TextureManager::LoadTexture(path, TextureWrapping::ClampToEdge, TextureMinFilter::Linear, TextureMagFilter::Linear);
-			recalculateNormals = true;
-		}
-
-
-		for (size_t i = 0; i < layers.size(); i++)
-		{
-			data.Serialize("layer" + std::to_string(i), m_Layers[i]);
-		}
-
-		if(m_Quadtree == nullptr)
+		if (m_Quadtree == nullptr)
 			m_Quadtree = std::make_unique<Quadtree>();
 
 		data.Serialize("Lod distances", m_Quadtree->lodDistances);
 
-		if ((recalculateNormals && m_Heightmap != nullptr) || (data.mode == DataObject::DataMode::Inspector && InspectorFields::Button("Recalculate")))
-		{
-			{
-				ScopeTimer timer("Terrain generate normalmap");
-				NormalMapRenderer nmr;
-				m_Normalmap = nmr.Render(m_Heightmap, m_Heightmap->width, m_NormalStrength);
-			}
-			{
-				ScopeTimer timer("Terrain generate splatmap");
-				SplatMapRenderer smr;
-				m_Splatmaps = smr.Render(m_Normalmap->width, m_Normalmap, m_Heightmap, m_Layers);
-			}
-		}
+		if (m_Noise == nullptr)
+			m_Noise = std::make_shared<Noise>();
+		data.Serialize("Noise", m_Noise);
 	}
 
-	std::vector<glm::vec2> Terrain::GeneratePatch()
+	std::vector<glm::vec2> Water::GeneratePatch()
 	{
 		std::vector<glm::vec2> vertices(4);
 
