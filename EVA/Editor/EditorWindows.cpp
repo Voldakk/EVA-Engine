@@ -718,6 +718,11 @@ namespace EVA
 			shader->SetPaths(paths);
 			ShaderManager::SaveShader(shader.get(), paths->shader);
 		}
+
+		if (InspectorFields::Button("Reload"))
+		{
+			shader->SetPaths(paths);
+		}
 	}
 
 	void EditorWindows::NewAssetPopup()
