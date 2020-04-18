@@ -18,7 +18,7 @@ namespace EVA
 	void Terrain::Start()
 	{
 		if (m_Quadtree == nullptr)
-			m_Quadtree = std::make_unique<Quadtree>();
+			m_Quadtree = std::make_shared<Quadtree>();
 
 		m_Material = std::make_shared<TerrainMaterial>();
 		m_Material->SetTerrain(this);
@@ -118,9 +118,8 @@ namespace EVA
 		}
 
 		if(m_Quadtree == nullptr)
-			m_Quadtree = std::make_unique<Quadtree>();
-
-		data.Serialize("Lod distances", m_Quadtree->lodDistances);
+			m_Quadtree = std::make_shared<Quadtree>();
+		data.Serialize("Quadtree", m_Quadtree);
 
 		if ((recalculateNormals && m_Heightmap != nullptr) || (data.mode == DataObject::DataMode::Inspector && InspectorFields::Button("Recalculate")))
 		{

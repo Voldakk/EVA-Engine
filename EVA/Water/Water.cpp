@@ -10,7 +10,7 @@ namespace EVA
 	void Water::Start()
 	{
 		if (m_Quadtree == nullptr)
-			m_Quadtree = std::make_unique<Quadtree>();
+			m_Quadtree = std::make_shared<Quadtree>();
 
 		m_Material = std::make_shared<WaterMaterial>();
 		m_Material->SetWater(this);
@@ -89,9 +89,8 @@ namespace EVA
 		}
 
 		if (m_Quadtree == nullptr)
-			m_Quadtree = std::make_unique<Quadtree>();
-
-		data.Serialize("Lod distances", m_Quadtree->lodDistances);
+			m_Quadtree = std::make_shared<Quadtree>();
+		data.Serialize("Quadtree", m_Quadtree);
 
 		if (m_Noise == nullptr)
 			m_Noise = std::make_shared<Noise>();

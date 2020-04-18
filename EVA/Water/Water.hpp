@@ -80,7 +80,7 @@ namespace EVA
 	{
 		REGISTER_COMPONENT(Water, "EVA::Water");
 
-		std::unique_ptr<Quadtree> m_Quadtree;
+		std::shared_ptr<Quadtree> m_Quadtree;
 
 		std::shared_ptr<WaterMaterial> m_Material = nullptr;
 		FS::path m_ShaderPath;

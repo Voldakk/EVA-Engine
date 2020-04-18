@@ -32,4 +32,12 @@ namespace EVA
 		return m_RootNode->Find(x, y);
 	}
 
+	void Quadtree::Serialize(DataObject& data)
+	{
+		bool numLodChanged = data.Serialize("Lod levels", numLodDistances);
+		data.Serialize("Lod distances", lodDistances);
+		if (numLodChanged)
+			lodDistances.resize(numLodDistances);
+	}
+
 }

@@ -160,16 +160,19 @@
                             "max": 60.0
                         }
                     },
-                    "Lod distances": [
-                        3200,
-                        1600,
-                        800,
-                        600,
-                        400,
-                        200,
-                        100,
-                        50
-                    ]
+                    "Quadtree": {
+                        "Lod levels": 8,
+                        "Lod distances": [
+                            3200,
+                            1600,
+                            800,
+                            600,
+                            400,
+                            200,
+                            100,
+                            50
+                        ]
+                    }
                 }
             ]
         },
@@ -227,16 +230,19 @@
                     ],
                     "Target": "",
                     "shader": "./assets/water/water.shader",
-                    "Lod distances": [
-                        3200,
-                        1600,
-                        800,
-                        600,
-                        400,
-                        200,
-                        100,
-                        50
-                    ],
+                    "Quadtree": {
+                        "Lod levels": 8,
+                        "Lod distances": [
+                            3200,
+                            1600,
+                            800,
+                            600,
+                            400,
+                            200,
+                            100,
+                            50
+                        ]
+                    },
                     "Noise": {
                         "scale": 100.0,
                         "persistance": 0.6000000238418579,
