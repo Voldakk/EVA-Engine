@@ -20,8 +20,6 @@ namespace EVA
 		FS::path m_ShaderPath;
 		std::shared_ptr<QuadtreeMesh> m_Mesh = nullptr;
 
-		std::vector<QuadtreeMeshData> m_MeshData;
-
 		std::shared_ptr<Texture> m_Heightmap;
 		std::shared_ptr<Texture> m_Normalmap;
 		std::vector<std::shared_ptr<Texture>> m_Splatmaps;

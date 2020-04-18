@@ -10,6 +10,8 @@ namespace EVA
 
 		if (m_Terrain != nullptr)
 		{
+			shader->SetUniformMatrix4Fv("worldMatrix", m_Terrain->transform->modelMatrix);
+
 			shader->SetUniform1F("scaleY", m_Terrain->transform->scale.y);
 			shader->SetUniform1I("tbnRange", m_Terrain->tbnRange);
 

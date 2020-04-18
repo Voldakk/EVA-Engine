@@ -3,7 +3,6 @@
 
 layout(quads, fractional_even_spacing, cw) in;
 
-flat in vec2 scaleTE[];
 out vec3 normalGeo;
 
 uniform float time;

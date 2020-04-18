@@ -1,7 +1,6 @@
 #version 430
 
 in vec2 vertPos;
-in mat4 worldMatrix;
 in mat4 localMatrix;
 in float tScaleNegX;
 in float tScalePosX;
@@ -16,6 +15,7 @@ out float tScalePosXTC;
 out float tScaleNegYTC;
 out float tScalePosYTC;
 
+uniform mat4 worldMatrix;
 uniform sampler2D heightmap;
 uniform mat4 view;
 

@@ -9,6 +9,7 @@ namespace EVA
 {
 	struct NodeData
 	{
+		glm::mat4 localMatrix;
 		Bounds2 bounds;
 		int lod;
 		glm::vec2 index;

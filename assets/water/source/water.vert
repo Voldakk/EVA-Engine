@@ -1,7 +1,6 @@
 #version 430
 
 in vec2 vertPos;
-in mat4 worldMatrix;
 in mat4 localMatrix;
 in float tScaleNegX;
 in float tScalePosX;
@@ -13,7 +12,7 @@ out float tScalePosXTC;
 out float tScaleNegYTC;
 out float tScalePosYTC;
 
-flat out vec2 scaleTC;
+uniform mat4 worldMatrix;
 
 void main()
 {
@@ -23,9 +22,6 @@ void main()
 	tScalePosXTC = tScalePosX;
 	tScaleNegYTC = tScaleNegY;
 	tScalePosYTC = tScalePosY;
-
-	scaleTC.x = localMatrix[0][0] * worldMatrix[0][0]; 
-	scaleTC.y = localMatrix[3][3] * worldMatrix[3][3]; 
 
 	gl_Position = worldMatrix * vec4(localPosition, 1);
 }

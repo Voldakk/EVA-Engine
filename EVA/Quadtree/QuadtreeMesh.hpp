@@ -12,7 +12,6 @@ namespace EVA
 {
 	struct QuadtreeMeshData
 	{
-		glm::mat4 world;
 		glm::mat4 local;
 		float tScaleNegX;
 		float tScalePosX;
@@ -22,13 +21,16 @@ namespace EVA
 
 	class QuadtreeMesh : public EVA::Mesh
 	{
-		std::unique_ptr<VertexBuffer> m_Data;
+		std::unique_ptr<VertexBuffer> m_Db;
 
 	public:
 
+		std::vector<QuadtreeMeshData> data;
+
+
 		explicit QuadtreeMesh(const std::vector<glm::vec2>& vertices);
 
-		void Draw(const std::vector<QuadtreeMeshData>& data);
+		void Draw() const override;
 	};
 
 	inline QuadtreeMesh::QuadtreeMesh(const std::vector<glm::vec2>& vertices)
@@ -50,13 +52,9 @@ namespace EVA
 			m_Vb->Unbind();
 		}
 		{
-			m_Data = std::make_unique<VertexBuffer>(0);
+			m_Db = std::make_unique<VertexBuffer>(0);
 
 			VertexBufferLayout layout;
-			layout.Push<float>(4, 1); // World matrix
-			layout.Push<float>(4, 1); // World matrix
-			layout.Push<float>(4, 1); // World matrix
-			layout.Push<float>(4, 1); // World matrix
 
 			layout.Push<float>(4, 1); // Local matrix
 			layout.Push<float>(4, 1); // Local matrix
@@ -70,18 +68,18 @@ namespace EVA
 
 			layout.patchSize = vertices.size();
 
-			m_Va->AddBuffer(*m_Data, layout);
-			m_Data->Unbind();
+			m_Va->AddBuffer(*m_Db, layout);
+			m_Db->Unbind();
 		}
 
 		m_Va->Unbind();
 	}
 
-	inline void QuadtreeMesh::Draw(const std::vector<QuadtreeMeshData>& data)
+	inline void QuadtreeMesh::Draw() const
 	{
 		m_Va->Bind();
 		
-		m_Data->BufferData(&data[0], data.size() * sizeof(QuadtreeMeshData));
+		m_Db->BufferData(&data[0], data.size() * sizeof(QuadtreeMeshData));
 
 		GLCall(glDrawArraysInstanced(GL_PATCHES, 0, m_VertexCount, data.size()));
 		m_Va->Unbind();

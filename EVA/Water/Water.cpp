@@ -4,7 +4,6 @@
 #include "../ScopeTimer.hpp"
 
 #include "glm/gtc/quaternion.hpp"
-#include <glm/gtc/matrix_transform.hpp>
 
 namespace EVA
 {
@@ -44,13 +43,11 @@ namespace EVA
 		{
 			SCOPE_TIMER("Water::Update - Mesh data");
 
-			m_MeshData.clear();
-			m_MeshData.reserve(leafData.size());
+			m_Mesh->data.clear();
+			m_Mesh->data.reserve(leafData.size());
 			for (const auto data : leafData)
 			{
-				auto localMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(data.bounds.GetMin().x, 0.0f, data.bounds.GetMin().y));
-				localMatrix = glm::scale(localMatrix, glm::vec3(data.bounds.GetSize().x, 0.0f, data.bounds.GetSize().y));
-				m_MeshData.push_back({ transform->modelMatrix, localMatrix, data.tScaleNegX, data.tScalePosX, data.tScaleNegY, data.tScalePosY });
+				m_Mesh->data.push_back({ data.localMatrix, data.tScaleNegX, data.tScalePosX, data.tScaleNegY, data.tScalePosY });
 			}
 		}
 	}
@@ -62,7 +59,7 @@ namespace EVA
 
 		SCOPE_TIMER("Water::Render");
 		m_Material->Activate(scene.Get(), transform.Get());
-		m_Mesh->Draw(m_MeshData);
+		m_Mesh->Draw();
 	}
 
 	void Water::Serialize(DataObject& data)

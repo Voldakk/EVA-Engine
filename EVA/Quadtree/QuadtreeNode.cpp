@@ -1,6 +1,7 @@
 #include "QuadtreeNode.hpp"
 
 #include "Quadtree.hpp"
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace EVA
 {
@@ -14,6 +15,8 @@ namespace EVA
 		m_Data.lod = lod;
 		m_Data.index = index;
 		m_Data.bounds = bounds;
+		m_Data.localMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_Data.bounds.GetMin().x, 0.0f, m_Data.bounds.GetMin().y));
+		m_Data.localMatrix = glm::scale(m_Data.localMatrix, glm::vec3(m_Data.bounds.GetSize().x, 0.0f, m_Data.bounds.GetSize().y));
 	}
 
 	void QuadtreeNode::Subdivide()

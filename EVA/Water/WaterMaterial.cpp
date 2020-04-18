@@ -8,6 +8,8 @@ void EVA::WaterMaterial::SetMaterialUniforms(Scene* scene)
 
 	if (m_Water != nullptr)
 	{
+		shader->SetUniformMatrix4Fv("worldMatrix", m_Water->transform->modelMatrix);
+
 		shader->SetUniform4Fv("material.tint", glm::vec4(0, 0, 1, 0));
 		
 		shader->SetUniform1F("time", Application::time);

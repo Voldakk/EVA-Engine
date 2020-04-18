@@ -88,7 +88,6 @@ namespace EVA
 		std::shared_ptr<WaterMaterial> m_Material = nullptr;
 		FS::path m_ShaderPath;
 		std::shared_ptr<QuadtreeMesh> m_Mesh = nullptr;
-		std::vector<QuadtreeMeshData> m_MeshData;
 
 		std::string m_TargetName;
 		Transform* m_Target;
