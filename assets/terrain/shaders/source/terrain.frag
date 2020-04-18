@@ -6,7 +6,7 @@ const float PI = 3.14159265359;
 in vec2 uvFrag;
 in vec3 posFrag;
 in vec3 tangentFrag;
-in vec4 allFragPosLightSpace [MAX_LIGHTS];
+in vec4 posLightSpaceFrag [MAX_LIGHTS];
 
 out vec4 fragColor;
 
@@ -238,10 +238,10 @@ void main()
             L =  normalize(allLights[i].position.xyz);
             radiance = allLights[i].color;
             if(allLights[i].hasShadows == 1)
-                shadow = ShadowCalculation(N, L, allLights[i].shadowMap, allFragPosLightSpace[i]);
+                shadow = ShadowCalculation(N, L, allLights[i].shadowMap, posLightSpaceFrag[i]);
         }
 
-        //radiance *= 1 - shadow;
+        radiance *= 1 - shadow;
 
         vec3 H = normalize(V + L);
 

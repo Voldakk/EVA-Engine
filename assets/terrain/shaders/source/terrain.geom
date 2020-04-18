@@ -1,5 +1,6 @@
-#version 330
+#version 430
 #define MAX_MATERIALS 8
+#define MAX_LIGHTS 10
 
 layout (triangles) in;
 layout (triangle_strip, max_vertices=3) out;
@@ -22,6 +23,22 @@ uniform struct Material
     sampler2D metRouAoMap;
     sampler2D normalHeightMap;
 } materials[MAX_MATERIALS];
+
+// Lights
+uniform int numLights;
+uniform struct Light
+{
+   vec4 position;
+   vec3 color;
+   float farPlane;
+   int hasShadows;
+   mat4 lightSpaceMatrix;
+   sampler2D shadowMap;
+   samplerCube shadowCubeMap;
+} allLights[MAX_LIGHTS];
+
+in vec4 posLightSpaceGeo [3][MAX_LIGHTS];
+out vec4 posLightSpaceFrag [MAX_LIGHTS];
 
 uniform mat4 viewProjection;
 uniform sampler2D normalmap;
@@ -101,6 +118,7 @@ void main() {
 		uvFrag = uvGeo[i];
 		posFrag = (worldPos).xyz;
 		tangentFrag = tangent;
+		posLightSpaceFrag = posLightSpaceGeo[i];
 		EmitVertex();
 	}
 	

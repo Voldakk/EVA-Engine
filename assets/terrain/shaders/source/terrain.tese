@@ -1,4 +1,5 @@
 #version 430
+#define MAX_LIGHTS 10
 
 layout(quads, fractional_even_spacing, cw) in;
 
@@ -8,6 +9,21 @@ out vec2 uvGeo;
 
 uniform sampler2D heightmap;
 uniform float scaleY;
+
+// Lights
+uniform int numLights;
+uniform struct Light
+{
+   vec4 position;
+   vec3 color;
+   float farPlane;
+   int hasShadows;
+   mat4 lightSpaceMatrix;
+   sampler2D shadowMap;
+   samplerCube shadowCubeMap;
+} allLights[MAX_LIGHTS];
+
+out vec4 posLightSpaceGeo [MAX_LIGHTS];
 
 void main()
 {
@@ -32,4 +48,9 @@ void main()
 	position.y = height * scaleY;
 
 	gl_Position = position;
+
+	for(int i = 0; i < numLights; ++i)
+    {
+        posLightSpaceGeo[i] = allLights[i].lightSpaceMatrix * position;
+    }
 }
