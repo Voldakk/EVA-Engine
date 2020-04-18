@@ -12,7 +12,10 @@ void EVA::WaterMaterial::SetMaterialUniforms(Scene* scene)
 		
 		shader->SetUniform1F("time", Application::time);
 		shader->SetUniform1F("scaleY", m_Water->transform->scale.y);
-		shader->SetUniform2Fv("waveSpeed", m_Water->waveSpeed);
+		for (size_t i = 0; i < m_Water->waveSpeeds.size(); i++)
+		{
+			shader->SetUniform2Fv("waveSpeeds[" + std::to_string(i) + "]", m_Water->waveSpeeds[i]);
+		}
 
 		shader->SetUniform1F("scale", m_Water->noise->scale);
 		shader->SetUniform1F("persistance", m_Water->noise->persistance);

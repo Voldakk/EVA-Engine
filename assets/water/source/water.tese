@@ -10,7 +10,7 @@ uniform float time;
 
 // Water
 uniform float scaleY;
-uniform vec2 waveSpeed;
+uniform vec2[MAX_OCTAVES] waveSpeeds;
 
 // Noise
 uniform float scale;
@@ -68,8 +68,9 @@ float GenerateNoise(vec2 position)
 
     for (int i = 0; i < numOctaves; ++i)
     {
-        float sampleX = (octaveOffsets[i].x + position.x) / scale * frequency;
-        float sampleY = (octaveOffsets[i].y + position.y) / scale * frequency;
+		vec2 pos = position + waveSpeeds[i] * time;
+        float sampleX = (octaveOffsets[i].x + pos.x) / scale * frequency;
+        float sampleY = (octaveOffsets[i].y + pos.y) / scale * frequency;
 
         float value = snoise(vec2(sampleX, sampleY)) * 2 - 1;
         noiseHeight += value * amplitude;
@@ -94,15 +95,13 @@ void main()
 	    u    * (1 - v) * gl_in[0].gl_Position +
 	    u    *    v    * gl_in[1].gl_Position +
 	 (1 - u) *    v    * gl_in[3].gl_Position);
-    
-	vec2 offset = waveSpeed * time;
 
-	vec3 tangent = position.xyz + vec3(scaleTE[0].x, 0.0, 0.0);
-	vec3 bitangent = position.xyz + vec3(0.0, 0.0, scaleTE[0].y);
+	vec3 tangent = position.xyz + vec3(1, 0.0, 0.0);
+	vec3 bitangent = position.xyz + vec3(0.0, 0.0, 1);
 
-	position.y += GenerateNoise(position.xz + offset) * scaleY;
-	tangent.y += GenerateNoise(tangent.xz + offset) * scaleY;
-	bitangent.y += GenerateNoise(bitangent.xz + offset) * scaleY;
+	position.y += GenerateNoise(position.xz) * scaleY;
+	tangent.y += GenerateNoise(tangent.xz) * scaleY;
+	bitangent.y += GenerateNoise(bitangent.xz) * scaleY;
 
 	normalGeo = cross(tangent - position.xyz, bitangent - position.xyz);
 	normalGeo = normalize(normalGeo);

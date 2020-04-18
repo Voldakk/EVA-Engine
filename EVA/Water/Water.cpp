@@ -3,6 +3,7 @@
 #include "EVA/ResourceManagers.hpp"
 #include "../ScopeTimer.hpp"
 
+#include "glm/gtc/quaternion.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace EVA
@@ -66,8 +67,6 @@ namespace EVA
 
 	void Water::Serialize(DataObject& data)
 	{
-		data.Serialize("Wave speed", m_WaveSpeed);
-
 		if (data.Serialize("Target", m_TargetName))
 		{
 			const auto go = scene->FindGameObjectByName(m_TargetName);
@@ -94,7 +93,34 @@ namespace EVA
 
 		if (m_Noise == nullptr)
 			m_Noise = std::make_shared<Noise>();
-		data.Serialize("Noise", m_Noise);
+		bool recalculateSpeeds = data.Serialize("Noise", m_Noise);
+
+		recalculateSpeeds = data.Serialize("Wave speed", m_WaveSpeed) || recalculateSpeeds;
+
+		if (recalculateSpeeds)
+		{
+			m_WaveSpeeds.resize(m_Noise->octaveOffsets.size());
+			glm::quat rot(glm::vec3(m_WaveSpeed.x, m_WaveSpeed.y, 0));
+
+			std::random_device r;
+			std::default_random_engine dre(r());
+			std::uniform_real_distribution<float> uniformDist(-0.5, 0.5);
+
+			glm::vec3 ws = glm::vec3(m_WaveSpeed.x, m_WaveSpeed.y, 0);
+			for (size_t i = 0; i < m_WaveSpeeds.size(); i++)
+			{
+				glm::vec3 speed = glm::angleAxis(uniformDist(dre) * i, ZAXIS) * ws * (i + 1.0f);
+				m_WaveSpeeds[i] = glm::vec2(speed.x, speed.y);
+			}
+		}
+
+		if (data.mode == DataObject::DataMode::Inspector)
+		{
+			for (int i = 0; i < m_WaveSpeeds.size(); i++)
+			{
+				InspectorFields::Text("Wave speed " + std::to_string(i) + ": (" + std::to_string(m_WaveSpeeds[i].x) + ", " + std::to_string(m_WaveSpeeds[i].y) + ")");
+			}
+		}
 	}
 
 	std::vector<glm::vec2> Water::GeneratePatch()

@@ -40,10 +40,13 @@ namespace EVA
 
 		virtual void Serialize(DataObject& data) override
 		{
-			if (data.Serialize("scale", m_Scale) ||
-				data.Serialize("persistance", m_Persistance) ||
-				data.Serialize("lacunarity", m_Lacunarity) ||
-				data.Serialize("octaves", m_Octaves))
+			bool changed = false;
+			changed = data.Serialize("scale", m_Scale) || changed;
+			changed = data.Serialize("persistance", m_Persistance) || changed;
+			changed = data.Serialize("lacunarity", m_Lacunarity) || changed;
+			changed = data.Serialize("octaves", m_Octaves) || changed;
+
+			if (changed)
 			{
 				std::random_device r;
 				std::default_random_engine dre(r());
@@ -93,11 +96,13 @@ namespace EVA
 		std::shared_ptr<Noise> m_Noise;
 
 		glm::vec2 m_WaveSpeed;
+		std::vector<glm::vec2> m_WaveSpeeds;
 
 	public:
 
 		const std::shared_ptr<Noise>& noise = m_Noise;
 		const glm::vec2& waveSpeed = m_WaveSpeed;
+		const std::vector<glm::vec2>& waveSpeeds = m_WaveSpeeds;
 
 		void Start() override;
 		void Update(float deltaTime) override;

@@ -109,7 +109,7 @@
                         "material": "./assets/terrain/materials/sand.mat",
                         "height": {
                             "min": 0.0,
-                            "max": 0.10999999940395355
+                            "max": 0.10000000149011612
                         },
                         "angle": {
                             "min": 0.0,
@@ -119,8 +119,8 @@
                     "layer1": {
                         "material": "./assets/terrain/materials/rocky_shoreline.mat",
                         "height": {
-                            "min": 0.20000000298023225,
-                            "max": 0.699999988079071
+                            "min": 0.10000000149011612,
+                            "max": 0.5
                         },
                         "angle": {
                             "min": 0.0,
@@ -130,8 +130,8 @@
                     "layer2": {
                         "material": "./assets/terrain/materials/ground_forest.mat",
                         "height": {
-                            "min": 0.14000000059604646,
-                            "max": 0.7099999785423279
+                            "min": 0.10000000149011612,
+                            "max": 0.4009999930858612
                         },
                         "angle": {
                             "min": 1.0,
@@ -152,7 +152,7 @@
                     "layer4": {
                         "material": "./assets/terrain/materials/snow.mat",
                         "height": {
-                            "min": 0.699999988079071,
+                            "min": 0.4000000059604645,
                             "max": 1.0
                         },
                         "angle": {
@@ -177,7 +177,7 @@
             ]
         },
         {
-            "name": "0, 0",
+            "name": "Origin",
             "position": [
                 0.0,
                 0.0,
@@ -207,12 +207,12 @@
             "name": "Water",
             "position": [
                 0.0,
-                140.0,
+                50.0,
                 0.0
             ],
             "scale": [
                 6000.0,
-                0.4000000059604645,
+                2.0,
                 6000.0
             ],
             "orientation": [
@@ -224,10 +224,6 @@
             "components": [
                 {
                     "id": "EVA::Water",
-                    "Wave speed": [
-                        0.0,
-                        2.0
-                    ],
                     "Target": "",
                     "shader": "./assets/water/water.shader",
                     "Quadtree": {
@@ -245,10 +241,14 @@
                     },
                     "Noise": {
                         "scale": 100.0,
-                        "persistance": 0.6000000238418579,
+                        "persistance": 0.4000000059604645,
                         "lacunarity": 2.0,
-                        "octaves": 6
-                    }
+                        "octaves": 4
+                    },
+                    "Wave speed": [
+                        0.0,
+                        5.0
+                    ]
                 }
             ]
         }
