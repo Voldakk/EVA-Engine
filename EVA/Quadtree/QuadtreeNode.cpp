@@ -69,7 +69,7 @@ namespace EVA
 
 	void QuadtreeNode::Update(const glm::vec2 cameraPosition)
 	{
-		if (m_Data.lod >= m_Quadtree->lodDistances.size())
+		if (m_Data.lod >= m_Quadtree->numLodDistances)
 			return;
 
 		auto b = m_Data.bounds;

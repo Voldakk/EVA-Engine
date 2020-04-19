@@ -5,7 +5,9 @@
 #include <string>
 #include <unordered_map>
 
-#ifdef _DEBUG
+//#define ENABLE_SCOPE_TIMER
+
+#ifdef ENABLE_SCOPE_TIMER
 	#define SCOPE_TIMER(MESSAGE) ScopeTimer scopeTimer(MESSAGE);
 #else
 	#define SCOPE_TIMER(MESSAGE);
