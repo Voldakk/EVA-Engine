@@ -6,7 +6,8 @@ A C++ OpenGL game engine
 
 ### Windows - Visual Studio 2017
 1. File -> Open -> Folder - Select the root folder
-2. Select "main" as the startup item
+2. Make sure the Clang config is selected
+3. Select "main" as the startup item
 
 ### Windows - CMake (cmake-gui)
 1. Set the source code file to the root directory containing "CMakeLists.txt"
@@ -17,7 +18,8 @@ A C++ OpenGL game engine
 
 ### Ubuntu - CLion 2017
 1. File -> Open - Select the root folder
-2. Select the "main" configuration
+2. Make sure the Clang config is selected
+3. Select the "main" configuration
 
 ### Ubuntu - Cmake terminal
 Open a terminal window in the root folder of the project
