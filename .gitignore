@@ -4,7 +4,6 @@
 
 build/
 cmake-build-debug/
-CMakeSettings.json
 
 project files/
 
